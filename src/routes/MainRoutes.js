@@ -6,9 +6,10 @@ import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
-const LeadManagement = Loadable(lazy(() => import('views/Lead')));
-const ContactManagement = Loadable(lazy(() => import('views/Contact')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js'))); 
+const LeadManagement = Loadable(lazy(() => import('views/Lead')));  //SALES ORDER
+const ContactManagement = Loadable(lazy(() => import('views/Contact')));   //POS
+const POS = Loadable(lazy(() => import('views/POS')));   //POS
 const Call = Loadable(lazy(() => import('views/Calls')));
 const Policy = Loadable(lazy(() => import('views/Policy')));
 const Metting = Loadable(lazy(() => import('views/Metting')));
@@ -52,7 +53,7 @@ const MainRoutes = {
       children: [
         {
           path: 'contact',
-          element: <ContactManagement />
+          element: <POS/>
         }
       ]
     },

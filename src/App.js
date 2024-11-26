@@ -12,7 +12,7 @@ import Routes from 'routes';
 import themes from 'themes';
 
 // project imports
-// import NavigationScroll from 'layout/NavigationScroll';
+import NavigationScroll from 'layout/NavigationScroll';
 
 // ==============================|| APP ||============================== //
 
@@ -24,9 +24,9 @@ const App = () => {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <ToastContainer />
-        {/* <NavigationScroll> */}
+        <NavigationScroll>
           <Routes />
-        {/* </NavigationScroll> */}
+        </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>
   );

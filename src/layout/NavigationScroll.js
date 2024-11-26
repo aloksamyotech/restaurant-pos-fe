@@ -23,4 +23,4 @@ NavigationScroll.propTypes = {
   children: PropTypes.node
 };
 
-// export default NavigationScroll;
+export default NavigationScroll;

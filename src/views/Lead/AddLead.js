@@ -722,4 +722,4 @@ const AddLead = (props) => {
   );
 };
 
-export default AddLead;
+// export default AddLead;

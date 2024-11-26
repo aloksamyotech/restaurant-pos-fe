@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import restaurantImage from 'assets/images/restaurant_serving_dashboarddefault.jpg';
+import restaurantImage from 'assets/images/dashboard_default_image.jpg';
 
 const Image = () => (
   <Box

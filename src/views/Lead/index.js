@@ -7,19 +7,19 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import AddLead from './AddLead.js';
+// import AddLead from './AddLead.js';
 
 // ----------------------------------------------------------------------
 
 const leadData = [
   {
     id: 1,
-    firstName: 'petter',
-    lastName: 'jhon',
-    gender: 'male',
-    phoneNumber: '9981923587',
-    emailAddress: 'ap@samyotech.com',
-    action: 'Edit'
+    firstName: '',
+    lastName: '',
+    gender: '',
+    phoneNumber: '',
+    emailAddress: '',
+    action: ''
   }
 ];
 
@@ -28,36 +28,42 @@ const Lead = () => {
   const columns = [
     {
       field: 'firstName',
-      headerName: 'First Name',
+      headerName: 'Tracking',
       flex: 1,
       cellClassName: 'name-column--cell name-column--cell--capitalize'
     },
     {
       field: 'lastName',
-      headerName: 'Last Name',
+      headerName: 'Information',
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'gender',
-      headerName: 'Gender',
+      headerName: 'By Order Type',
       flex: 1
     },
     {
       field: 'phoneNumber',
-      headerName: 'Phone Number',
+      headerName: 'Status',
       flex: 1
     },
     {
       field: 'emailAddress',
-      headerName: 'Email Address',
+      headerName: 'Booked At',
       flex: 1
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: 'Prepared At',
       flex: 1
-      // eslint-disable-next-line arrow-body-style
+//       // eslint-disable-next-line arrow-body-style
+    },
+    {
+      field: '',
+      headerName: 'Completed At',
+      flex: 1
+//       // eslint-disable-next-line arrow-body-style
     }
   ];
 
@@ -65,14 +71,14 @@ const Lead = () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-      <AddLead open={openAdd} handleClose={handleCloseAdd} />
+      {/* <AddLead open={openAdd} handleClose={handleCloseAdd} /> */}
       <Container>
         <Stack direction="row" alignItems="center" mb={5} justifyContent={'space-between'}>
           <Typography variant="h4">Sales Orders</Typography>
           <Stack direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenAdd}>
+            {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenAdd}>
               New Lead
-            </Button>
+            </Button> */}
           </Stack>
         </Stack>
         <TableStyle>
@@ -81,7 +87,7 @@ const Lead = () => {
               <DataGrid
                 rows={leadData}
                 columns={columns}
-                checkboxSelection
+                // checkboxSelection
                 getRowId={(row) => row.id}
                 slots={{ toolbar: GridToolbar }}
                 slotProps={{ toolbar: { showQuickFilter: true } }}
