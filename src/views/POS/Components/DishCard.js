@@ -2,6 +2,8 @@ import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import sandwich from 'assets/images/sandwich.jpg'
 
+
+
 const DishCard = ({ name, image, price }) => {
   return (
     <Card sx={{ maxWidth: 250, margin: 2 }}>
@@ -13,7 +15,7 @@ const DishCard = ({ name, image, price }) => {
       />
       <CardContent>
         <Typography variant="h5">{name}</Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body 2" color="text.secondary">
           Rs.{price.toFixed(2)}
         </Typography>
       </CardContent>
