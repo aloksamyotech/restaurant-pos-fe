@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "@mui/material";
 import DishCard from "./DishCard";
 
-const DishesGrid = ({ dishes }) => {
+const DishesGrid = ({ dishes, onDishClick}) => {
   return (
     <Grid container spacing={1} justifyContent="flex-start">
       {dishes.map((dish) => (
@@ -11,6 +11,7 @@ const DishesGrid = ({ dishes }) => {
             name={dish.name}
             image={dish.image}
             price={dish.price}
+            onDishClick={()=> onDishClick(dish)}
           />
         </Grid>
       ))}
