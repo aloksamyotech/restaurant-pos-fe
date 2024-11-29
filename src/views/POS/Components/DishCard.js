@@ -4,18 +4,17 @@ import sandwich from 'assets/images/sandwich.jpg'
 
 
 
-const DishCard = ({ name, image, price,onDishClick }) => {
+const DishCard = ({ name, image, price,onAddToCart }) => {
   return (
-    <Card sx={{ maxWidth: 250, margin: 2 }}>
+    <Card onClick={onAddToCart} sx={{ maxWidth: 250, margin: 2,cursor: "pointer"}}>
       <CardMedia
         component="img"
         height="100"
         image={sandwich}
         alt={name}
-        onClick={onDishClick}
-        sx={{cursor: "pointer"}}
+        
       />
-      <CardContent>
+      <CardContent >
         <Typography variant="h5">{name}</Typography>
         <Typography variant="body 2" color="text.secondary">
           Rs.{price.toFixed(2)}
