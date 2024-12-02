@@ -1,22 +1,24 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 import sandwich from 'assets/images/sandwich.jpg'
+import { margin } from "@mui/system";
 
 
 
 const DishCard = ({ name, image, price,onAddToCart }) => {
   return (
-    <Card onClick={onAddToCart} sx={{ maxWidth: 250, margin: 2,cursor: "pointer"}}>
+    <Card variant="outlined" onClick={onAddToCart} sx={{m:"2px"}} >
       <CardMedia
         component="img"
-        height="100"
+        height="150px"
         image={sandwich}
         alt={name}
+        sx={{ borderRadius: 2, p: 0.5 }}
         
       />
-      <CardContent >
-        <Typography variant="h5">{name}</Typography>
-        <Typography variant="body 2" color="text.secondary">
+      <CardContent sx={{height:'40px',padding: '5px',textAlign: 'center'}} >
+        <Typography color="rgb(55 65 81)">{name}</Typography>
+        <Typography color="rgb(37 99 235)">
           Rs.{price.toFixed(2)}
         </Typography>
       </CardContent>

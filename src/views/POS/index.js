@@ -32,10 +32,10 @@ const POS=() =>{
  
   return(
     <>
-   <Container maxWidth="xl" sx={{ mt: 1}}>
-      <Grid container spacing={2}>
+   <Container maxWidth="lg" sx={{bgcolor:''}}>
+      <Grid container spacing={1}>
         {/* Left Section--Dishes */}
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={8} sx={{margin:"0"}} >
           <SearchBar />
           <DishesGrid dishes={dishes} 
           
@@ -46,8 +46,9 @@ const POS=() =>{
        
 
         {/* Right Section--Cart */}
-        <Grid item xs={10} md={4}>
-          <Paper elevation={24} sx={{ p: 2}}>
+        <Grid item xs={12} md={4}   
+    >
+          <Paper elevation={24} sx={{ p: 1,width:'110%'}}>
             <Typography variant="h5" sx={{ mb: 2 }}>
               Your Dish Box
             </Typography>
