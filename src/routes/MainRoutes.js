@@ -4,14 +4,16 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
+
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js'))); 
 const LeadManagement = Loadable(lazy(() => import('views/Lead')));  //SALES ORDER
-const ContactManagement = Loadable(lazy(() => import('views/Contact')));   //POS
-const POS = Loadable(lazy(() => import('views/POS')));   //POS
+const ContactManagement = Loadable(lazy(() => import('views/Contact')));  //link of contact--below change to pos
+const POS = Loadable(lazy(() => import('views/POS')));   //New POS Created 
 const Call = Loadable(lazy(() => import('views/Calls')));
-const Policy = Loadable(lazy(() => import('views/Policy')));
+const Policy = Loadable(lazy(() => import('views/Policy')));    //link of policy--below change to pos
+const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  // New Kitchen Created 
 const Metting = Loadable(lazy(() => import('views/Metting')));
 const Email = Loadable(lazy(() => import('views/Email')));
 const Task = Loadable(lazy(() => import('views/Task')));
@@ -70,12 +72,12 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'kitchen',
+          element: <Kitchen/>
         }
       ]
     },
-    {
+     {
       path: 'dashboard',
       children: [
         {

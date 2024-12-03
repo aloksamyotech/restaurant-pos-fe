@@ -62,7 +62,7 @@ const dashboard = {
       id: '03',
       title: 'Kitchen',
       type: 'item',
-      url: '/dashboard/policy',
+      url: '/dashboard/kitchen',
       icon: icons.IconNotebook,
       breadcrumbs: false
     },

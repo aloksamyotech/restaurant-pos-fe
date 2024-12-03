@@ -8,8 +8,8 @@ const Image = () => (
     src={restaurantImage}
     alt="Restaurant"
     sx={{
-      maxWidth: '100%', // Scale to fit the container
-      height: 'auto',   // Maintain aspect ratio
+      maxWidth: '100%', 
+      height: 'auto',   
       display: 'block',
     }}
   />
