@@ -3,11 +3,11 @@ import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar
 import { Remove, Add, Delete } from "@mui/icons-material";
 const Cart = ({ cartItems,setCart }) => { 
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
 
   const handleRemoveDish = (id) => {
-    setCart((prevCart) => prevCart.filter((cartItem) => cartItem.id !== id));
+    setCart((prevCart) => prevCart.filter((cartItem) => cartItem?.id !== id));
   };
 
     const handleIncrementQuantity = (id) => {
@@ -23,8 +23,8 @@ const Cart = ({ cartItems,setCart }) => {
   const handleDecrementQuantity = (id) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
-        cartItem?.id === id && cartItem.quantity > 1
-          ? { ...cartItem, quantity: cartItem.quantity - 1 }
+        cartItem?.id === id && cartItem?.quantity > 1
+          ? { ...cartItem, quantity: cartItem?.quantity - 1 }
           : cartItem
       )
     );
@@ -55,13 +55,13 @@ const Cart = ({ cartItems,setCart }) => {
           padding: 2,
         }}
       >
-        {cartItems.length === 0 ? (
+        {cartItems?.length === 0 ? (
           <Typography textAlign="center">Add a Dish to the Cart</Typography>
         ) : (
           <List>
             {cartItems.map((cartItem) => (
               <ListItem
-                key={cartItem.id}
+                key={cartItem?.id}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -81,8 +81,8 @@ const Cart = ({ cartItems,setCart }) => {
                   }}
                 >
                   <Avatar
-                    src={cartItem.image}
-                    alt={cartItem.name}
+                    src={cartItem?.image}
+                    alt={cartItem?.name}
                     sx={{
                       width: 80,
                       height: 80,
@@ -98,13 +98,13 @@ const Cart = ({ cartItems,setCart }) => {
                     }}
                   >
                     <IconButton
-                      onClick={() => handleDecrementQuantity(cartItem.id)}
+                      onClick={() => handleDecrementQuantity(cartItem?.id)}
                     >
                       <Remove />
                     </IconButton>
-                    <Typography sx={{ mx: 1 }}>{cartItem.quantity}</Typography>
+                    <Typography sx={{ mx: 1 }}>{cartItem?.quantity}</Typography>
                     <IconButton
-                      onClick={() => handleIncrementQuantity(cartItem.id)}
+                      onClick={() => handleIncrementQuantity(cartItem?.id)}
                     >
                       <Add />
                     </IconButton>
@@ -112,18 +112,18 @@ const Cart = ({ cartItems,setCart }) => {
                 </Box>
 
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="h6">{cartItem.name}</Typography>
+                  <Typography variant="h6">{cartItem?.name}</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Price: Rs. {cartItem.price}
+                    Price: Rs. {cartItem?.price}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Subtotal: Rs. {cartItem.price * cartItem.quantity}
+                    Subtotal: Rs. {cartItem?.price * cartItem?.quantity}
                   </Typography>
                 </Box>
 
                 <IconButton
                   color="error"
-                  onClick={() => handleRemoveDish(cartItem.id)}
+                  onClick={() => handleRemoveDish(cartItem?.id)}
                 >
                   <Delete />
                 </IconButton>

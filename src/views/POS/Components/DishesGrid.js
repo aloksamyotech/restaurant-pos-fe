@@ -6,12 +6,12 @@ const DishesGrid = ({ dishes, onAddToCart}) => {
   return (
     <Grid container spacing={0} justifyContent="flex-start" >
       {dishes.map((dish) => (
-        <Grid item key={dish.id} >
+        <Grid item key={dish?.id} >
           <DishCard
           
-            name={dish.name}
-            image={dish.image}
-            price={dish.price}
+            name={dish?.name}
+            image={dish?.image}
+            price={dish?.price}
             onAddToCart={()=> onAddToCart(dish)}
           />
         </Grid>

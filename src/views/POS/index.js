@@ -13,13 +13,13 @@ const POS=() =>{
   const handleAddToCart = (item) => {
     setCart((prevCart) => {
       
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevCart.find((cartItem) => cartItem?.id === item?.id);
   
       if (existingItem) {
         
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          cartItem?.id === item?.id
+            ? { ...cartItem, quantity: cartItem?.quantity + 1 }
             : cartItem
         );
       } else {
