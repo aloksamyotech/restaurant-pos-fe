@@ -12,7 +12,7 @@ const LeadManagement = Loadable(lazy(() => import('views/Lead')));  //SALES ORDE
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));  //link of contact--below change to pos
 const POS = Loadable(lazy(() => import('views/POS')));   //New POS Created 
 const Call = Loadable(lazy(() => import('views/Calls')));
-const Policy = Loadable(lazy(() => import('views/Policy')));    //link of policy--below change to pos
+const Categories = Loadable(lazy(() => import('views/Categories')));    //link of policy--below change to pos
 const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  // New Kitchen Created 
 const Metting = Loadable(lazy(() => import('views/Metting')));
 const Email = Loadable(lazy(() => import('views/Email')));
@@ -81,8 +81,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'categories',
+          element: <Categories />
         }
       ]
     },

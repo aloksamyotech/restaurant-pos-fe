@@ -68,9 +68,9 @@ const dashboard = {
     },
     {
       id: '04',
-      title: 'Policy Management',
+      title: 'Categories',
       type: 'item',
-      url: '/dashboard/task',
+      url: '/dashboard/categories',
       icon: icons.IconChecklist,
       breadcrumbs: false
     },
