@@ -1,30 +1,34 @@
-import React from "react";
+import React, {useState} from "react";
 import {Stack,Button,Container,Typography,Card,Box,TextField,Checkbox,IconButton,Grid,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import sandwich from 'assets/images/sandwich.jpg'
+import sandwich from "assets/images/sandwich.jpg"
+import AddButton from "./Components/AddButton";
 
 const Categories = () => {
-  const data = [
+  const [data,setData] =useState([
     {
       id: 1,
-      image: "sandwich", 
+      image: sandwich, 
       name: "Sandwiches",
       date: "04-12-2024, 05:06:11",
     },
     {
       id: 2,
-      image: "sandwich", 
+      image: sandwich, 
       name: "Paneer",
       date: "04-12-2024, 05:05:10",
     },
-  ];
+  ]); 
+  const handleAddCategory=(newCategory)=>{
+    setData((old)=>[...old, newCategory]);
+  };
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" mb={3} justifyContent="space-between">
-        <Typography variant="h4" component="h1">
+        <Typography variant="h3" component="h2">
           <Iconify icon="" /> Food Categories
         </Typography>
         <Button variant="contained">Back</Button>
@@ -33,7 +37,8 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
-          <Button variant="contained">Add</Button>
+          <AddButton onAdd={handleAddCategory} />
+
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
             <TextField
@@ -63,8 +68,8 @@ const Categories = () => {
             sx={{ width: 100, height: 100, borderRadius: 2, ml: 1 }}
           />
           <Box sx={{ flex: 1, ml: 2 }}>
-            <Typography variant="h6">{item?.name}</Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="h3">{item?.name}</Typography>
+            <Typography variant="body1" color="textSecondary">
               {item?.date}
             </Typography>
           </Box>
