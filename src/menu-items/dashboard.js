@@ -121,30 +121,56 @@ export const dashboard3 = {
 
     {
       id: '08',
-      title: 'Calender',
+      title: 'Expense Type',
       type: 'item',
-      url: '/dashboard/calender',
+      url: '/dashboard/expenseType',
       icon: icons.IconCalendarEvent,
       breadcrumbs: false
     },
     {
       id: '09',
-      title: 'Document Management',
+      title: 'Expenses',
       type: 'item',
-      url: '/dashboard/document',
+      url: '/dashboard/expenses',
+      icon: icons.IconFileUpload,
+      breadcrumbs: false
+    }
+   
+  ]
+};
+export const dashboard4 = {
+  title: 'People',
+  type: 'group',
+  children: [
+
+
+    {
+      id: '10',
+      title: 'Users',
+      type: 'item',
+      url: '/dashboard/users',
+      icon: icons.IconCalendarEvent,
+      breadcrumbs: false
+    },
+    {
+      id: '11',
+      title: 'User Roles',
+      type: 'item',
+      url: '/dashboard/userRoles',
       icon: icons.IconFileUpload,
       breadcrumbs: false
     },
     {
-      id: '10',
-      title: 'Email Template',
+      id: '12',
+      title: 'Customers',
       type: 'item',
-      url: '/dashboard/emailtemplate',
+      url: '/dashboard/customers',
       icon: icons.IconFileInvoice,
       breadcrumbs: false
     }
   ]
 };
+
 
 
 
