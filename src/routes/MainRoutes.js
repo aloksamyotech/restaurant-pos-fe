@@ -4,16 +4,17 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
+
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js'))); 
-const LeadManagement = Loadable(lazy(() => import('views/Lead')));  //SALES ORDER
-const ContactManagement = Loadable(lazy(() => import('views/Contact')));   //POS
-const POS = Loadable(lazy(() => import('views/POS')));   //POS
-const Call = Loadable(lazy(() => import('views/Calls')));
-const Policy = Loadable(lazy(() => import('views/Policy')));
-const Metting = Loadable(lazy(() => import('views/Metting')));
-const Email = Loadable(lazy(() => import('views/Email')));
+const Sales = Loadable(lazy(() => import('views/Sales')));  
+const POS = Loadable(lazy(() => import('views/POS')));    
+const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
+const Categories = Loadable(lazy(() => import('views/Categories')));    
+const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  
+const Items = Loadable(lazy(() => import('views/Items')));
+const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const Task = Loadable(lazy(() => import('views/Task')));
 const EmailTemplates = Loadable(lazy(() => import('views/EmailTemplates')));
 const Document = Loadable(lazy(() => import('views/Documents')));
@@ -43,8 +44,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'lead',
-          element: <LeadManagement />
+          path: 'sales',
+          element: <Sales />
         }
       ]
     },
@@ -52,7 +53,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'contact',
+          path: 'pos',
           element: <POS/>
         }
       ]
@@ -61,8 +62,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'call',
-          element: <Call />
+          path: 'modifiers',
+          element: <Modifiers />
         }
       ]
     },
@@ -70,17 +71,17 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'kitchen',
+          element: <Kitchen/>
         }
       ]
     },
-    {
+     {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'categories',
+          element: <Categories />
         }
       ]
     },
@@ -97,8 +98,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'email',
-          element: <Email />
+          path: 'ingredients',
+          element: <Ingredients />
         }
       ]
     },
@@ -106,8 +107,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'meeting',
-          element: <Metting />
+          path: 'items',
+          element: <Items />
         }
       ]
     },

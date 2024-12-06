@@ -30,8 +30,8 @@ const icons = {
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-const dashboard = {
-  title: 'Dashboard-Menu',
+export const dashboard = {
+  title: 'Restaurant POS',
   type: 'group',
   children: [
     {
@@ -46,15 +46,22 @@ const dashboard = {
       id: '01',
       title: 'Sales',
       type: 'item',
-      url: '/dashboard/lead',
+      url: '/dashboard/sales',
       icon: icons.IconAntennaBars5,
       breadcrumbs: false
-    },
+    }]
+};
+
+
+export const dashboard1 = {
+  title: 'Portal',
+  type: 'group',
+  children: [
     {
       id: '02',
       title: 'POS',
       type: 'item',
-      url: '/dashboard/contact',
+      url: '/dashboard/pos',
       icon: icons.IconPhoneCheck,
       breadcrumbs: false
     },
@@ -62,42 +69,56 @@ const dashboard = {
       id: '03',
       title: 'Kitchen',
       type: 'item',
-      url: '/dashboard/policy',
+      url: '/dashboard/kitchen',
       icon: icons.IconNotebook,
       breadcrumbs: false
-    },
+    }
+  ]
+};
+export const dashboard2 = {
+  title: 'FOOD',
+  type: 'group',
+  children: [
     {
       id: '04',
-      title: 'Policy Management',
+      title: 'Categories',
       type: 'item',
-      url: '/dashboard/task',
+      url: '/dashboard/categories',
       icon: icons.IconChecklist,
       breadcrumbs: false
     },
     {
       id: '05',
-      title: 'Meeting',
+      title: 'Items',
       type: 'item',
-      url: '/dashboard/meeting',
+      url: '/dashboard/items',
       icon: icons.IconUsers,
       breadcrumbs: false
     },
     {
       id: '06',
-      title: 'Calls',
+      title: 'Modifiers',
       type: 'item',
-      url: '/dashboard/call',
+      url: '/dashboard/modifiers',
       icon: icons.IconPhoneCall,
       breadcrumbs: false
     },
     {
       id: '07',
-      title: 'Emails',
+      title: 'Ingredients',
       type: 'item',
-      url: '/dashboard/email',
+      url: '/dashboard/ingredients',
       icon: icons.IconMail,
       breadcrumbs: false
-    },
+    }
+  ]
+};
+export const dashboard3 = {
+  title: 'Expenses',
+  type: 'group',
+  children: [
+
+
     {
       id: '08',
       title: 'Calender',
@@ -125,4 +146,5 @@ const dashboard = {
   ]
 };
 
-export default dashboard;
+
+

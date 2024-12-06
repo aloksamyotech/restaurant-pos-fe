@@ -9,8 +9,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ActionCalenderDropDown from './ActionCalenderDropDown';
 import AddTask from 'views/Task/AddTask';
-import AddCalls from 'views/Calls/Addcalls';
-import AddMeetings from 'views/Metting/Addmeetings';
+import AddCalls from 'views/Modifiers/Addmodifiers';
+import AddMeetings from 'views/Items/AddItems';
 
 // ----------------------------------------------------------------------
 function renderEventContent(eventInfo) {

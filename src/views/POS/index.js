@@ -1,35 +1,68 @@
-import SearchBar from "./SearchBar/SearchBar";
-import DishCard from "./DishCard/DishCard";
-import DishesGrid from "./Dishes/DishesGrid";
-import sandwich from 'assets/images/sandwich.jpg'
-
-
-
-
+import React, {useState} from "react";
+import SearchBar from "./Components/SearchBar";
+import DishesGrid from "./Components/DishesGrid";
+import { Container,Grid, Paper, Typography } from "@mui/material";
+import dishes from "./Components/Dishes";
+import Cart from "./Components/Cart";
 
 
 const POS=() =>{
-  const dishes = [
-    { id: 1, name: "sandwich", image: sandwich, price: 15 },
-    { id: 2, name: "sandwich", image: sandwich, price: 20 },
-    { id: 3, name: "sandwich", image: sandwich, price: 25 },
-  ];
+  const [cartStore, setCart] = useState([]);
+
+  
+  const handleAddToCart = (item) => {
+    setCart((prevCart) => {
+      
+      const existingItem = prevCart.find((cartItem) => cartItem?.id === item?.id);
+  
+      if (existingItem) {
+        
+        return prevCart.map((cartItem) =>
+          cartItem?.id === item?.id
+            ? { ...cartItem, quantity: cartItem?.quantity + 1 }
+            : cartItem
+        );
+      } else {
+       
+        return [...prevCart, { ...item, quantity: 1 }];
+      }
+    });
+  };
+  
+ 
   return(
     <>
-   
-    <SearchBar/>
-    <div>
-    <DishCard
-        name="Sandwich"
+   <Container maxWidth="lg" sx={{bgcolor:''}}>
+      <Grid container spacing={1}>
+       
+        <Grid item xs={12} md={8}  >
+          <SearchBar />
+          <DishesGrid dishes={dishes} 
+          
+          onAddToCart={handleAddToCart}/>
+
+          
+        </Grid>
+       
+
         
-        price={15}
-      />
-    </div>
-    <div>
-      <DishesGrid dishes={dishes} />
-    </div>
+        <Grid item xs={12} md={4}   
+    >
+          <Paper elevation={1} sx={{ p: 1,width:'110%'}}>
+            <Typography variant="h5" sx={{ mb: 2 }}>
+              Your Dish Box
+            </Typography>
+            <Cart cartItems={cartStore} setCart={setCart}/>
+          </Paper>
+        </Grid>
+      </Grid>
+    
+    </Container>
+     
+      
     
     </>
-  )
-}
+  );
+};
+
 export default POS;
