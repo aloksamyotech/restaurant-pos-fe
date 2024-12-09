@@ -19,7 +19,7 @@ const AddButton = ({ onAdd }) => {
   };
 
   const handleImageUpload = (d) => {
-    const file = d.target.files[0];
+    const file = d.target?.files[0];
     setNewCategory((old) => ({ ...old, image: URL.createObjectURL(file) }));
   };
 

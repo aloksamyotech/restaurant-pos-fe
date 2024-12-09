@@ -6,8 +6,10 @@ import Iconify from "../../ui-component/iconify";
 import sandwich from "assets/images/sandwich.jpg"
 import AddButton from "./Components/AddButton";
 import HomeIcon from '@mui/icons-material/Home';
+import { useTranslation } from "react-i18next";
 
 const Categories = () => {
+  const {t} = useTranslation();
   const [data,setData] =useState([
     {
       id: 1,
@@ -52,7 +54,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
       <Stack direction="row" alignItems="center"  justifyContent="space-between">
         <Typography variant="h3" component="h2">
-          <Iconify icon="" /> Food Categories
+          <Iconify icon="" /> {t('Food Categories')}
         </Typography>
         <Breadcrumbs separator="›" aria-label="breadcrumb">
         {breadcrumbs}

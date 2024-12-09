@@ -1,79 +1,119 @@
-import React, { useState } from "react";
-import {Button,Dialog,DialogTitle,DialogContent,DialogActions,Stack,TextField,} from "@mui/material";
+import React, { useState } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
 
-const AddButton = ({ onAdd }) => {
-  const [open, setOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState({ name: "", image: null });
-
-  
-  const handleDialogOpen = () => {setOpen(true)};
-  const handleDialogClose = () => {
-    setOpen(false);
-    setNewCategory({ name: "", image: null }); 
-  };
+const AddModifierDialog = ({ open, onClose }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm(); 
 
   
-  const handleInputChange = (d) => {
-    const { name, value } = d.target; 
-    setNewCategory((old) => ({ ...old, [name]: value }));
-  };
-
-  const handleImageUpload = (d) => {
-    const file = d.target.files[0];
-    setNewCategory((old) => ({ ...old, image: URL.createObjectURL(file) }));
-  };
-
-  
-  const handleAddCategory = () => {
-    if (newCategory?.name && newCategory?.image) {
-      onAdd({
-        id: Date.now(), 
-        name: newCategory?.name,
-        image: newCategory?.image,
-        date: new Date().toLocaleString(),
-      });
-      handleDialogClose();
-    } else {
-      alert("Add Category of Dish ");
-    }
+  const onSubmit = (data) => {
+    const formData = { ...data}; 
+    console.log(formData); 
+    onClose();  
   };
 
   return (
-    <>
-      <Button variant="contained" onClick={handleDialogOpen}>
-        Add
-      </Button>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle padding={0}>Add New Dish</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2}>
+            
+             <Grid mt={1} item xs={12}>
+              <Controller
+                name="dishName"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'Dish Name is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Dish Name"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.dishName}
+                    helperText={errors.dishName ? errors.dishName.message : ''}
+                  />
+                )}
+              />
+            </Grid>
 
-      <Dialog open={open} onClose={handleDialogClose} fullWidth maxWidth="sm">
-        <DialogTitle>Add New Category</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2}>
-            <TextField
-              label="Category Name"
-              name="name"
-              value={newCategory?.name}
-              onChange={handleInputChange}
-              fullWidth
-            />
-            <input
-              type="file"
-              accept="image"
-              onChange={handleImageUpload}
-              style={{ marginTop: "8px" }}
-            />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddCategory} variant="contained">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+          
+            <Grid item xs={6}>
+              <Controller
+                name="cost"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: 'Cost is required',
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: 'Invalid cost format'
+                  }
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Cost"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.cost}
+                    helperText={errors.cost ? errors.cost.message : ''}
+                    type="number"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+
+           
+            <Grid item xs={6}>
+              <Controller
+                name="price"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: 'Price is required',
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: 'Invalid price format'
+                  }
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Price"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.price}
+                    helperText={errors.price ? errors.price.message : ''}
+                    type="number"
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+
+           
+          </Grid>
+
+          <DialogActions>
+          <Button type="submit" variant="contained" color="primary">
+              Add Item
+            </Button>
+            <Button onClick={onClose} color="secondary">
+              Cancel
+            </Button>
+            
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default AddButton;
+export default AddModifierDialog;
