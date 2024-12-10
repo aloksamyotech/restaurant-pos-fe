@@ -152,15 +152,8 @@ export const dashboard4 = {
       icon: icons.IconCalendarEvent,
       breadcrumbs: false
     },
-    {
-      id: '11',
-      title: 'User Roles',
-      type: 'item',
-      url: '/dashboard/userRoles',
-      icon: icons.IconFileUpload,
-      breadcrumbs: false
-    },
-    {
+  
+{
       id: '12',
       title: 'Customers',
       type: 'item',

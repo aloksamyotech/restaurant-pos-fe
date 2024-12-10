@@ -1,79 +1,136 @@
-import React, { useState } from "react";
-import {Button,Dialog,DialogTitle,DialogContent,DialogActions,Stack,TextField,} from "@mui/material";
+import React, { useState } from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
 
-const AddButton = ({ onAdd }) => {
-  const [open, setOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState({ name: "", image: null });
+const Customer = ({ open, onClose }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm(); 
 
+  const [image, setImage] = useState(null); 
+  const [dishImage, setDishImage] = useState(""); 
   
-  const handleDialogOpen = () => {setOpen(true)};
-  const handleDialogClose = () => {
-    setOpen(false);
-    setNewCategory({ name: "", image: null }); 
-  };
-
-  
-  const handleInputChange = (d) => {
-    const { name, value } = d.target; 
-    setNewCategory((old) => ({ ...old, [name]: value }));
-  };
-
-  const handleImageUpload = (d) => {
-    const file = d.target.files[0];
-    setNewCategory((old) => ({ ...old, image: URL.createObjectURL(file) }));
-  };
-
-  
-  const handleAddCategory = () => {
-    if (newCategory?.name && newCategory?.image) {
-      onAdd({
-        id: Date.now(), 
-        name: newCategory?.name,
-        image: newCategory?.image,
-        date: new Date().toLocaleString(),
-      });
-      handleDialogClose();
-    } else {
-      alert("Add Category of Dish ");
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file)); 
+      setDishImage(file); 
     }
   };
 
-  return (
-    <>
-      <Button variant="contained" onClick={handleDialogOpen}>
-        Add
-      </Button>
 
-      <Dialog open={open} onClose={handleDialogClose} fullWidth maxWidth="sm">
-        <DialogTitle>Add New Category</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2}>
-            <TextField
-              label="Category Name"
-              name="name"
-              value={newCategory?.name}
-              onChange={handleInputChange}
-              fullWidth
-            />
-            <input
-              type="file"
-              accept="image"
-              onChange={handleImageUpload}
-              style={{ marginTop: "8px" }}
-            />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddCategory} variant="contained">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+  const onSubmit = (data) => {
+    const formData = { ...data, dishImage: dishImage }; 
+    console.log(formData); 
+    onClose();  
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Add Customer</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={2}>
+           
+            
+
+            
+            <Grid item xs={12}>
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'Name is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Name"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors?.name}
+                    helperText={errors?.name ? errors?.name?.message : ''}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'Email is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Email"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors?.email}
+                    helperText={errors?.email ? errors?.email?.message : ''}
+                  />
+                )}
+              />
+            </Grid>
+           
+            <Grid item xs={12}>
+              <Controller
+                name="phone"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'phone is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Phone"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors?.phone}
+                    helperText={errors?.phone ? errors?.phone?.message : ''}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Controller
+                name="address"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'address is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Address"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors?.address}
+                    helperText={errors?.address ? errors?.address?.message : ''}
+                  />
+                )}
+              />
+            </Grid>
+
+           
+           
+            
+
+            
+
+           
+            
+          </Grid>
+
+          <DialogActions>
+          <Button type="submit" variant="contained" color="primary">
+              Add Item
+            </Button>
+            <Button onClick={onClose} color="secondary">
+              Cancel
+            </Button>
+            
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default AddButton;
+export default Customer;
