@@ -4,7 +4,14 @@ import DishCard from "./DishCard";
 
 const DishesGrid = ({ dishes, onAddToCart}) => {
   return (
-    <Grid container spacing={0} justifyContent="flex-start" >
+    <Grid container spacing={0} justifyContent="flex-start"  
+    sx={{ 
+      height: "420px", 
+      overflowY: "auto", 
+      
+    }}
+    overflow={"auto"}
+    >
       {dishes.map((dish) => (
         <Grid item key={dish?.id} >
           <DishCard

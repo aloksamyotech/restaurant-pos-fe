@@ -18,8 +18,9 @@ const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Expenses = Loadable(lazy(() => import('views/Expenses')));
 const Users = Loadable(lazy(() => import('views/Users')));
-
+// const UserRoles = Loadable(lazy(() => import('views/UserRoles')));
 const Customers = Loadable(lazy(() => import('views/Customers')));
+const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -147,6 +148,15 @@ const MainRoutes = {
         {
           path: 'customers',
           element: <Customers />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'customer/customerview',
+          element: <CustomersView/>
         }
       ]
     }

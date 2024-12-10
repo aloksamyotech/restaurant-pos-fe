@@ -12,6 +12,7 @@ const Customer = ({ open, onClose }) => {
     const file = e.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file)); 
+      
       setDishImage(file); 
     }
   };
@@ -107,16 +108,7 @@ const Customer = ({ open, onClose }) => {
                 )}
               />
             </Grid>
-
-           
-           
-            
-
-            
-
-           
-            
-          </Grid>
+       </Grid>
 
           <DialogActions>
           <Button type="submit" variant="contained" color="primary">

@@ -10,8 +10,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
+
 const columns = [
-  { field: 'id', headerName: 'ID', flex:1,headerAlign: 'center',align: 'center',},
+  { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
   
   {
     field: 'customer',
@@ -52,6 +53,23 @@ const columns = [
     align: 'center',
 
   },
+  {
+    field: 'action',
+    headerName: 'Action',
+    headerAlign: 'center',
+    align: 'center',
+
+    flex:1,
+    renderCell: (params) => (
+      <Link fontSize={0} color="inherit"
+        href="/dashboard/customer/customerview">
+
+      <VisibilityIcon color="primary" />
+      </Link>
+
+
+    ),
+  }
   
   
   

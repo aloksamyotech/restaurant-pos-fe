@@ -1,6 +1,7 @@
 import React from "react";
 import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar,IconButton,Button,Box } from "@mui/material";
 import { Remove, Add, Delete } from "@mui/icons-material";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 const Cart = ({ cartItems,setCart }) => { 
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
@@ -56,7 +57,20 @@ const Cart = ({ cartItems,setCart }) => {
         }}
       >
         {cartItems?.length === 0 ? (
-          <Typography textAlign="center">Add a Dish to the Cart</Typography>
+           <Box
+           sx={{
+             display: 'flex',
+             justifyContent: 'center',
+             alignItems: 'center',
+            
+           }}
+         >
+          <IconButton color="primary" aria-label="add to cart" 
+            
+            >
+          <AddShoppingCartIcon sx={{ fontSize: 100 }}/>
+        </IconButton>
+        </Box>
         ) : (
           <List>
             {cartItems.map((cartItem) => (
