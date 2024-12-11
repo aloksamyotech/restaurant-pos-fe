@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import SearchBar from "./Components/SearchBar";
 import DishesGrid from "./Components/DishesGrid";
-import { Container, Grid, Paper, Typography,Card } from "@mui/material";
+import { Container, Grid, Paper, Typography,Card, Button, Stack } from "@mui/material";
 import dishes from "./Components/Dishes";
 import Cart from "./Components/Cart";
+import Dropdown from "./Components/dropDown";
 
 
 const POS = () => {
   const [cartStore, setCart] = useState([]);
+  const [dishesPerRow, setDishesPerRow] = useState(3);
 
 
   const handleAddToCart = (item) => {
@@ -33,21 +35,28 @@ const POS = () => {
   return (
     <>
       <Container maxWidth="xl" sx={{ }}>
+      <Card sx={{p:1,m:1}}>
+        <Stack direction="row"><SearchBar />
+        <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />
+        <Button variant="outlined" >Submit</Button>
+        </Stack>
+      
+      </Card>
 
         <Grid container spacing={0.5}>
 
           <Grid item xs={12} md={8}  >
-            <SearchBar />
-            <DishesGrid dishes={dishes} onAddToCart={handleAddToCart} />
+            
+            <DishesGrid dishes={dishes} onAddToCart={handleAddToCart}  dishesPerRow={dishesPerRow} />
           </Grid>
 
 
           <Grid item xs={12} md={4} >
 
-            <Card sx={{ p: 1, width: '110%' }}>
-              <Typography variant="h5" sx={{ mb: 2 }}>
+            <Card sx={{ p: 0, width: '110%' }}>
+              {/* <Typography variant="h5" sx={{ mb: 2 }}>
                 Your Dish Box
-              </Typography>
+              </Typography> */}
               <Cart cartItems={cartStore} setCart={setCart} />
             </Card>
           </Grid>

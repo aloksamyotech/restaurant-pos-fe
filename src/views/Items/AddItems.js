@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, 
+  InputAdornment, Typography,
+  IconButton,} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
+import MultipleSelect from './multiDropDown';
+import CloseIcon from '@mui/icons-material/Close';
 
 const AddItemDialog = ({ open, onClose }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm(); 
+  const { control, handleSubmit, reset,formState: { errors } } = useForm(); 
 
   const [image, setImage] = useState(null); 
   const [dishImage, setDishImage] = useState(""); 
@@ -16,19 +20,39 @@ const AddItemDialog = ({ open, onClose }) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    reset();
+  }
+
 
   const onSubmit = (data) => {
     const formData = { ...data, dishImage: dishImage }; 
     console.log(formData); 
-    onClose();  
+    handleClose();  
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add New Dish</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} marginTop={"1px"}>
+
+          <IconButton
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            color: 'grey',
+            '&:hover': {
+              color: 'red',
+            },
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
            
             
 
@@ -135,6 +159,8 @@ const AddItemDialog = ({ open, onClose }) => {
                 )}
               />
             </Grid>
+
+            <Grid item xs={6}><MultipleSelect/></Grid>
 
             <Grid item xs={12}>
               <Typography variant="body1" sx={{ mb: 1 }}>Upload Dish Image</Typography>

@@ -10,8 +10,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
+
+
 const columns = [
-  { field: 'id', headerName: 'ID', flex:1,headerAlign: 'center',align: 'center',},
+  { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
   
   {
     field: 'dishName',

@@ -11,7 +11,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'id', headerName: 'S.No', width: 90 },
   {
     field: 'dishImage',
     headerName: 'Dish Image',
@@ -30,6 +30,8 @@ const columns = [
     headerName: 'Dish Name',
     width: 150,
     editable: true,
+    headerAlign: 'center',
+    align: 'center',
   },
   {
     field: 'cost',
@@ -37,6 +39,8 @@ const columns = [
     type: 'number',
     width: 110,
     editable: true,
+    headerAlign: 'center',
+    align: 'center',
   },
   {
     field: 'price',
@@ -44,6 +48,8 @@ const columns = [
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
     width: 160,
+    headerAlign: 'center',
+    align: 'center',
 
   },
   {
@@ -52,10 +58,14 @@ const columns = [
     type: 'number',
     width: 110,
     editable: true,
+    headerAlign: 'center',
+    align: 'center',
   },
   {
     field: 'action',
     headerName: 'Action',
+    headerAlign: 'center',
+    align: 'center',
 
     width: 110,
     renderCell: (params) => (
