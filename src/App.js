@@ -5,6 +5,7 @@ import { CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 // routing
 import Routes from 'routes';
 
@@ -24,10 +25,13 @@ const App = () => {
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
         <ToastContainer />
+        
         <NavigationScroll>
+        
           <Routes />
         </NavigationScroll>
       </ThemeProvider>
+      
     </StyledEngineProvider>
   );
 };

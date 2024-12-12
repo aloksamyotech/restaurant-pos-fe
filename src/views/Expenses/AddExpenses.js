@@ -2,50 +2,88 @@ import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 
-const AddModifierDialog = ({ open, onClose }) => {
+const AddUser = ({ open, onClose }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
 
+  const [image, setImage] = useState(null); 
+  const [dishImage, setDishImage] = useState(""); 
   
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file)); 
+      setDishImage(file); 
+    }
+  };
+
+
   const onSubmit = (data) => {
-    const formData = { ...data}; 
+    const formData = { ...data, dishImage: dishImage }; 
     console.log(formData); 
     onClose();  
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Dish</DialogTitle>
+      <DialogTitle>Add New Dish</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+           
             
-             <Grid mt={1} item xs={12}>
+
+            
+            <Grid item xs={12}>
               <Controller
-                name="dishName"
+                name="expense"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Dish Name is required' }}
+                rules={{ required: 'Expense is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Dish Name"
+                    label="Expense"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.dishName}
-                    helperText={errors.dishName ? errors.dishName.message : ''}
+                    error={!!errors?.expense}
+                    helperText={errors?.expense ? errors?.expense?.message : ''}
                   />
                 )}
               />
             </Grid>
 
-          
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Controller
-                name="cost"
+                name="category"
+                control={control}
+                defaultValue=""
+                rules={{ required: 'Category is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    select
+                    label="Category"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.category}
+                    helperText={errors.category ? errors.category.message : ''}
+                  >
+                    <MenuItem value="Kitchen Expenses">Kitchen Expenses</MenuItem>
+                    <MenuItem value="Drinks">Drinks</MenuItem>
+                    <MenuItem value="Human Resource">Human Resource</MenuItem>
+                  </TextField>
+                )}
+              />
+            </Grid>
+
+           
+            <Grid item xs={12}>
+              <Controller
+                name="amount"
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: 'amount is required',
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
@@ -54,11 +92,11 @@ const AddModifierDialog = ({ open, onClose }) => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label="Amount"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.cost}
-                    helperText={errors.cost ? errors.cost.message : ''}
+                    error={!!errors?.amount}
+                    helperText={errors?.amount ? errors?.amount?.message : ''}
                     type="number"
                     InputProps={{
                       startAdornment: <InputAdornment position="start">₹</InputAdornment>
@@ -69,36 +107,13 @@ const AddModifierDialog = ({ open, onClose }) => {
             </Grid>
 
            
-            <Grid item xs={6}>
-              <Controller
-                name="price"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: 'Price is required',
-                  pattern: {
-                    value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
-                  }
-                }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Price"
-                    variant="outlined"
-                    fullWidth
-                    error={!!errors.price}
-                    helperText={errors.price ? errors.price.message : ''}
-                    type="number"
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
-                    }}
-                  />
-                )}
-              />
-            </Grid>
+           
+            
+
+            
 
            
+            
           </Grid>
 
           <DialogActions>
@@ -116,4 +131,4 @@ const AddModifierDialog = ({ open, onClose }) => {
   );
 };
 
-export default AddModifierDialog;
+export default AddUser ;

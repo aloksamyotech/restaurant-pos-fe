@@ -1,12 +1,19 @@
 import React, {useState} from "react";
-import {Stack,Button,Container,Typography,Card,Box,TextField,Checkbox,IconButton,Grid,
+import {Stack,Button,Container,Typography,Card,Box,TextField,Checkbox,IconButton,Grid, Breadcrumbs, Link,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
 import sandwich from "assets/images/sandwich.jpg"
-import AddButton from "./Components/AddButton";
+import AddCategoriesDialog from "./Components/AddCategories";
+import HomeIcon from '@mui/icons-material/Home';
+import { useTranslation } from "react-i18next";
 
 const Categories = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+  const {t} = useTranslation();
   const [data,setData] =useState([
     {
       id: 1,
@@ -24,20 +31,48 @@ const Categories = () => {
   const handleAddCategory=(newCategory)=>{
     setData((old)=>[...old, newCategory]);
   };
+  function handleClick(event) {
+    event.preventDefault();
+    console.info('You clicked a breadcrumb.');
+  }
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+      <HomeIcon />
+    </Link>,
+    <Link
+      underline="hover"
+      key="2"
+      color="primary"
+      href="/material-ui/getting-started/installation/"
+      onClick={handleClick}
+    >
+      Food 
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      Categories
+    </Typography>,
+  ];
 
   return (
     <Container>
-      <Stack direction="row" alignItems="center" mb={3} justifyContent="space-between">
+      <Card sx={{ p: 2, mb: 3 }}>
+      <Stack direction="row" alignItems="center"  justifyContent="space-between">
         <Typography variant="h3" component="h2">
-          <Iconify icon="" /> Food Categories
+          <Iconify icon="" /> {t('Food Categories')}
         </Typography>
-        <Button variant="contained">Back</Button>
+        <Breadcrumbs separator="›" aria-label="breadcrumb">
+        {breadcrumbs}
+      </Breadcrumbs>
       </Stack>
+      </Card>
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
-          <AddButton onAdd={handleAddCategory} />
+          <Button variant="contained" color="primary" onClick={handleDialogOpen}>
+            Add Item
+          </Button>
+          <AddCategoriesDialog open={dialogOpen} onClose={handleDialogClose} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

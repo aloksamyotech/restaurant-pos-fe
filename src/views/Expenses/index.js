@@ -4,41 +4,46 @@ import {
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import AddModifierDialog from "./Addmodifiers";
+import AddExpensesDialog  from "./AddExpenses";
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+
 const columns = [
-  { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
+  { field: 'id', headerName: 'ID', flex:1,headerAlign: 'center',align: 'center',},
   
   {
-    field: 'dishName',
-    headerName: 'Dish Name',
+    field: 'expenses',
+    headerName: 'Expenses ',
     flex:1,
     headerAlign: 'center',
     align: 'center',
     editable: true,
   },
+  
   {
-    field: 'cost',
-    headerName: 'Cost',
-    type: 'number',
-    flex:1,
-    headerAlign: 'center',
-    editable: true,
-    align: 'center',
-  },
-  {
-    field: 'price',
-    headerName: 'Price',
-    description: 'This column has a value getter and is not sortable.',
+    field: 'amount',
+    headerName: 'Amount',
+    type:'string',
     sortable: false,
     flex:1,
     headerAlign: 'center',
     align: 'center',
 
   },
+  {
+    field: 'category',
+    headerName: 'Category',
+    type:'string',
+    sortable: false,
+    flex:1,
+    headerAlign: 'center',
+    align: 'center',
+
+  },
+  
+  
   
   {
     field: 'action',
@@ -57,11 +62,11 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 2,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 3,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 4,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 5,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
+  { id: 1,  expenses: 'Vegetable', amount:1000,category:'Kitchen Expense',  action: '' },
+  { id: 2,  expenses: 'Fish', amount:5000,category:'Kitchen Expense',   action: '' },
+  { id: 3,  expenses: 'Pepsi', amount:1000,category:'Drinks',    action: '' },
+  { id: 4,  expenses: 'Veg', amount:2000,category:'Kitchen Expense',    action: '' },
+  { id: 5,  expenses: 'Test', amount:3000,  category:'Human Resource', action: '' },
 
 ];
 
@@ -86,10 +91,10 @@ const Categories = () => {
       href="/material-ui/getting-started/installation/"
       onClick={handleClick}
     >
-      Food Modifiers
+      Expenses
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Modifiers
+      Expenses
     </Typography>,
   ];
 
@@ -98,7 +103,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Food Modifiers
+            <Iconify icon="" /> Expenses 
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -110,9 +115,9 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add Item
+            Add Expense
           </Button>
-          <AddModifierDialog open={dialogOpen} onClose={handleDialogClose} />
+          <AddExpensesDialog  open={dialogOpen} onClose={handleDialogClose} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

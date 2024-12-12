@@ -1,7 +1,8 @@
 import React from "react";
-import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar,IconButton,Button,Box } from "@mui/material";
+import { List, ListItem, ListItemText, Typography, Paper, Avatar, ListItemAvatar, IconButton, Button, Box } from "@mui/material";
 import { Remove, Add, Delete } from "@mui/icons-material";
-const Cart = ({ cartItems,setCart }) => { 
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+const Cart = ({ cartItems, setCart }) => {
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
@@ -10,16 +11,16 @@ const Cart = ({ cartItems,setCart }) => {
     setCart((prevCart) => prevCart.filter((cartItem) => cartItem?.id !== id));
   };
 
-    const handleIncrementQuantity = (id) => {
-      setCart((prevCart) =>
-        prevCart.map((cartItem) =>
-          cartItem?.id === id
-            ? { ...cartItem, quantity: cartItem?.quantity + 1 }
-            : cartItem
-        )
-      );
-    };
-    
+  const handleIncrementQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((cartItem) =>
+        cartItem?.id === id
+          ? { ...cartItem, quantity: cartItem?.quantity + 1 }
+          : cartItem
+      )
+    );
+  };
+
   const handleDecrementQuantity = (id) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
@@ -42,12 +43,12 @@ const Cart = ({ cartItems,setCart }) => {
         flexDirection: "column",
         justifyContent: "",
         height: "420px",
-        border: "1px solid #ccc",
+        // border: "1px solid #ccc",
         borderRadius: "8px",
         overflow: "hidden",
       }}
     >
-      
+
       <Box
         sx={{
           flex: 1,
@@ -56,7 +57,20 @@ const Cart = ({ cartItems,setCart }) => {
         }}
       >
         {cartItems?.length === 0 ? (
-          <Typography textAlign="center">Add a Dish to the Cart</Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+
+            }}
+          >
+            <IconButton color="primary" aria-label="add to cart"
+
+            >
+              <AddShoppingCartIcon sx={{ fontSize: 100 }} />
+            </IconButton>
+          </Box>
         ) : (
           <List>
             {cartItems.map((cartItem) => (
@@ -133,7 +147,7 @@ const Cart = ({ cartItems,setCart }) => {
         )}
       </Box>
 
-     
+
       <Box
         sx={{
           borderTop: "1px solid #ccc",

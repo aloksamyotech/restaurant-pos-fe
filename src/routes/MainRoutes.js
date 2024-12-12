@@ -15,11 +15,13 @@ const Categories = Loadable(lazy(() => import('views/Categories')));
 const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  
 const Items = Loadable(lazy(() => import('views/Items')));
 const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
-const Task = Loadable(lazy(() => import('views/Task')));
-const EmailTemplates = Loadable(lazy(() => import('views/EmailTemplates')));
-const Document = Loadable(lazy(() => import('views/Documents')));
-const Calender = Loadable(lazy(() => import('views/Calender')));
-const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
+const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
+const Expenses = Loadable(lazy(() => import('views/Expenses')));
+const Users = Loadable(lazy(() => import('views/Users')));
+// const UserRoles = Loadable(lazy(() => import('views/UserRoles')));
+const Customers = Loadable(lazy(() => import('views/Customers')));
+const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
+
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -85,15 +87,7 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'task',
-          element: <Task />
-        }
-      ]
-    },
+   
     {
       path: 'dashboard',
       children: [
@@ -116,8 +110,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'calender',
-          element: <Calender />
+          path: 'expenseType',
+          element: <ExpenseType />
         }
       ]
     },
@@ -125,8 +119,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'document',
-          element: <Document />
+          path: 'expenses',
+          element: <Expenses />
         }
       ]
     },
@@ -134,8 +128,26 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'emailtemplate',
-          element: <EmailTemplates />
+          path: 'users',
+          element: <Users />
+        }
+      ]
+    },
+    // {
+    //   path: 'dashboard',
+    //   children: [
+    //     {
+    //       path: 'userRoles',
+    //       element: <UserRoles />
+    //     }
+    //   ]
+    // },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'customers',
+          element: <Customers />
         }
       ]
     },
@@ -143,11 +155,12 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'emailtemplate/addTemplates',
-          element: <AddTemplates />
+          path: 'customer/customerview',
+          element: <CustomersView/>
         }
       ]
     }
+    
   ]
 };
 

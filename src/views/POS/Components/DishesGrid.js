@@ -1,23 +1,35 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import DishCard from "./DishCard";
 
-const DishesGrid = ({ dishes, onAddToCart}) => {
+const DishDataGrid = ({ dishes, dishesPerRow, onAddToCart }) => {
+  const calculateGridColumns = () => {
+    return Math.floor(12 / dishesPerRow); 
+  };
+
   return (
-    <Grid container spacing={0} justifyContent="flex-start" >
+    <Box
+    sx={{
+      height: "400px", 
+      overflowY: "auto", 
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+    }}
+  >
+    <Grid container spacing={0.1}>
       {dishes.map((dish) => (
-        <Grid item key={dish?.id} >
+        <Grid item xs={calculateGridColumns()} key={dish.id}>
           <DishCard
-          
-            name={dish?.name}
-            image={dish?.image}
-            price={dish?.price}
-            onAddToCart={()=> onAddToCart(dish)}
+            name={dish.name}
+            image={dish.image}
+            price={dish.price}
+            onAddToCart={() => onAddToCart(dish)} 
           />
         </Grid>
       ))}
     </Grid>
+    </Box>
   );
 };
 
-export default DishesGrid;
+export default DishDataGrid;

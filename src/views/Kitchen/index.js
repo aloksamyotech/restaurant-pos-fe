@@ -2,6 +2,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import { Avatar, Button, CardContent, FormControl, FormLabel, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import FastfoodIcon from "@mui/icons-material/Fastfood";
+import { padding } from '@mui/system';
 
 
 const kitchen = () => {
@@ -37,7 +38,7 @@ const kitchen = () => {
                 </Button>
             </Card>
 
-            <Grid container spacing={2} justifyContent="flex-start">
+            <Grid container spacing={2} justifyContent="flex-start" sx={{ p:2}}>
       {orders.map((order) => (
         <Grid item key={order.orderId}>
           <Card sx={{ margin: 1, padding: 2, maxWidth: 400,bgcolor:'#cfd8dc'  }}>

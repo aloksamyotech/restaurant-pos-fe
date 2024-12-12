@@ -4,41 +4,36 @@ import {
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import AddModifierDialog from "./Addmodifiers";
+import AddExpensesTypeDialog from "./AddExpensesType";
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
+
 const columns = [
-  { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
+  { field: 'id', headerName: 'ID', flex:1,headerAlign: 'center',align: 'center',},
   
   {
-    field: 'dishName',
-    headerName: 'Dish Name',
+    field: 'expensesType',
+    headerName: 'Expenses Type',
     flex:1,
     headerAlign: 'center',
     align: 'center',
     editable: true,
   },
+  
   {
-    field: 'cost',
-    headerName: 'Cost',
-    type: 'number',
-    flex:1,
-    headerAlign: 'center',
-    editable: true,
-    align: 'center',
-  },
-  {
-    field: 'price',
-    headerName: 'Price',
-    description: 'This column has a value getter and is not sortable.',
+    field: 'createdAt',
+    headerName: 'Created At',
+    type:'string',
     sortable: false,
     flex:1,
     headerAlign: 'center',
     align: 'center',
 
   },
+  
+  
   
   {
     field: 'action',
@@ -57,11 +52,11 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 2,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 3,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 4,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 5,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
+  { id: 1,  expensesType: 'Rent ', createdAt:"04-12-2024, 05:06:11",unit:'ltr',  action: '' },
+  { id: 2,  expensesType: 'Electricity', createdAt:"04-12-2024, 05:06:11",unit:'kg',   action: '' },
+  { id: 3,  expensesType: 'Salary', createdAt:"04-12-2024, 05:06:11",unit:'piece',    action: '' },
+  { id: 4,  expensesType: 'Drinks', createdAt:"04-12-2024, 05:06:11",unit:'piece',    action: '' },
+  { id: 5,  expensesType: 'Other Expenses', createdAt:"04-12-2024, 05:06:11",  unit:'kg', action: '' },
 
 ];
 
@@ -86,10 +81,10 @@ const Categories = () => {
       href="/material-ui/getting-started/installation/"
       onClick={handleClick}
     >
-      Food Modifiers
+      Expenses Type
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Modifiers
+      Expenses
     </Typography>,
   ];
 
@@ -98,7 +93,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Food Modifiers
+            <Iconify icon="" /> Expenses Type
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -112,7 +107,7 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddModifierDialog open={dialogOpen} onClose={handleDialogClose} />
+          <AddExpensesTypeDialog open={dialogOpen} onClose={handleDialogClose} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

@@ -6,7 +6,10 @@ const dishes = [
     { id: 3, name: "Rasmalia", image: sandwich, price: 25 },
     { id: 4, name: "Kofta", image: sandwich, price: 35 },
     { id: 5, name: "Burger", image: sandwich, price: 35 },
-    { id: 6, name: "Paneer", image: sandwich, price: 35 }
+    { id: 6, name: "Paneer", image: sandwich, price: 35 },
+    { id: 7, name: "Kofta", image: sandwich, price: 35 },
+    { id: 8, name: "Burger", image: sandwich, price: 35 },
+    { id: 9, name: "Paneer", image: sandwich, price: 35 }
   ];
 
   export default dishes;

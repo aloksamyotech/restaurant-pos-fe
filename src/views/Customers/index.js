@@ -4,42 +4,55 @@ import {
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import AddModifierDialog from "./Addmodifiers";
+import Customer  from "./Customers";
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+
+
 
 const columns = [
   { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
   
   {
-    field: 'dishName',
-    headerName: 'Dish Name',
+    field: 'customer',
+    headerName: 'Customer ',
     flex:1,
     headerAlign: 'center',
     align: 'center',
     editable: true,
   },
+  
   {
-    field: 'cost',
-    headerName: 'Cost',
-    type: 'number',
-    flex:1,
-    headerAlign: 'center',
-    editable: true,
-    align: 'center',
-  },
-  {
-    field: 'price',
-    headerName: 'Price',
-    description: 'This column has a value getter and is not sortable.',
+    field: 'email',
+    headerName: 'Email',
+    type:'string',
     sortable: false,
     flex:1,
     headerAlign: 'center',
     align: 'center',
 
   },
-  
+  {
+    field: 'phone',
+    headerName: 'Phone',
+    type:'string',
+    sortable: false,
+    flex:1,
+    headerAlign: 'center',
+    align: 'center',
+
+  },
+  {
+    field: 'address',
+    headerName: 'Address',
+    type:'string',
+    sortable: false,
+    flex:1,
+    headerAlign: 'center',
+    align: 'center',
+
+  },
   {
     field: 'action',
     headerName: 'Action',
@@ -48,20 +61,27 @@ const columns = [
 
     flex:1,
     renderCell: (params) => (
+      <Link fontSize={0} color="inherit"
+        href="/dashboard/customer/customerview">
 
       <VisibilityIcon color="primary" />
+      </Link>
 
 
     ),
   }
+  
+  
+  
+  
 ];
 
 const rows = [
-  { id: 1,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 2,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 3,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 4,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 5,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
+  { id: 1,  customer: 'Shubham', email:"shubh@gmail.com",phone:9876543210,  address: '' },
+  { id: 2,  customer: 'Rahul', email:'rahul@gmail.com',phone:9876543210,   address: '' },
+  { id: 3,  customer: 'Rohit', email:'rohit@gmail.com',phone:9876543210,    address: '' },
+  { id: 4,  customer: 'Neeraj', email:'neeraj@gmail.com',phone:9876543210,    address: '' },
+  { id: 5,  customer: 'Jairaj', email:'jairaj@gmail.com',  phone:9876543210, address: '' },
 
 ];
 
@@ -86,10 +106,10 @@ const Categories = () => {
       href="/material-ui/getting-started/installation/"
       onClick={handleClick}
     >
-      Food Modifiers
+      Customers
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Modifiers
+      customer
     </Typography>,
   ];
 
@@ -98,7 +118,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Food Modifiers
+            <Iconify icon="" /> Customers 
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -110,9 +130,9 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add Item
+            Add User
           </Button>
-          <AddModifierDialog open={dialogOpen} onClose={handleDialogClose} />
+          <Customer  open={dialogOpen} onClose={handleDialogClose} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
