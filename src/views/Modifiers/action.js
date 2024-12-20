@@ -1,26 +1,42 @@
-import React, { useState } from 'react';
+import React,{ useState,useEffect }  from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
-import axios from 'axios';
+import {updateApi} from 'core/apis/apiClient.js';
 
-const AddModifierDialog = ({ open, onClose }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm(); 
+
+
+const EditModifierDialog = ({ open, onClose,modifier }) => {
+  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+
+  useEffect(() => {
+    if (modifier) {
+        reset({
+          name: modifier.name,
+          cost: modifier.cost,
+          price: modifier.price,
+          desc: modifier.desc,
+        });
+      }
+    }, [modifier, reset]);
 
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data}; 
+    const formData = { ...data,id: modifier.id}; 
     console.log(formData); 
-    const response = await postApi(urls?.modifier?.create, formData);
+    console.log(urls?.modifier?.update.replace(':id', modifier.id));
+    const response = await updateApi(urls?.modifier?.update.replace(':id', modifier.id), formData);
+    
+    console.log(response); 
+    onClose();
        
      
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Modifier</DialogTitle>
+      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -131,7 +147,7 @@ const AddModifierDialog = ({ open, onClose }) => {
 
           <DialogActions>
           <Button type="submit" variant="contained" color="primary">
-              Add Item
+              Edit Item
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
@@ -144,4 +160,4 @@ const AddModifierDialog = ({ open, onClose }) => {
   );
 };
 
-export default AddModifierDialog;
+export default EditModifierDialog;

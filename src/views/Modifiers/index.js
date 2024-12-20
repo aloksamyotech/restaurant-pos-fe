@@ -1,69 +1,18 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
 import AddModifierDialog from "./Addmodifiers";
+import EditModifierDialog from "./action";
 import HomeIcon from '@mui/icons-material/Home';
-import { DataGrid } from '@mui/x-data-grid';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { DataGrid } from '@mui/x-data-grid';  
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { urls } from "core/constant/urls";
+import {getApi} from 'core/apis/apiClient.js';
 
-const columns = [
-  { field: 'id', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
-  
-  {
-    field: 'dishName',
-    headerName: 'Dish Name',
-    flex:1,
-    headerAlign: 'center',
-    align: 'center',
-    editable: true,
-  },
-  {
-    field: 'cost',
-    headerName: 'Cost',
-    type: 'number',
-    flex:1,
-    headerAlign: 'center',
-    editable: true,
-    align: 'center',
-  },
-  {
-    field: 'price',
-    headerName: 'Price',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    flex:1,
-    headerAlign: 'center',
-    align: 'center',
-
-  },
-  
-  {
-    field: 'action',
-    headerName: 'Action',
-    headerAlign: 'center',
-    align: 'center',
-
-    flex:1,
-    renderCell: (params) => (
-
-      <VisibilityIcon color="primary" />
-
-
-    ),
-  }
-];
-
-const rows = [
-  { id: 1,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 2,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-  { id: 3,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 4,  dishName: 'Sandwich', cost: 35, price: 50,  action: '' },
-  { id: 5,  dishName: 'Sandwich', cost: 35, price: 50, action: '' },
-
-];
 
 const Categories = () => {
 
@@ -71,6 +20,80 @@ const Categories = () => {
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
+
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedModifier, setSelectedModifier] = useState(null);
+
+       const handleEditDialogOpen = (modifier) => {
+        console.log("modifier=======", modifier)
+        setSelectedModifier(modifier); 
+        setEditDialogOpen(true); 
+      };
+       const handleEditDialogClose = () => setEditDialogOpen(false);
+ 
+
+  const columns = [
+    { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
+    
+    {
+      field: 'name',
+      headerName: 'Modifier',
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    {
+      field: 'desc',
+      headerName: 'Description',
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    {
+      field: 'cost',
+      headerName: 'Cost',
+      type: 'number',
+      flex:1,
+      headerAlign: 'center',
+      editable: true,
+      align: 'center',
+    },
+    {
+      field: 'price',
+      headerName: 'Price',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+  
+    },
+    
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerAlign: 'center',
+      align: 'center',
+  
+      flex:1,
+       renderCell: (params) => (
+        
+        
+        <Stack  direction="row" spacing={4}>
+        
+        <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
+        <EditModifierDialog open={editDialogOpen} onClose={handleEditDialogClose} 
+        modifier={selectedModifier}/>
+        <DeleteIcon sx={{color:"red"}}/>
+        </Stack>
+        
+  
+  
+      ),
+    }
+  ];
   function handleClick(event) {
     event?.preventDefault();
     console?.info('You clicked a breadcrumb.');
@@ -92,6 +115,32 @@ const Categories = () => {
       Modifiers
     </Typography>,
   ];
+
+
+  const [rows, setRows] = useState([]);
+   const fetchData = async () => {
+     
+  
+        const response = await getApi(urls?.modifier.get);
+        const formattedData = response.data.map((item, index) => ({
+          id: item._id,
+          serial: index + 1,
+          name: item.name,
+          desc: item.desc,
+          cost: item.cost,
+          price: item.price,
+          isAvailable: true
+          
+        }));
+        console.log("formattedData",formattedData); 
+        setRows(formattedData);
+       
+    };
+  
+    useEffect(() => {
+      
+      fetchData();
+    }, []);
 
   return (
     <Container>
@@ -141,17 +190,18 @@ const Categories = () => {
            
             initialState={{
               pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
+               paginationModel: {
+                 pageSize: 5,
+               },
+             },
+           }}
+           pageSizeOptions={[5]}
+         
 
             
           />
         </Box>
-        </Card >
+      </Card>
     </Container>
   );
 };

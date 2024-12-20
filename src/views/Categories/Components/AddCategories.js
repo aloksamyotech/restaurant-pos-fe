@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
+import axios from 'axios';
+
+import { urls } from "core/constant/urls";
+import {postApi} from 'core/apis/apiClient.js';
 
 const AddCategoriesDialog = ({ open, onClose }) => {
   const { control, handleSubmit, formState: { errors } } = useForm();
 
   const [image, setImage] = useState(null);
-  const [dishImage, setDishImage] = useState("");
+  const [categoryImage, setDishImage] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -17,9 +21,12 @@ const AddCategoriesDialog = ({ open, onClose }) => {
   };
 
 
-  const onSubmit = (data) => {
-    const formData = { ...data, dishImage: dishImage };
+  const onSubmit =async(data) => {
+    const formData = { ...data, categoryImage: categoryImage };
     console.log(formData);
+    const response = await postApi(urls?.foodCategory.create, formData);
+    // const response = await axios.post("http://localhost:7200/api/v1/category/addCategory", formData);
+    setData(response.data);
     onClose();
   };
 
@@ -33,9 +40,9 @@ const AddCategoriesDialog = ({ open, onClose }) => {
 
 
 
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Controller
-                name="dishName"
+                name="categoryName"
                 control={control}
                 defaultValue=""
                 rules={{ required: 'Dish Name is required' }}
@@ -45,20 +52,29 @@ const AddCategoriesDialog = ({ open, onClose }) => {
                     label="Dish Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors?.dishName}
-                    helperText={errors?.dishName ? errors?.dishName?.message : ''}
+                    error={!!errors?.categoryName}
+                    helperText={errors?.categoryName ? errors?.categoryName?.message : ''}
                   />
                 )}
               />
             </Grid>
-
-
-
-
-
-
-
-
+            <Grid item xs={12}>
+              <Controller
+                name="desc"
+                control={control}
+                defaultValue=""
+                
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Description"
+                    variant="outlined"
+                    fullWidth
+                   
+                  />
+                )}
+              />
+            </Grid>
 
             <Grid item xs={12}>
               <Typography variant="body1" sx={{ mb: 1 }}>Upload Dish Image</Typography>
@@ -73,7 +89,7 @@ const AddCategoriesDialog = ({ open, onClose }) => {
                 <Button variant="contained" color="primary" component="span">Choose Image</Button>
               </label>
               {image && <img src={image} alt="Dish preview" style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }} />}
-              {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}
+              {errors?.categoryImage && <Typography color="error">{errors?.categoryImage?.message}</Typography>}
             </Grid>
 
 
