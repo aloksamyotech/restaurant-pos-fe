@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {postApi} from 'core/apis/apiClient.js';
-import axios from 'axios';
+
 
 const AddModifierDialog = ({ open, onClose }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
@@ -130,7 +130,7 @@ const AddModifierDialog = ({ open, onClose }) => {
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
               Add Item
             </Button>
             <Button onClick={onClose} color="secondary">

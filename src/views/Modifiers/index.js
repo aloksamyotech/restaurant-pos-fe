@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { urls } from "core/constant/urls";
 import {getApi} from 'core/apis/apiClient.js';
+import {deleteApi} from 'core/apis/apiClient.js';
 
 
 const Categories = () => {
@@ -33,7 +34,7 @@ const Categories = () => {
  
 
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
+    { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center'},
     
     {
       field: 'name',
@@ -86,7 +87,16 @@ const Categories = () => {
         <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
         <EditModifierDialog open={editDialogOpen} onClose={handleEditDialogClose} 
         modifier={selectedModifier}/>
-        <DeleteIcon sx={{color:"red"}}/>
+
+        <DeleteIcon sx={{color:"red"}}
+         onClick={async () => {
+          if (window.confirm('Are you sure you want to delete this item?')) {
+            await deleteApi(urls?.modifier.delete.replace(':id', params.row.id));
+            setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+            alert('Item deleted successfully');
+          }
+        }}
+        />
         </Stack>
         
   
@@ -129,11 +139,12 @@ const Categories = () => {
           desc: item.desc,
           cost: item.cost,
           price: item.price,
-          isAvailable: true
+          isAvailable: item.true
           
         }));
         console.log("formattedData",formattedData); 
         setRows(formattedData);
+        //setRows(response.data);
        
     };
   
@@ -185,20 +196,9 @@ const Categories = () => {
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={rows}
+            // getRowId={(row)=>row._id}
             columns={columns}
-           
-            initialState={{
-              pagination: {
-               paginationModel: {
-                 pageSize: 5,
-               },
-             },
-           }}
-           pageSizeOptions={[5]}
-         
-
-            
+            rows={rows}
           />
         </Box>
       </Card>

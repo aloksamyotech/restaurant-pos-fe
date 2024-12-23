@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
+import { urls } from "core/constant/urls";
+import {postApi} from 'core/apis/apiClient.js';
+
 
 const AddIngredientDialog = ({ open, onClose }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
 
   
-  const onSubmit = (data) => {
+  const onSubmit =async (data) => {
     const formData = { ...data}; 
     console?.log(formData); 
+    const response = await postApi(urls?.ingredient?.create, formData);
     onClose();  
   };
 
@@ -21,18 +25,37 @@ const AddIngredientDialog = ({ open, onClose }) => {
             
              <Grid mt={1} item xs={12}>
               <Controller
-                name="dishName"
+                name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Dish Name is required' }}
+                rules={{ required: 'Ingredient Name is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Dish Name"
+                    label="Ingredient Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.dishName}
-                    helperText={errors.dishName ? errors.dishName.message : ''}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name.message : ''}
+                  />
+                )}
+              />
+            </Grid>
+
+            <Grid mt={1} item xs={12}>
+              <Controller
+                name="desc"
+                control={control}
+                defaultValue=""
+                
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Description"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.desc}
+                    helperText={errors.desc ? errors.desc.message : ''}
                   />
                 )}
               />
@@ -99,14 +122,14 @@ const AddIngredientDialog = ({ open, onClose }) => {
             </Grid>
             <Grid item xs={6}>
               <Controller
-                name="qty"
+                name="quantity"
                 control={control}
                 defaultValue=""
                 rules={{
                   required: 'Quantity is required',
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid qty format'
+                    message: 'Invalid quantity format'
                   }
                 }}
                 render={({ field }) => (
@@ -115,8 +138,8 @@ const AddIngredientDialog = ({ open, onClose }) => {
                     label="Qty"
                     variant="outlined"
                     fullWidth
-                    error={!!errors?.qty}
-                    helperText={errors?.qty ? errors?.qty?.message : ''}
+                    error={!!errors?.quantity}
+                    helperText={errors?.quantity ? errors?.quantity?.message : ''}
                     type="number"
                     
                   />
@@ -125,7 +148,7 @@ const AddIngredientDialog = ({ open, onClose }) => {
             </Grid>
             <Grid item xs={6}>
   <Controller
-    name="units"
+    name="unit"
     control={control}
     defaultValue=""
     rules={{
@@ -135,11 +158,11 @@ const AddIngredientDialog = ({ open, onClose }) => {
       <TextField
         {...field}
         select
-        label="Units"
+        label="Unit"
         variant="outlined"
         fullWidth
-        error={!!errors.units}
-        helperText={errors?.units ? errors?.units.message : ''}
+        error={!!errors.unit}
+        helperText={errors?.unit ? errors?.unit.message : ''}
       >
         {['kg', 'ltr', 'pieces'].map((unit) => (
           <MenuItem key={unit} value={unit}>

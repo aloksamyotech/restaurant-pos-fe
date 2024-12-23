@@ -5,27 +5,30 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {updateApi} from 'core/apis/apiClient.js';
 
-const EditModifierDialog = ({ open, onClose,modifier }) => {
+const EditDialog = ({ open, onClose,ingredient }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
 
   useEffect(() => {
-    if (modifier) {
+    if (ingredient) {
         reset({
-          name: modifier.name,
-          cost: modifier.cost,
-          price: modifier.price,
-          desc: modifier.desc,
+          name: ingredient.name,
+          cost: ingredient.cost,
+          price: ingredient.price,
+          desc: ingredient.desc,
+          quantity: ingredient.quantity,
+          unit: ingredient.unit,
+          isAvailable: ingredient.true
         });
       }
-    }, [modifier, reset]);
+    }, [ingredient, reset]);
 
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data,id: modifier.id}; 
+    const formData = { ...data,id: ingredient.id}; 
     console.log(formData); 
-    console.log(urls?.modifier?.update.replace(':id', modifier.id));
-    const response = await updateApi(urls?.modifier?.update.replace(':id', modifier.id), formData);
+    console.log(urls?.ingredient?.update.replace(':id', ingredient.id));
+    const response = await updateApi(urls?.ingredient?.update.replace(':id', ingredient.id), formData);
     
     console.log(response); 
     onClose();
@@ -58,6 +61,25 @@ const EditModifierDialog = ({ open, onClose,modifier }) => {
                 )}
               />
             </Grid>
+
+             <Grid mt={1} item xs={12}>
+                          <Controller
+                            name="desc"
+                            control={control}
+                            defaultValue=""
+                            
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                label="Description"
+                                variant="outlined"
+                                fullWidth
+                                error={!!errors.desc}
+                                helperText={errors.desc ? errors.desc.message : ''}
+                              />
+                            )}
+                          />
+                        </Grid>
 
             <Grid item xs={6}>
               <Controller
@@ -118,25 +140,62 @@ const EditModifierDialog = ({ open, onClose,modifier }) => {
               />
             </Grid>
 
-            <Grid mt={1} item xs={12}>
-              <Controller
-                name="desc"
-                control={control}
-                defaultValue=""
-                
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Description"
-                    variant="outlined"
-                    fullWidth
-                    
-                    error={!!errors.desc}
-                    helperText={errors.desc ? errors.desc.message : ''}
-                  />
-                )}
-              />
-            </Grid>
+           <Grid item xs={6}>
+                         <Controller
+                           name="quantity"
+                           control={control}
+                           defaultValue=""
+                           rules={{
+                             required: 'Quantity is required',
+                             pattern: {
+                               value: /^\d+(\.\d{1,2})?$/,
+                               message: 'Invalid quantity format'
+                             }
+                           }}
+                           render={({ field }) => (
+                             <TextField
+                               {...field}
+                               label="Qty"
+                               variant="outlined"
+                               fullWidth
+                               error={!!errors?.quantity}
+                               helperText={errors?.quantity ? errors?.quantity?.message : ''}
+                               type="number"
+                               
+                             />
+                           )}
+                         />
+                       </Grid>
+                       <Grid item xs={6}>
+             <Controller
+               name="unit"
+               control={control}
+               defaultValue=""
+               rules={{
+                 required: 'Unit is required',
+               }}
+               render={({ field }) => (
+                 <TextField
+                   {...field}
+                   select
+                   label="Unit"
+                   variant="outlined"
+                   fullWidth
+                   error={!!errors.unit}
+                   helperText={errors?.unit ? errors?.unit.message : ''}
+                 >
+                   {['kg', 'ltr', 'pieces'].map((unit) => (
+                     <MenuItem key={unit} value={unit}>
+                       {unit}
+                     </MenuItem>
+                   ))}
+                 </TextField>
+               )}
+             />
+           </Grid>
+            
+
+            
 
            
           </Grid>
@@ -156,4 +215,4 @@ const EditModifierDialog = ({ open, onClose,modifier }) => {
   );
 };
 
-export default EditModifierDialog;
+export default EditDialog;

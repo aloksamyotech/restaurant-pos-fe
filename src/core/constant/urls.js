@@ -13,7 +13,20 @@ export const urls = Object.freeze({
     modifier: {
         create: base + '/modifier/addModifier',
         get: base + '/modifier/getModifiers',
-        update: base + '/modifier/updateModifier/:id'   
-    }    
+        update: base + '/modifier/updateModifier/:id', 
+        delete:  base + '/modifier/deleteModifier/:id' 
+    },    
+    ingredient: {
+        create: base + '/ingredient/addIngredient',
+        get: base + '/ingredient/getIngredients',
+        update: base + '/ingredient/updateIngredient/:id', 
+        delete:  base + '/ingredient/deleteIngredient/:id' 
+    }, 
+    expenseType: {
+        create: base + '/expenseType/addExpenseType',
+        get: base + '/expenseType/getExpenseTypes',
+        update: base + '/expenseType/updateExpenseType/:id', 
+        delete:  base + '/expenseType/softDeleteExpenseType/:id' 
+    }
     }
 );

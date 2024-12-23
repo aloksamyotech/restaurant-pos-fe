@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import React,{ useState,useEffect }  from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+    Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import {updateApi} from 'core/apis/apiClient.js';
 
-const AddExpensesTypeDialog = ({ open, onClose }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm(); 
+const EditDialog = ({ open, onClose,tag }) => {
+  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+
+  useEffect(() => {
+    if (tag) {
+        reset({
+          name: tag.name,
+          desc: tag.desc,
+          isAvailable: tag.true
+        });
+      }
+    }, [tag, reset]);
 
   
-  const onSubmit =async (data) => {
-    const formData = { ...data}; 
-    console?.log(formData);
-    const response = await postApi(urls?.expenseType?.create, formData); 
-    onClose();  
+
+  const onSubmit =async(data) => {
+    const formData = { ...data,id: tag.id}; 
+    console.log("form data========" + formData); 
+    console.log("response========" +urls?.expenseType?.update.replace(':id', tag.id));
+    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag.id), formData);
+    
+    console.log(response); 
+    onClose();
+       
+     
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add Expenses Type</DialogTitle>
+      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -27,21 +44,21 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Dish Name is required' }}
+                rules={{ required: 'Modifier Name is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense"
+                    label="Modifier Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.dishName}
-                    helperText={errors.dishName ? errors.dishName.message : ''}
+                    error={!!errors.name}
+                    helperText={errors.name ? errors.name.message : ''}
                   />
                 )}
               />
             </Grid>
 
-              <Grid mt={1} item xs={12}>
+             <Grid mt={1} item xs={12}>
                           <Controller
                             name="desc"
                             control={control}
@@ -60,16 +77,17 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
                           />
                         </Grid>
 
-          
+           
             
 
+            
 
            
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
-              Add Item
+          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
+              Edit Item
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
@@ -82,4 +100,4 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
   );
 };
 
-export default AddExpensesTypeDialog;
+export default EditDialog;
