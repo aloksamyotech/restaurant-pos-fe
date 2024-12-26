@@ -5,20 +5,21 @@ import { urls } from "core/constant/urls";
 import {postApi} from 'core/apis/apiClient.js';
 
 
-const AddIngredientDialog = ({ open, onClose }) => {
+const AddIngredientDialog = ({ open, onClose,fetchData }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
 
   
   const onSubmit =async (data) => {
     const formData = { ...data}; 
-    console?.log(formData); 
+    
     const response = await postApi(urls?.ingredient?.create, formData);
+    fetchData();
     onClose();  
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Dish</DialogTitle>
+      <DialogTitle padding={0}>Add New Ingredient</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -28,7 +29,9 @@ const AddIngredientDialog = ({ open, onClose }) => {
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Ingredient Name is required' }}
+                rules={{ required: 'Ingredient Name is required',
+                  maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -47,6 +50,12 @@ const AddIngredientDialog = ({ open, onClose }) => {
                 name="desc"
                 control={control}
                 defaultValue=""
+                rules={{
+                  validate: value => {
+                    const wordCount = value.trim().split(/\s+/).length; 
+                    return wordCount <= 200 || 'Description must be at most 200 words';
+                  }
+                }}
                 
                 render={({ field }) => (
                   <TextField
@@ -72,7 +81,10 @@ const AddIngredientDialog = ({ open, onClose }) => {
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
-                  }
+                  },
+                  validate: value => (value >= 0) || 'Cost must be positive',
+                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -102,7 +114,10 @@ const AddIngredientDialog = ({ open, onClose }) => {
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
-                  }
+                  },
+                  validate: value => (value >= 0) || 'Cost must be positive',
+                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -130,7 +145,10 @@ const AddIngredientDialog = ({ open, onClose }) => {
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid quantity format'
-                  }
+                  },
+                  validate: value => (value >= 0) || 'Cost must be positive',
+                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -181,7 +199,7 @@ const AddIngredientDialog = ({ open, onClose }) => {
 
           <DialogActions>
           <Button type="submit" variant="contained" color="primary">
-              Add Item
+              Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel

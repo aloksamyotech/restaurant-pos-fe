@@ -1,48 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import sandwich from "assets/images/sandwich.jpg"
-import AddCategoriesDialog from "./Components/AddCategories";
+import AddCategoryDialog from "./AddCategories";
 import HomeIcon from '@mui/icons-material/Home';
-import { useTranslation } from "react-i18next";
+import { DataGrid } from '@mui/x-data-grid';
 import { urls } from "core/constant/urls";
 import {getApi} from 'core/apis/apiClient.js';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditDialog from "./action";
+import {deleteApi} from 'core/apis/apiClient.js';
+import DeleteConfirmationDialog from "./Delete.js";
+
 
 
 const Categories = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-  const { t } = useTranslation();
-  const [data, setData] = useState([]);
-
-  const handleAddCategory = (newCategory) => {
-    setData((old) => [...old, newCategory]);
-  };
-
-  const fetchData = async () => {
-   
-
-      const response = await getApi(urls?.foodCategory.get);
-      console.log(response.data);
-      setData(response.data);
-     
-  };
-
-  useEffect(() => {
-    
-    fetchData();
-  }, []);
-
-
-  function handleClick(event) {
-    event.preventDefault();
-    console.info('You clicked a breadcrumb.');
-  }
+ 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
@@ -54,19 +30,134 @@ const Categories = () => {
       href="/material-ui/getting-started/installation/"
       onClick={handleClick}
     >
-      Food
+      Food Category
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
       Categories
     </Typography>,
   ];
 
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+       const handleEditDialogOpen = (category) => {
+        
+        setSelectedCategory(category); 
+        setEditDialogOpen(true); 
+      };
+       const handleEditDialogClose = () => setEditDialogOpen(false);
+        const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
+
+  function handleClick(event) {
+    event?.preventDefault();
+    
+  }
+
+  const columns = [
+    { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
+
+    {
+      field: 'categoryImage',
+      headerName: 'Category Image',
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    
+    {
+      field: 'name',
+      headerName: 'Category',
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    {
+      field: 'desc',
+      headerName: 'Description',
+      flex:1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    
+    
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerAlign: 'center',
+      align: 'center',
+  
+      flex:1,
+      renderCell: (params) => (
+  
+        <Stack  direction="row" spacing={4}>
+        
+        <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
+        <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} 
+        category={selectedCategory}/>
+
+<DeleteIcon
+            sx={{ color: "red", cursor: "pointer" }}
+            onClick={() => setDeleteDialogOpen(params.row.id)}
+          />
+
+<DeleteConfirmationDialog
+            open={deleteDialogOpen === params.row.id}
+            onClose={() => setDeleteDialogOpen(null)}
+            onConfirm={async () => {
+              await deleteApi(urls?.foodCategory.delete.replace(':id', params.row.id));
+              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              await fetchData(); 
+              setDeleteDialogOpen(null);
+              
+            }}
+          />
+        </Stack>
+        
+  
+  
+      ),
+    }
+  ];
+  
+   const [rows, setRows] = useState([]);
+     const fetchData = async () => {
+       
+    
+          const response = await getApi(urls?.foodCategory.get);
+          const formattedData = response.data.map((item, index) => ({
+            id: item._id,
+            serial: index + 1,
+            name: item.categoryName,
+            desc: item.desc,
+            
+            isAvailable: item.true
+            
+          }));
+          
+          setRows(formattedData);
+          
+         
+      };
+    
+      useEffect(() => {
+        
+        fetchData();
+      }, []);
+
   return (
     <Container>
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> {t('Food Categories')}
+            <Iconify icon="" /> Food Ingredients
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -80,7 +171,7 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddCategoriesDialog open={dialogOpen} onClose={handleDialogClose} />
+          <AddCategoryDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
@@ -101,28 +192,18 @@ const Categories = () => {
         </Stack>
       </Card>
 
-      {data.map((item) => (
-        <Card key={item?._id} sx={{ display: "flex", alignItems: "center", p: 2, mb: 2 }}>
-          <Checkbox />
-          <Box
-            component="img"
-            src={`http://localhost:7200/${item.image}`}
+      <Card>
+        <Box sx={{ height: 400, width: '100%' }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+           
+           
+
             
-            alt={item?.categoryName}
-            sx={{ width: 100, height: 100, borderRadius: 2, ml: 1 }}
           />
-          <Box sx={{ flex: 1, ml: 2 }}>
-            <Typography variant="h3">{item?.categoryName}</Typography>
-            <Typography variant="body1" color="textSecondary">
-              {item?.desc}
-            </Typography>
-            <Typography variant="body2" color={item?.isAvailable ? "success.main" : "error.main"}>
-              {item?.isAvailable ? "Available" : "Not Available"}
-            </Typography>
-          </Box>
-          <Button variant="contained">View</Button>
-        </Card>
-      ))}
+        </Box>
+        </Card >
     </Container>
   );
 };

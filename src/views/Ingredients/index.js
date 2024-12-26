@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from "./action";
 import {deleteApi} from 'core/apis/apiClient.js';
+import DeleteConfirmationDialog from "./Delete.js";
 
 
 
@@ -45,15 +46,16 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
        const handleEditDialogOpen = (ingredient) => {
-        console.log("ingredient=======", ingredient)
+        
         setSelectedIngredient(ingredient); 
         setEditDialogOpen(true); 
       };
        const handleEditDialogClose = () => setEditDialogOpen(false);
+        const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
 
   function handleClick(event) {
     event?.preventDefault();
-    console?.info('You clicked a breadcrumb.');
+    
   }
 
   const columns = [
@@ -128,18 +130,25 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
         <Stack  direction="row" spacing={4}>
         
         <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
-        <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} 
+        <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} 
         ingredient={selectedIngredient}/>
 
-        <DeleteIcon sx={{color:"red"}}
-         onClick={async () => {
-          if (window.confirm('Are you sure you want to delete this item?')) {
-            await deleteApi(urls?.ingredient.delete.replace(':id', params.row.id));
-            setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
-            alert('Item deleted successfully');
-          }
-        }}
-        />
+<DeleteIcon
+            sx={{ color: "red", cursor: "pointer" }}
+            onClick={() => setDeleteDialogOpen(params.row.id)}
+          />
+
+<DeleteConfirmationDialog
+            open={deleteDialogOpen === params.row.id}
+            onClose={() => setDeleteDialogOpen(null)}
+            onConfirm={async () => {
+              await deleteApi(urls?.ingredient.delete.replace(':id', params.row.id));
+              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              await fetchData(); 
+              setDeleteDialogOpen(null);
+              
+            }}
+          />
         </Stack>
         
   
@@ -165,7 +174,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
             isAvailable: item.true
             
           }));
-          console.log("formattedData",formattedData); 
+          
           setRows(formattedData);
           
          
@@ -195,7 +204,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddIngredientDialog open={dialogOpen} onClose={handleDialogClose} />
+          <AddIngredientDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

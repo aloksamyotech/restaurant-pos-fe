@@ -5,15 +5,19 @@ import { urls } from "core/constant/urls";
 import {postApi} from 'core/apis/apiClient.js';
 
 
-const AddModifierDialog = ({ open, onClose }) => {
+const AddModifierDialog = ({ open, onClose,fetchData,setRows }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
 
   
 
   const onSubmit =async(data) => {
     const formData = { ...data}; 
-    console.log(formData); 
+    
     const response = await postApi(urls?.modifier?.create, formData);
+    
+    
+    fetchData();
+    onClose();
        
      
   };
@@ -30,7 +34,9 @@ const AddModifierDialog = ({ open, onClose }) => {
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Modifier Name is required' }}
+                rules={{ required: 'Modifier Name is required',
+                  maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -57,7 +63,9 @@ const AddModifierDialog = ({ open, onClose }) => {
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
-                  }
+                  },
+                  validate: value => (value >= 0) || 'Cost must be positive',
+                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
                   <TextField
@@ -87,7 +95,9 @@ const AddModifierDialog = ({ open, onClose }) => {
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
-                  }
+                  },
+                  validate: value => (value >= 0) || 'Cost must be positive',
+                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
                   <TextField
@@ -111,6 +121,12 @@ const AddModifierDialog = ({ open, onClose }) => {
                 name="desc"
                 control={control}
                 defaultValue=""
+                rules={{
+                  validate: value => {
+                    const wordCount = value.trim().split(/\s+/).length; 
+                    return wordCount <= 200 || 'Description must be at most 200 words';
+                  }
+                }}
                 
                 render={({ field }) => (
                   <TextField
@@ -130,8 +146,8 @@ const AddModifierDialog = ({ open, onClose }) => {
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
-              Add Item
+          <Button type="submit" variant="contained" color="primary" >
+              Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel

@@ -8,8 +8,16 @@ export const urls = Object.freeze({
     },
     foodCategory: {
         create: base + '/category/addCategory',
-        get: base + '/category/getCategory'
+        get: base + '/category/getCategory',
+        update: base + '/category/updateCategory/:id', 
+        delete:  base + '/category/deleteCategory/:id'
     },
+    item: {
+        create: base + '/item/addItem',
+        get: base + '/item/getItems',
+        update: base + '/item/updateItem/:id', 
+        delete:  base + '/item/deleteItem/:id' 
+    }, 
     modifier: {
         create: base + '/modifier/addModifier',
         get: base + '/modifier/getModifiers',
@@ -27,6 +35,12 @@ export const urls = Object.freeze({
         get: base + '/expenseType/getExpenseTypes',
         update: base + '/expenseType/updateExpenseType/:id', 
         delete:  base + '/expenseType/softDeleteExpenseType/:id' 
+    }, 
+    expense: {
+        create: base + '/expense/addExpense',
+        get: base + '/expense/getExpenses',
+        update: base + '/expense/updateExpense/:id', 
+        delete:  base + '/expense/deleteExpense/:id' 
     }
     }
 );

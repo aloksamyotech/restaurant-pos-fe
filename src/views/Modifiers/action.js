@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {updateApi} from 'core/apis/apiClient.js';
 
-const EditModifierDialog = ({ open, onClose,modifier }) => {
+const EditModifierDialog = ({ open, onClose,modifier,fetchData }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
 
   useEffect(() => {
@@ -23,11 +23,10 @@ const EditModifierDialog = ({ open, onClose,modifier }) => {
 
   const onSubmit =async(data) => {
     const formData = { ...data,id: modifier.id}; 
-    console.log(formData); 
-    console.log(urls?.modifier?.update.replace(':id', modifier.id));
+    
     const response = await updateApi(urls?.modifier?.update.replace(':id', modifier.id), formData);
     
-    console.log(response); 
+    fetchData();
     onClose();
        
      

@@ -4,14 +4,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {postApi} from 'core/apis/apiClient.js';
 
-const AddExpensesTypeDialog = ({ open, onClose }) => {
+const AddExpensesTypeDialog = ({ open, onClose,fetchData }) => {
   const { control, handleSubmit, formState: { errors } } = useForm(); 
 
   
   const onSubmit =async (data) => {
     const formData = { ...data}; 
-    console?.log(formData);
+   
     const response = await postApi(urls?.expenseType?.create, formData); 
+    
+    fetchData();
     onClose();  
   };
 
@@ -24,18 +26,20 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
             
              <Grid mt={1} item xs={12}>
               <Controller
-                name="name"
+                name="expenseName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Dish Name is required' }}
+                rules={{ required: 'Expense Name is required',
+                    
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Expense"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.dishName}
-                    helperText={errors.dishName ? errors.dishName.message : ''}
+                    error={!!errors.expenseName}
+                    helperText={errors.expenseName ? errors.expenseName.message : ''}
                   />
                 )}
               />
@@ -46,6 +50,12 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
                             name="desc"
                             control={control}
                             defaultValue=""
+                            rules={{
+                              validate: value => {
+                                const wordCount = value.trim().split(/\s+/).length; 
+                                return wordCount <= 200 || 'Description must be at most 200 words';
+                              }
+                            }}
                             
                             render={({ field }) => (
                               <TextField
@@ -69,7 +79,7 @@ const AddExpensesTypeDialog = ({ open, onClose }) => {
 
           <DialogActions>
           <Button type="submit" variant="contained" color="primary">
-              Add Item
+              Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel

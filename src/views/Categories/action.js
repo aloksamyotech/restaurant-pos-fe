@@ -5,27 +5,30 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {updateApi} from 'core/apis/apiClient.js';
 
-const EditDialog = ({ open, onClose,tag,fetchData }) => {
+const EditDialog = ({ open, onClose,category,fetchData }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
 
+  console.log(category);
   useEffect(() => {
-    if (tag) {
+    if (category) {
         reset({
-          expenseName: tag.expenseName,
-          desc: tag.desc,
-          isAvailable: tag.true
+          categoryName: category.name,
+
+          desc: category.desc,
+          isAvailable: category.true
         });
       }
-    }, [tag, reset]);
+    }, [category, reset]);
 
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data,id: tag.id}; 
+    const formData = { ...data,id: category.id}; 
     
+   
+    const response = await updateApi(urls?.foodCategory?.update.replace(':id', category.id), formData);
     
-    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag.id), formData);
-    
+   
     fetchData();
     onClose();
        
@@ -41,20 +44,18 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
             
              <Grid mt={1} item xs={12}>
               <Controller
-                name="expenseName"
+                name="categoryName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense Type is required',
-                  maxLength: { value: 50, message: 'Expense Type must be at most 50 characters' }
-                 }}
+                rules={{ required: 'Category Name is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense Type"
+                    label="Category Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.expenseName}
-                    helperText={errors.expenseName ? errors.expenseName.message : ''}
+                    error={!!errors.categoryName}
+                    helperText={errors.categoryName ? errors.categoryName.message : ''}
                   />
                 )}
               />
@@ -65,12 +66,6 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
                             name="desc"
                             control={control}
                             defaultValue=""
-                            rules={{
-                              validate: value => {
-                                const wordCount = value.trim().split(/\s+/).length; 
-                                return wordCount <= 200 || 'Description must be at most 200 words';
-                              }
-                            }}
                             
                             render={({ field }) => (
                               <TextField
@@ -85,7 +80,6 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
                           />
                         </Grid>
 
-           
             
 
             

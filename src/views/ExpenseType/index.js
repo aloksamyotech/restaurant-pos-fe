@@ -13,6 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from "./action";
 import {deleteApi} from 'core/apis/apiClient.js';
+import DeleteConfirmationDialog from "./Delete.js";
 
 
 
@@ -36,6 +37,11 @@ const Categories = () => {
       Expenses
     </Typography>,
   ];
+  function handleClick(event) {
+    event?.preventDefault();
+    
+  }
+
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -45,22 +51,19 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
 
        const handleEditDialogOpen = (tag) => {
-        console.log("tag=======", tag)
+        
         setSelectedTag(tag); 
         setEditDialogOpen(true); 
       };
        const handleEditDialogClose = () => setEditDialogOpen(false);
+      const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
 
-  function handleClick(event) {
-    event?.preventDefault();
-    console?.info('You clicked a breadcrumb.');
-  }
 
   const columns = [
     { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
     
     {
-      field: 'name',
+      field: 'expenseName',
       headerName: 'Expenses Type',
       flex:1,
       headerAlign: 'center',
@@ -76,11 +79,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
       editable: true,
     },
     
-   
-    
-    
-    
-    {
+   {
       field: 'action',
       headerName: 'Action',
       headerAlign: 'center',
@@ -92,18 +91,24 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
         <Stack  direction="row" spacing={4}>
         
         <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
-        <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} 
+        <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} 
         tag={selectedTag}/>
 
-        <DeleteIcon sx={{color:"red"}}
-         onClick={async () => {
-          if (window.confirm('Are you sure you want to delete this item?')) {
-            await deleteApi(urls?.expenseType.delete.replace(':id', params.row.id));
-            setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
-            alert('Item deleted successfully');
-          }
-        }}
-        />
+<DeleteIcon
+            sx={{ color: "red", cursor: "pointer" }}
+            onClick={() => setDeleteDialogOpen(params.row.id)}
+          />
+          <DeleteConfirmationDialog
+            open={deleteDialogOpen === params.row.id}
+            onClose={() => setDeleteDialogOpen(null)}
+            onConfirm={async () => {
+              await deleteApi(urls?.expenseType.delete.replace(':id', params.row.id));
+              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              await fetchData(); 
+              setDeleteDialogOpen(null);
+              
+            }}
+          />
         </Stack>
   
   
@@ -119,12 +124,12 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
             const formattedData = response.data.map((item, index) => ({
               id: item._id,
               serial: index + 1,
-              name: item.name,
+              expenseName: item.expenseName,
               desc: item.desc,
               isAvailable: item.true
               
             }));
-            console.log("formattedData",formattedData); 
+            
             setRows(formattedData);
             
            
@@ -155,7 +160,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddExpensesTypeDialog open={dialogOpen} onClose={handleDialogClose} />
+          <AddExpensesTypeDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
@@ -182,14 +187,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
             rows={rows}
             columns={columns}
            
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
+            
 
             
           />
