@@ -1,85 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import Iconify from "../../ui-component/iconify";
-import AddExpensesDialog  from "./AddExpenses";
+import AddExpensesDialog from "./AddExpenses";
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { urls } from "core/constant/urls";
+import { getApi } from 'core/apis/apiClient.js';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditDialog from "./action";
+import { deleteApi } from 'core/apis/apiClient.js';
+import DeleteConfirmationDialog from "./Delete.js";
 
-
-const columns = [
-  { field: 'id', headerName: 'ID', flex:1,headerAlign: 'center',align: 'center',},
-  
-  {
-    field: 'expenses',
-    headerName: 'Expenses ',
-    flex:1,
-    headerAlign: 'center',
-    align: 'center',
-    editable: true,
-  },
-  
-  {
-    field: 'amount',
-    headerName: 'Amount',
-    type:'string',
-    sortable: false,
-    flex:1,
-    headerAlign: 'center',
-    align: 'center',
-
-  },
-  {
-    field: 'category',
-    headerName: 'Category',
-    type:'string',
-    sortable: false,
-    flex:1,
-    headerAlign: 'center',
-    align: 'center',
-
-  },
-  
-  
-  
-  {
-    field: 'action',
-    headerName: 'Action',
-    headerAlign: 'center',
-    align: 'center',
-
-    flex:1,
-    renderCell: (params) => (
-
-      <VisibilityIcon color="primary" />
-
-
-    ),
-  }
-];
-
-const rows = [
-  { id: 1,  expenses: 'Vegetable', amount:1000,category:'Kitchen Expense',  action: '' },
-  { id: 2,  expenses: 'Fish', amount:5000,category:'Kitchen Expense',   action: '' },
-  { id: 3,  expenses: 'Pepsi', amount:1000,category:'Drinks',    action: '' },
-  { id: 4,  expenses: 'Veg', amount:2000,category:'Kitchen Expense',    action: '' },
-  { id: 5,  expenses: 'Test', amount:3000,  category:'Human Resource', action: '' },
-
-];
 
 const Categories = () => {
 
-  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-  function handleClick(event) {
-    event?.preventDefault();
-    console?.info('You clicked a breadcrumb.');
-  }
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
@@ -97,13 +36,142 @@ const Categories = () => {
       Expenses
     </Typography>,
   ];
+  function handleClick(event) {
+    event?.preventDefault();
+
+  }
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedTag, setSelectedTag] = useState(null);
+
+  const handleEditDialogOpen = (tag) => {
+
+    setSelectedTag(tag);
+    setEditDialogOpen(true);
+  };
+  const handleEditDialogClose = () => setEditDialogOpen(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
+
+
+  const columns = [
+    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center', },
+
+    {
+      field: 'name',
+      headerName: 'Expenses ',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+    {
+      field: 'desc',
+      headerName: 'Description',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true,
+    },
+
+
+    {
+      field: 'amount',
+      headerName: 'Amount',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+
+    },
+    {
+      field: 'expenseNameId',
+      headerName: 'expenseType',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+
+    },
+
+
+
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerAlign: 'center',
+      align: 'center',
+
+      flex: 1,
+      renderCell: (params) => (
+
+        <Stack direction="row" spacing={4}>
+
+          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)} />
+          <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData}
+            tag={selectedTag} />
+
+          <DeleteIcon
+            sx={{ color: "red", cursor: "pointer" }}
+            onClick={() => setDeleteDialogOpen(params.row.id)}
+          />
+          <DeleteConfirmationDialog
+            open={deleteDialogOpen === params.row.id}
+            onClose={() => setDeleteDialogOpen(null)}
+            onConfirm={async () => {
+              await deleteApi(urls?.expense.delete.replace(':id', params.row.id));
+              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              await fetchData();
+              setDeleteDialogOpen(null);
+
+            }}
+          />
+        </Stack>
+
+
+      ),
+    }
+  ];
+
+  const [rows, setRows] = useState([]);
+  const fetchData = async () => {
+
+
+    const response = await getApi(urls?.expense.get);
+    const formattedData = response.data.map((item, index) => ({
+      id: item._id,
+      serial: index + 1,
+      name: item.name,
+      desc: item.desc,
+      expenseNameId: item.expenseNameId?.expenseName,
+      amount: item.amount,
+      isAvailable: item.true
+
+    }));
+
+    setRows(formattedData);
+
+
+  };
+
+  useEffect(() => {
+
+    fetchData();
+  }, []);
+
+
 
   return (
     <Container>
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Expenses 
+            <Iconify icon="" /> Expenses
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -117,7 +185,8 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Expense
           </Button>
-          <AddExpensesDialog  open={dialogOpen} onClose={handleDialogClose} />
+          
+          <AddExpensesDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
@@ -143,20 +212,13 @@ const Categories = () => {
           <DataGrid
             rows={rows}
             columns={columns}
-           
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
-            }}
-            pageSizeOptions={[5]}
 
-            
+
+
+
           />
         </Box>
-        </Card >
+      </Card >
     </Container>
   );
 };

@@ -7,7 +7,7 @@ import {updateApi} from 'core/apis/apiClient.js';
 
 const EditModifierDialog = ({ open, onClose,modifier,fetchData }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
-
+  
   useEffect(() => {
     if (modifier) {
         reset({
