@@ -14,7 +14,7 @@ import { urls } from "core/constant/urls";
 import { getApi } from 'core/apis/apiClient.js';
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from "./Delete.js";
-
+import { Snackbar } from '@mui/material';
 
 const Categories = () => {
 
@@ -31,10 +31,15 @@ const Categories = () => {
     setSelectedModifier(modifier);
     setEditDialogOpen(true);
   };
-  const handleEditDialogClose = () => setEditDialogOpen(false);
+  const handleEditDialogClose = () => {
+    setEditDialogOpen(false);
+   
+  };
+
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
- 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [snackbarMessage, setSnackbarMessage] = useState('');
 
 
 
@@ -90,21 +95,23 @@ const Categories = () => {
 
         <Stack direction="row" spacing={4}>
 
-          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)} />
+          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params?.row)} />
           <EditModifierDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData}
-            modifier={selectedModifier} />
+            modifier={selectedModifier} setSnackbarMessage={setSnackbarMessage} setSnackbarOpen={setSnackbarOpen} />
 
           <DeleteIcon
             sx={{ color: "red", cursor: "pointer" }}
-            onClick={() => setDeleteDialogOpen(params.row.id)}
+            onClick={() => setDeleteDialogOpen(params?.row?.id)}
           />
           <DeleteConfirmationDialog
             open={deleteDialogOpen === params.row.id}
             onClose={() => setDeleteDialogOpen(null)}
             onConfirm={async () => {
-              await deleteApi(urls?.modifier.delete.replace(':id', params.row.id));
-              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              await deleteApi(urls?.modifier?.delete?.replace(':id', params?.row?.id));
+              setRows((prevRows) => prevRows.filter((row) => row.id !== params?.row?.id));
               await fetchData(); 
+              setSnackbarMessage('Modifier deleted successfully!');
+              setSnackbarOpen(true);
               setDeleteDialogOpen(null);
               
             }}
@@ -144,15 +151,15 @@ const Categories = () => {
   const fetchData = async () => {
 
 
-    const response = await getApi(urls?.modifier.get);
-    const formattedData = response.data.map((item, index) => ({
-      id: item._id,
+    const response = await getApi(urls?.modifier?.get);
+    const formattedData = response?.data?.map((item, index) => ({
+      id: item?._id,
       serial: index + 1,
-      name: item.name,
-      desc: item.desc,
-      cost: item.cost,
-      price: item.price,
-      isAvailable: item.true
+      name: item?.name,
+      desc: item?.desc,
+      cost: item?.cost,
+      price: item?.price,
+      isAvailable: item?.true
 
     }));
 
@@ -168,7 +175,13 @@ const Categories = () => {
 
   return (
     <Container>
-      
+       <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            message={snackbarMessage}
+            onClose={() => setSnackbarOpen(false)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
+          />
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -188,7 +201,9 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddModifierDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} setRows={setRows} />
+          <AddModifierDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} setRows={setRows}
+           setSnackbarMessage={setSnackbarMessage}
+           setSnackbarOpen={setSnackbarOpen} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

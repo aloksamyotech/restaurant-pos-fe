@@ -5,6 +5,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { urls } from "core/constant/urls";
+import { postApi } from 'core/apis/apiClient.js';
+import {getApi} from 'core/apis/apiClient.js';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -17,19 +20,6 @@ const MenuProps = {
   },
 };
 
-const ingredients = [
-  'Black Paper',
-  'Salt',
-  'Floor',
-  'Potato',
-  'Onion',
-  'Garlic',
-  'Spices',
-  'Soyabean Oil',
-  'Corriander',
-  'Ginger',
-];
-
 function getStyles(name, personName, theme) {
   return {
     fontWeight: personName.includes(name)
@@ -38,7 +28,7 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect() {
+export default function MultipleSelect({ onSelectionChange }) {
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
 
@@ -46,15 +36,41 @@ export default function MultipleSelect() {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
+  //   setPersonName(
 
+  //     typeof value === 'string' ? value.split(',') : value,
+  //   );
+  // };
+  const selectedValues = typeof value === 'string' ? value.split(',') : value;
+    setPersonName(selectedValues);
+
+    if (onSelectionChange) { 
+      onSelectionChange(selectedValues); // Send data to parent
+    }
+  };
+  const [ingredient, setingredients] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const [ingredientResponse] = await Promise.all([
+          getApi(urls?.ingredient.get),
+
+        ]);
+        setingredients(ingredientResponse.data);
+
+      } catch (error) {
+        console.error('Failed to load dropdown data', error);
+      }
+    };
+    fetchDropdownData();
+  }, []);
+
+ 
+  
   return (
     <div>
-      <FormControl sx={{ width:265 }}>
+      <FormControl sx={{ width: 265 }}>
         <InputLabel id="demo-multiple-name-label">Ingredients</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
@@ -65,13 +81,13 @@ export default function MultipleSelect() {
           input={<OutlinedInput label="Ingredients" />}
           MenuProps={MenuProps}
         >
-          {ingredients.map((name) => (
+          {ingredient.map((type) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={type._id}
+              value={type._id}
+              style={getStyles(type._id, personName, theme)}
             >
-              {name}
+              {type.name}
             </MenuItem>
           ))}
         </Select>

@@ -1,78 +1,77 @@
-import React, { useState } from 'react';
-import {
-  Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem,
-  InputAdornment, Typography,
-  IconButton,
-} from '@mui/material';
+import React,{ useState,useEffect }  from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import MultipleSelect from './multiDropDown';
-import CloseIcon from '@mui/icons-material/Close';
 import { urls } from "core/constant/urls";
-import { postApi } from 'core/apis/apiClient.js';
-import { getApi } from 'core/apis/apiClient.js';
+import {getApi, updateApi} from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
+import MultipleSelect from './multiDropDown';
 
-
-const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit, reset, formState: { errors } } = useForm();
-
-  const [image, setImage] = useState(null);
-  const [dishImage, setDishImage] = useState("");
+const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMessage }) => {
+  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+  const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-
-  const handleImageChange = (e) => {
-    const file = e?.target?.files[0];
-    if (file) {
-      setImage(URL?.createObjectURL(file));
-      setDishImage(file);
-    }
-  };
-
-  const handleClose = () => {
-    
-    onClose();
-  }
-
-
-  const [categories, setcategories,] = React.useState([]);
-  React.useEffect(() => {
-    const fetchDropdownData = async () => {
-      try {
-        const [categoryResponse] = await Promise.all([
-
-          getApi(urls?.foodCategory?.get),
-        ]);
-
-        setcategories(categoryResponse.data);
-      } catch (error) {
-        setSnackbarMessage('Failed to load dropdown data');
-        setSnackbarOpen(true);
+  useEffect(() => {
+    if (tag) {
+     
+      reset({
+          name: tag?.name,
+          cost: tag?.cost,
+          price: tag?.price,
+          desc: tag?.desc,
+          ingredient: tag?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
+          categoryId: tag?.categoryId.categoryName,
+          isAvailable: tag?.true
+        });
+        setSelectedIngredients(tag?.ingredientId?.map((ingredient) => ingredient?._id) || []);
       }
+    }, [tag, reset]);
+
+ 
+    useEffect(() => {
+      const fetchDropdownData = async () => {
+        try {
+          const categoryResponse = await getApi(urls?.foodCategory?.get);
+          
+          setCategories(categoryResponse?.data);
+        } catch (error) {
+          setSnackbarMessage('Failed to load dropdown data');
+          setSnackbarOpen(true);
+        }
+      };
+      fetchDropdownData();
+    }, []);
+
+    const handleIngredientSelectionChange = (selectedValues) => {
+      setSelectedIngredients(selectedValues); 
     };
-    fetchDropdownData();
-  }, []);
 
-  const handleIngredientSelection = (ingredients) => {
-    setSelectedIngredients(ingredients); 
-  };
-
-
-  const onSubmit = async (data) => {
-    const formData = { ...data, dishImage: dishImage,ingredients: selectedIngredients };
+  const onSubmit =async(data) => {
+    const formData = { ...data,id: tag?.id,
+      ingredientIds: selectedIngredients,
+    }; 
+    
+   
+    const response = await updateApi(urls?.item?.update?.replace(':id', tag?.id), formData);
+    
+   
+    if (response?.success) {
+      fetchData();
+      setSnackbarMessage('Edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to edit !');
+      setSnackbarOpen(true);
+    }
   
-    
-    
-    const response = await postApi(urls?.item?.create, formData);
-    fetchData();
-    reset();
     onClose();
-    setSnackbarMessage('Category added successfully!');
-  setSnackbarOpen(true);
+       
+     
   };
-
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add New Item</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Edit Item</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} marginTop={"1px"}>
@@ -132,6 +131,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
                     label="Description"
                     variant="outlined"
                     fullWidth
+                    
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
@@ -205,7 +205,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
             </Grid>
 
             <Grid item xs={6}>
-          <MultipleSelect onSelectionChange={handleIngredientSelection}/>
+            <MultipleSelect onSelectionChange={handleIngredientSelectionChange} />
       </Grid>
 
             <Grid item xs={6}>
@@ -235,21 +235,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
             </Grid>
 
 
-            <Grid item xs={12}>
-              <Typography variant="body1" sx={{ mb: 1 }}>Upload Dish Image</Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-                id="image-upload"
-              />
-              <label htmlFor="image-upload">
-                <Button variant="contained" color="primary" component="span">Choose Image</Button>
-              </label>
-              {image && <img src={image} alt="Dish preview" style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }} />}
-              {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}
-            </Grid>
+            
 
 
 
@@ -270,4 +256,4 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
   );
 };
 
-export default AddItemDialog;
+export default EditDialog;

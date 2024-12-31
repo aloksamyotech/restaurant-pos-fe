@@ -1,18 +1,20 @@
 import React,{ useState,useEffect }  from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-    Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {updateApi} from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
 
-const EditDialog = ({ open, onClose,tag,fetchData }) => {
+
+const EditDialog = ({ open, onClose,tag,fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
 
   useEffect(() => {
     if (tag) {
         reset({
-          expenseName: tag.expenseName,
-          desc: tag.desc,
+          expenseName: tag?.expenseName,
+          desc: tag?.desc,
           isAvailable: tag.true
         });
       }
@@ -21,12 +23,20 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data,id: tag.id}; 
+    const formData = { ...data,id: tag?.id}; 
     
     
-    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag.id), formData);
+    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag?.id), formData);
     
-    fetchData();
+    if (response.success) {
+      fetchData();
+      setSnackbarMessage('Expense Type edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to edit Expense Type!');
+      setSnackbarOpen(true);
+    }
+  
     onClose();
        
      
@@ -38,6 +48,21 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+            
+          <IconButton
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'grey',
+                '&:hover': {
+                  color: 'red',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             
              <Grid mt={1} item xs={12}>
               <Controller
@@ -94,8 +119,8 @@ const EditDialog = ({ open, onClose,tag,fetchData }) => {
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
-              Edit Item
+          <Button type="submit" variant="contained" color="primary" >
+              Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel

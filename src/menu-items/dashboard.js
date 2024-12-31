@@ -1,4 +1,16 @@
 // assets
+import FoodBankIcon from '@mui/icons-material/FoodBank';
+import CategoryIcon from '@mui/icons-material/Category';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import EmojiFoodBeverage from '@mui/icons-material/EmojiFoodBeverage';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountBalanceWallet from '@mui/icons-material/AccountBalanceWallet';
+import Payments from '@mui/icons-material/Payments';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+
+
+
 import {
   IconHome,
   IconCalendarEvent,
@@ -8,9 +20,12 @@ import {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
+  // IconCategoryFilled,
   IconNotebook,
   IconPhoneCheck,
-  IconUsers
+  IconUsers,
+  IconClipboardList,
+  
 } from '@tabler/icons';
 
 // constant
@@ -23,9 +38,21 @@ const icons = {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
+  // IconCategoryFilled,
   IconNotebook,
   IconPhoneCheck,
-  IconUsers
+  IconUsers,
+  IconClipboardList,
+  FoodBankIcon,
+  CategoryIcon,
+  FastfoodIcon,
+  EmojiFoodBeverage,
+  AccountCircleIcon,
+  AccountBalanceWallet,
+  Payments,
+  RestaurantIcon,
+  PointOfSaleIcon
+
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
@@ -62,7 +89,7 @@ export const dashboard1 = {
       title: 'POS',
       type: 'item',
       url: '/dashboard/pos',
-      icon: icons.IconPhoneCheck,
+      icon: icons.PointOfSaleIcon,
       breadcrumbs: false
     },
     {
@@ -70,7 +97,7 @@ export const dashboard1 = {
       title: 'Kitchen',
       type: 'item',
       url: '/dashboard/kitchen',
-      icon: icons.IconNotebook,
+      icon: icons.RestaurantIcon,
       breadcrumbs: false
     }
   ]
@@ -84,7 +111,7 @@ export const dashboard2 = {
       title: 'Categories',
       type: 'item',
       url: '/dashboard/categories',
-      icon: icons.IconChecklist,
+      icon: icons.CategoryIcon,
       breadcrumbs: false
     },
     {
@@ -92,7 +119,7 @@ export const dashboard2 = {
       title: 'Items',
       type: 'item',
       url: '/dashboard/items',
-      icon: icons.IconUsers,
+      icon: icons.FoodBankIcon,
       breadcrumbs: false
     },
     {
@@ -100,7 +127,7 @@ export const dashboard2 = {
       title: 'Modifiers',
       type: 'item',
       url: '/dashboard/modifiers',
-      icon: icons.IconPhoneCall,
+      icon: icons.FastfoodIcon,
       breadcrumbs: false
     },
     {
@@ -108,7 +135,7 @@ export const dashboard2 = {
       title: 'Ingredients',
       type: 'item',
       url: '/dashboard/ingredients',
-      icon: icons.IconMail,
+      icon: icons.EmojiFoodBeverage,
       breadcrumbs: false
     }
   ]
@@ -124,7 +151,7 @@ export const dashboard3 = {
       title: 'Expense Type',
       type: 'item',
       url: '/dashboard/expenseType',
-      icon: icons.IconCalendarEvent,
+      icon: icons.AccountBalanceWallet,
       breadcrumbs: false
     },
     {
@@ -132,7 +159,7 @@ export const dashboard3 = {
       title: 'Expenses',
       type: 'item',
       url: '/dashboard/expenses',
-      icon: icons.IconFileUpload,
+      icon: icons.Payments,
       breadcrumbs: false
     }
    
@@ -149,7 +176,7 @@ export const dashboard4 = {
       title: 'Users',
       type: 'item',
       url: '/dashboard/users',
-      icon: icons.IconCalendarEvent,
+      icon: icons.IconUsers,
       breadcrumbs: false
     },
   
@@ -158,7 +185,7 @@ export const dashboard4 = {
       title: 'Customers',
       type: 'item',
       url: '/dashboard/customers',
-      icon: icons.IconFileInvoice,
+      icon: icons.AccountCircleIcon,
       breadcrumbs: false
     }
   ]

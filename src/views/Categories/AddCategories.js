@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import { postApi } from 'core/apis/apiClient.js';
+import { sentApi } from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
 
 
-const AddCategoryDialog = ({ open, onClose, fetchData }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+
+const AddCategoryDialog = ({ open, onClose, fetchData,setSnackbarMessage, setSnackbarOpen }) => {
+  const { control, handleSubmit,reset, formState: { errors } } = useForm();
 
     const [image, setImage] = useState(null);
     const [dishImage, setDishImage] = useState("");
@@ -22,36 +25,26 @@ const AddCategoryDialog = ({ open, onClose, fetchData }) => {
   
 
 
-  // const onSubmit = async (data) => {
-  //   const formData = { ...data,categoryImage: dishImage  };
-  //   console.log("input",formData);
-
-  //   const response = await postApi(urls?.foodCategory?.create, formData);
-  //   fetchData();
-  //   onClose();
-  // };
-  const onSubmit = async (data) => {
-    // Create FormData instance
-    const formData = new FormData();
-    formData.append("categoryName", data.categoryName);
-    formData.append("desc", data.desc);
-    formData.append("categoryImage", dishImage); // Append the image file
   
-    console.log("FormData values:");
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
+  const onSubmit = async (data) => {
+    const formData = new FormData();
+    formData.append('categoryName', data?.categoryName);
+    formData.append('desc', data?.desc);
+    if (dishImage) {
+      formData.append('categoryImage', dishImage);
     }
   
-    // Send FormData using postApi
-    const response = await postApi(urls?.foodCategory?.create, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data", // Ensure correct headers
-      },
-    });
+   
+  
+    const response = await sentApi(urls?.foodCategory?.create, formData); 
   
     fetchData();
+    reset();
     onClose();
+    setSnackbarMessage('Category added successfully!');
+    setSnackbarOpen(true);
   };
+  
   
 
   return (
@@ -60,6 +53,21 @@ const AddCategoryDialog = ({ open, onClose, fetchData }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+            
+          <IconButton
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'grey',
+                '&:hover': {
+                  color: 'red',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
 
             <Grid mt={1} item xs={12}>
               <Controller
@@ -76,8 +84,8 @@ const AddCategoryDialog = ({ open, onClose, fetchData }) => {
                     label="Category Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.categoryName}
-                    helperText={errors.categoryName ? errors.categoryName.message : ''}
+                    error={!!errors?.categoryName}
+                    helperText={errors?.categoryName ? errors?.categoryName?.message : ''}
                   />
                 )}
               />

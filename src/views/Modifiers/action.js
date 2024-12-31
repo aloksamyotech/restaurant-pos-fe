@@ -1,20 +1,22 @@
 import React,{ useState,useEffect }  from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-    Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {updateApi} from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
 
-const EditModifierDialog = ({ open, onClose,modifier,fetchData }) => {
+
+const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, setSnackbarMessage }) => {
   const { control, handleSubmit,formState: { errors },reset } = useForm(); 
   
   useEffect(() => {
     if (modifier) {
         reset({
-          name: modifier.name,
-          cost: modifier.cost,
-          price: modifier.price,
-          desc: modifier.desc,
+          name: modifier?.name,
+          cost: modifier?.cost,
+          price: modifier?.price,
+          desc: modifier?.desc,
         });
       }
     }, [modifier, reset]);
@@ -22,11 +24,19 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData }) => {
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data,id: modifier.id}; 
+    const formData = { ...data,id: modifier?.id}; 
     
-    const response = await updateApi(urls?.modifier?.update.replace(':id', modifier.id), formData);
+    const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
     
-    fetchData();
+    if (response.success) {
+      fetchData();
+      setSnackbarMessage(' Edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to Edit !');
+      setSnackbarOpen(true);
+    }
+  
     onClose();
        
      
@@ -38,6 +48,21 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+            
+          <IconButton
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'grey',
+                '&:hover': {
+                  color: 'red',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             
              <Grid mt={1} item xs={12}>
               <Controller

@@ -14,7 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from "./action";
 import {deleteApi} from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from "./Delete.js";
-
+import { Snackbar } from '@mui/material';
 
 
 const Categories = () => {
@@ -36,11 +36,14 @@ const Categories = () => {
       Ingredients
     </Typography>,
   ];
+  function handleClick(event) {
+    event?.preventDefault();
+    
+  }
 
 
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleDialogOpen = () => setDialogOpen(true);
+ const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
 const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedIngredient, setSelectedIngredient] = useState(null);
@@ -50,13 +53,16 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
         setSelectedIngredient(ingredient); 
         setEditDialogOpen(true); 
       };
-       const handleEditDialogClose = () => setEditDialogOpen(false);
-        const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
-
-  function handleClick(event) {
-    event?.preventDefault();
+       const handleEditDialogClose = () =>  {
+        setEditDialogOpen(false);
+        
+      };
     
-  }
+        const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
+        const [snackbarOpen, setSnackbarOpen] = useState(false);
+        const [snackbarMessage, setSnackbarMessage] = useState('');
+
+
 
   const columns = [
     { field: 'serial', headerName: 'S.No', flex:1,headerAlign: 'center',align: 'center',},
@@ -131,7 +137,7 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
         
         <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)}/>
         <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} 
-        ingredient={selectedIngredient}/>
+        ingredient={selectedIngredient} setSnackbarMessage={setSnackbarMessage} setSnackbarOpen={setSnackbarOpen}/>
 
 <DeleteIcon
             sx={{ color: "red", cursor: "pointer" }}
@@ -145,6 +151,8 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
               await deleteApi(urls?.ingredient.delete.replace(':id', params.row.id));
               setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
               await fetchData(); 
+              setSnackbarOpen(true);
+              setSnackbarMessage('Ingredient deleted successfully!');
               setDeleteDialogOpen(null);
               
             }}
@@ -163,14 +171,14 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
     
           const response = await getApi(urls?.ingredient.get);
           const formattedData = response.data.map((item, index) => ({
-            id: item._id,
+            id: item?._id,
             serial: index + 1,
-            name: item.name,
-            desc: item.desc,
-            cost: item.cost,
-            price: item.price,
-            quantity: item.quantity,
-            unit: item.unit,
+            name: item?.name,
+            desc: item?.desc,
+            cost: item?.cost,
+            price: item?.price,
+            quantity: item?.quantity,
+            unit: item?.unit,
             isAvailable: item.true
             
           }));
@@ -187,6 +195,13 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   return (
     <Container>
+       <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            message={snackbarMessage}
+            onClose={() => setSnackbarOpen(false)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
+          />
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -204,7 +219,9 @@ const [editDialogOpen, setEditDialogOpen] = useState(false);
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddIngredientDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
+          <AddIngredientDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData}
+          setSnackbarMessage={setSnackbarMessage}
+          setSnackbarOpen={setSnackbarOpen} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

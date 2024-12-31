@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
 
-const AddExpense = ({ open, onClose,fetchData }) => {
-  const { control, handleSubmit, formState: { errors },reset } = useForm();
+
+const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
+  const { control, handleSubmit, reset,formState: { errors } } = useForm();
 
 
 
@@ -19,6 +21,8 @@ const AddExpense = ({ open, onClose,fetchData }) => {
     fetchData();
     reset();
     onClose();
+    setSnackbarMessage('Expense added successfully!');
+    setSnackbarOpen(true);
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
 
@@ -26,8 +30,8 @@ const AddExpense = ({ open, onClose,fetchData }) => {
   useEffect(() => {
     const fetchExpenseTypes = async () => {
       try {
-        const response = await getApi(urls.expenseType.get);
-        setExpenseTypes(response.data);
+        const response = await getApi(urls?.expenseType?.get);
+        setExpenseTypes(response?.data);
         
       } catch (error) {
         console.error("Failed to fetch expense types:", error);
@@ -43,6 +47,21 @@ const AddExpense = ({ open, onClose,fetchData }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+            
+          <IconButton
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'grey',
+                '&:hover': {
+                  color: 'red',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
 
 
 
@@ -163,7 +182,7 @@ const AddExpense = ({ open, onClose,fetchData }) => {
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Add Item
+              Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel

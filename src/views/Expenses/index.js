@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from "./action";
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from "./Delete.js";
+import { Snackbar } from '@mui/material';
 
 
 const Categories = () => {
@@ -53,8 +54,14 @@ const Categories = () => {
     setSelectedTag(tag);
     setEditDialogOpen(true);
   };
-  const handleEditDialogClose = () => setEditDialogOpen(false);
+  const handleEditDialogClose = () =>{
+    setEditDialogOpen(false);
+    
+  };
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
 
   const columns = [
@@ -112,21 +119,23 @@ const Categories = () => {
 
         <Stack direction="row" spacing={4}>
 
-          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params.row)} />
+          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params?.row)} />
           <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData}
             tag={selectedTag} />
 
           <DeleteIcon
             sx={{ color: "red", cursor: "pointer" }}
-            onClick={() => setDeleteDialogOpen(params.row.id)}
+            onClick={() => setDeleteDialogOpen(params?.row?.id)}
           />
           <DeleteConfirmationDialog
             open={deleteDialogOpen === params.row.id}
             onClose={() => setDeleteDialogOpen(null)}
             onConfirm={async () => {
               await deleteApi(urls?.expense.delete.replace(':id', params.row.id));
-              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+              setRows((prevRows) => prevRows?.filter((row) => row?.id !== params?.row?.id));
               await fetchData();
+              setSnackbarOpen(true);
+              setSnackbarMessage('Expense deleted successfully!');
               setDeleteDialogOpen(null);
 
             }}
@@ -142,15 +151,15 @@ const Categories = () => {
   const fetchData = async () => {
 
 
-    const response = await getApi(urls?.expense.get);
+    const response = await getApi(urls?.expense?.get);
     const formattedData = response.data.map((item, index) => ({
-      id: item._id,
+      id: item?._id,
       serial: index + 1,
-      name: item.name,
-      desc: item.desc,
-      expenseNameId: item.expenseNameId?.expenseName,
-      amount: item.amount,
-      isAvailable: item.true
+      name: item?.name,
+      desc: item?.desc,
+      expenseNameId: item?.expenseNameId?.expenseName,
+      amount: item?.amount,
+      isAvailable: item?.true
 
     }));
 
@@ -168,6 +177,14 @@ const Categories = () => {
 
   return (
     <Container>
+      
+ <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            message={snackbarMessage}
+            onClose={() => setSnackbarOpen(false)}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
+          />
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -186,7 +203,9 @@ const Categories = () => {
             Add Expense
           </Button>
           
-          <AddExpensesDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData} />
+          <AddExpensesDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData}
+           setSnackbarMessage={setSnackbarMessage}
+           setSnackbarOpen={setSnackbarOpen} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

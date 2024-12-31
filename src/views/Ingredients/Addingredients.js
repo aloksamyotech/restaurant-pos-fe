@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import {postApi} from 'core/apis/apiClient.js';
+import CloseIcon from '@mui/icons-material/Close';
 
 
-const AddIngredientDialog = ({ open, onClose,fetchData }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm(); 
+
+const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
+  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
 
   
   const onSubmit =async (data) => {
@@ -14,7 +16,10 @@ const AddIngredientDialog = ({ open, onClose,fetchData }) => {
     
     const response = await postApi(urls?.ingredient?.create, formData);
     fetchData();
-    onClose();  
+    reset();
+    onClose();
+    setSnackbarMessage('Ingredient added successfully!');
+  setSnackbarOpen(true); 
   };
 
   return (
@@ -23,6 +28,21 @@ const AddIngredientDialog = ({ open, onClose,fetchData }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+            
+          <IconButton
+              onClick={onClose}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'grey',
+                '&:hover': {
+                  color: 'red',
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             
              <Grid mt={1} item xs={12}>
               <Controller
