@@ -1,15 +1,33 @@
-import sandwich from 'assets/images/sandwich.jpg'
+import React, { useState, useEffect } from "react";
+import { getApi } from 'core/apis/apiClient.js';
+import { urls } from "core/constant/urls";
 
-const dishes = [
-    { id: 1, name: "Sandwich", image: sandwich, price: 15 },
-    { id: 2, name: "Kaju curry", image: sandwich, price: 200 },
-    { id: 3, name: "Rasmalia", image: sandwich, price: 25 },
-    { id: 4, name: "Kofta", image: sandwich, price: 35 },
-    { id: 5, name: "Burger", image: sandwich, price: 35 },
-    { id: 6, name: "Paneer", image: sandwich, price: 35 },
-    { id: 7, name: "Kofta", image: sandwich, price: 35 },
-    { id: 8, name: "Burger", image: sandwich, price: 35 },
-    { id: 9, name: "Paneer", image: sandwich, price: 35 }
-  ];
+const useDishes = () => {
+    const [dishes, setRows] = useState([]);
+    const fetchData = async () => {
+      
+      const response = await getApi(urls?.item?.get);
+      
+      const formattedData = response?.data?.map((item, index) => ({
+        id: item?._id,
+        name: item?.name,
+        
+        image: item?.image,
+        
+        price: item?.price,
+       
+    
+  
+        
+      }));
+      setRows(formattedData);
+           };
+  
+    useEffect(() => {
+  
+      fetchData();
+    }, []);
+    return dishes;
+  }
 
-  export default dishes;
+  export default useDishes;

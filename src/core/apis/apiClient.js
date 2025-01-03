@@ -47,26 +47,14 @@ export const getApi = async (url, params = {}, headers = {}) => {
         throw new Error(error.response ? error.response.data : error.message);
     }
 };
-// export const updateApi = async (url, data, headers = {}) => {
-//     try {
-//         const defaultHeaders = {
-//             'Content-Type': 'application/json',
-//             ...headers
-//         };
-//         const response = await axios.put(url, data, { headers: defaultHeaders });
-//         return response.data;
-//     } catch (error) {
-//         console.error('API Error:', error.response || error.message);
-//         throw new Error(error.response ? error.response.data : error.message);
-//     }
-// };
+
 export const updateApi = async (url, data, headers = {}) => {
     try {
-        // Check if the data is FormData (i.e., for file uploads)
+       
         const isFormData = data instanceof FormData;
 
         const defaultHeaders = {
-            // Do not set Content-Type header for FormData
+          
             ...headers,
             ...(isFormData ? {} : { 'Content-Type': 'application/json' })
         };
