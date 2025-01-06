@@ -43,7 +43,7 @@ const Cart = ({ cartItems, setCart }) => {
         flexDirection: "column",
         justifyContent: "",
         height: "420px",
-        // border: "1px solid #ccc",
+        
         borderRadius: "8px",
         overflow: "hidden",
       }}

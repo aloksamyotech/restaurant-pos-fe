@@ -1,13 +1,22 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
-import sandwich from 'assets/images/sandwich.jpg'
-import { margin } from "@mui/system";
+import sandwich from "../../../assets/images/sandwich.jpg";
 
 
 
-const DishCard = ({ name, image, price,onAddToCart }) => {
+
+const DishCard = ({ dish,onAddToCart }) => {
+  const { id, name, image, price } = dish;
   return (
-    <Card variant="outlined" onClick={onAddToCart} sx={{margin:"2px"}} >
+    <Card variant="outlined" onClick={() => onAddToCart({ id, name, image, price })} 
+    sx={{
+      margin: "2px",
+      cursor: "pointer", 
+      "&:hover": {
+        boxShadow: 3, 
+        
+      },
+    }}>
       <CardMedia
         component="img"
         height="129px"

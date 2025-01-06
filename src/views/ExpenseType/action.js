@@ -1,30 +1,50 @@
-import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import React,{ useState,useEffect }  from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import {updateApi} from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
 
-const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
+const EditDialog = ({ open, onClose,tag,fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+
+  useEffect(() => {
+    if (tag) {
+        reset({
+          expenseName: tag?.expenseName,
+          desc: tag?.desc,
+          isAvailable: tag.true
+        });
+      }
+    }, [tag, reset]);
 
   
-  const onSubmit =async (data) => {
-    const formData = { ...data}; 
-   
-    const response = await postApi(urls?.expenseType?.create, formData); 
+
+  const onSubmit =async(data) => {
+    const formData = { ...data,id: tag?.id}; 
     
-    fetchData();
-    reset();
+    
+    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag?.id), formData);
+    
+    if (response.success) {
+      fetchData();
+      setSnackbarMessage('Expense Type edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to edit Expense Type!');
+      setSnackbarOpen(true);
+    }
+  
     onClose();
-    setSnackbarMessage('Expense Type added successfully!');
-  setSnackbarOpen(true);  
+       
+     
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add Expenses Type</DialogTitle>
+      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -49,14 +69,13 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
                 name="expenseName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense Name is required',
-                  maxLength: { value: 50, message: 'Expense must be at most 50 characters' }
-                    
+                rules={{ required: 'Expense Type is required',
+                  maxLength: { value: 50, message: 'Expense Type must be at most 50 characters' }
                  }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense"
+                    label="Expense Type"
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseName}
@@ -66,7 +85,7 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
               />
             </Grid>
 
-              <Grid mt={1} item xs={12}>
+             <Grid mt={1} item xs={12}>
                           <Controller
                             name="desc"
                             control={control}
@@ -91,15 +110,16 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
                           />
                         </Grid>
 
-          
+           
             
 
+            
 
            
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="contained" color="primary" >
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
@@ -113,4 +133,4 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
   );
 };
 
-export default AddExpensesTypeDialog;
+export default EditDialog;

@@ -1,28 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import {
+  Dialog, DialogActions, DialogContent, DialogTitle, TextField,
+  Button, Grid, MenuItem, InputAdornment, Typography,IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
-import { postApi } from 'core/apis/apiClient.js';
+import { updateApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
 
-const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit, reset,formState: { errors } } = useForm();
+const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbarMessage }) => {
+  const { control, handleSubmit, formState: { errors }, reset } = useForm();
 
+  useEffect(() => {
+    if (tag) {
+      reset({
+        name: tag?.name,
+        desc: tag?.desc,
+        amount: tag?.amount,
+        expenseNameId: tag?.expenseNameId?.expenseName,
+        isAvailable: tag?.true
+      });
+    }
+  }, [tag, reset]);
 
 
 
   const onSubmit = async (data) => {
-    const formData = { ...data,expenseNameId: data.expenseNameId };
- 
-    const response = await postApi(urls?.expense?.create, formData);
-   
-    fetchData();
-    reset();
+    const formData = { ...data, id: tag?.id };
+
+
+    const response = await updateApi(urls?.expense?.update?.replace(':id', tag?.id), formData);
+
+    if (response.success) {
+      fetchData();
+      setSnackbarMessage('Expense Type edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to edit Expense Type!');
+      setSnackbarOpen(true);
+    }
+  
     onClose();
-    setSnackbarMessage('Expense added successfully!');
-    setSnackbarOpen(true);
+
+
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
 
@@ -32,7 +54,7 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
       try {
         const response = await getApi(urls?.expenseType?.get);
         setExpenseTypes(response?.data);
-        
+
       } catch (error) {
         console.error("Failed to fetch expense types:", error);
       }
@@ -43,7 +65,7 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Expense</DialogTitle>
+      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -63,25 +85,23 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
               <CloseIcon />
             </IconButton>
 
-
-
-
             <Grid mt={1} item xs={12}>
               <Controller
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense is required',
+                rules={{
+                  required: 'Expense Name is required',
                   maxLength: { value: 50, message: 'Expense must be at most 50 characters' }
-                 }}
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense"
+                    label="Expense Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors?.name}
-                    helperText={errors?.name ? errors?.name?.message : ''}
+                    error={!!errors.expenseName}
+                    helperText={errors.expenseName ? errors.expenseName.message : ''}
                   />
                 )}
               />
@@ -94,7 +114,7 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                 defaultValue=""
                 rules={{
                   validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
@@ -111,18 +131,17 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                 )}
               />
             </Grid>
-
             <Grid item xs={12}>
               <Controller
                 name="expenseNameId"
                 control={control}
-                defaultValue=""
+                defaultValue="expenseNameId"
                 rules={{ required: 'Category is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Expense Type"
+                    label="Category"
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseNameId}
@@ -175,13 +194,10 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
 
 
 
-
-
-
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" onClick={onClose}>
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
@@ -195,4 +211,4 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
   );
 };
 
-export default AddExpense;
+export default EditDialog;

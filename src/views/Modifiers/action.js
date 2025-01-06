@@ -1,34 +1,50 @@
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import React,{ useState,useEffect }  from 'react';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
+    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import {updateApi} from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
 
-const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
+const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, setSnackbarMessage }) => {
+  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+  
+  useEffect(() => {
+    if (modifier) {
+        reset({
+          name: modifier?.name,
+          cost: modifier?.cost,
+          price: modifier?.price,
+          desc: modifier?.desc,
+        });
+      }
+    }, [modifier, reset]);
 
   
 
   const onSubmit =async(data) => {
-    const formData = { ...data}; 
+    const formData = { ...data,id: modifier?.id}; 
     
-    const response = await postApi(urls?.modifier?.create, formData);
+    const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
     
-    
-    fetchData();
-    reset();
+    if (response.success) {
+      fetchData();
+      setSnackbarMessage(' Edited successfully!');
+      setSnackbarOpen(true);
+    } else {
+      setSnackbarMessage('Failed to Edit !');
+      setSnackbarOpen(true);
+    }
+  
     onClose();
-    setSnackbarMessage('Modifier added successfully!');
-  setSnackbarOpen(true);
        
      
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Modifier</DialogTitle>
+      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
@@ -53,9 +69,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Modifier Name is required',
-                  maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
-                 }}
+                rules={{ required: 'Modifier Name is required' }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -69,9 +83,6 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
               />
             </Grid>
 
-            
-
-          
             <Grid item xs={6}>
               <Controller
                 name="cost"
@@ -82,9 +93,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
-                  },
-                  validate: value => (value >= 0) || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  }
                 }}
                 render={({ field }) => (
                   <TextField
@@ -114,9 +123,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
-                  },
-                  validate: value => (value >= 0) || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  }
                 }}
                 render={({ field }) => (
                   <TextField
@@ -140,12 +147,6 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                 name="desc"
                 control={control}
                 defaultValue=""
-                rules={{
-                  validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
-                    return wordCount <= 200 || 'Description must be at most 200 words';
-                  }
-                }}
                 
                 render={({ field }) => (
                   <TextField
@@ -165,8 +166,8 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary" >
-              Submit
+          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
+              Edit Item
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
@@ -179,4 +180,4 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
   );
 };
 
-export default AddModifierDialog;
+export default EditModifierDialog;

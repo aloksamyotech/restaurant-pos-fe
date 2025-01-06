@@ -19,12 +19,7 @@ const DishDataGrid = ({ dishes, dishesPerRow, onAddToCart }) => {
     <Grid container spacing={0.1}>
       {dishes.map((dish) => (
         <Grid item xs={calculateGridColumns()} key={dish.id}>
-          <DishCard
-            name={dish.name}
-            image={dish.image}
-            price={dish.price}
-            onAddToCart={() => onAddToCart(dish)} 
-          />
+          <DishCard dish={dish} onAddToCart={onAddToCart} />
         </Grid>
       ))}
     </Grid>
