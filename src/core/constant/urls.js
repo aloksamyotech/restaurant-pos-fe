@@ -41,6 +41,12 @@ export const urls = Object.freeze({
         get: base + '/expense/getExpenses',
         update: base + '/expense/updateExpense/:id', 
         delete:  base + '/expense/deleteExpense/:id' 
+    },
+    order: {
+        create: base + '/order/addorder',
+        get: base + '/order/getorders',
+        getbyid: base + '/order/fetchOrder/:id',
+        
     }
     }
 );

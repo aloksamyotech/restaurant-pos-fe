@@ -27,6 +27,7 @@ const AddCategoryDialog = ({ open, onClose, fetchData,setSnackbarMessage, setSna
 
   
   const onSubmit = async (data) => {
+    
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
@@ -143,9 +144,9 @@ const AddCategoryDialog = ({ open, onClose, fetchData,setSnackbarMessage, setSna
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
+              <Button type="submit" variant="contained" color="primary">
+                Submit
+              </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>

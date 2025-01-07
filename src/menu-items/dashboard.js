@@ -8,6 +8,7 @@ import AccountBalanceWallet from '@mui/icons-material/AccountBalanceWallet';
 import Payments from '@mui/icons-material/Payments';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 
 
 
@@ -51,7 +52,8 @@ const icons = {
   AccountBalanceWallet,
   Payments,
   RestaurantIcon,
-  PointOfSaleIcon
+  PointOfSaleIcon,
+  ReorderSharpIcon
 
 };
 
@@ -98,6 +100,14 @@ export const dashboard1 = {
       type: 'item',
       url: '/dashboard/kitchen',
       icon: icons.RestaurantIcon,
+      breadcrumbs: false
+    },
+    {
+      id: '13',
+      title: 'Order',
+      type: 'item',
+      url: '/dashboard/order',
+      icon: icons.ReorderSharpIcon,
       breadcrumbs: false
     }
   ]

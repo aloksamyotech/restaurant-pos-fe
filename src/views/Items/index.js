@@ -15,7 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EditDialog from "./action";
 import { Snackbar } from '@mui/material';
-import { getAllCategories, getAllItems } from "core/apis/allapis";
+
 
 
 const Categories = () => {

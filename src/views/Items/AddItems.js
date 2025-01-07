@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem,
   InputAdornment, Typography,
@@ -17,7 +17,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState("");
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+ 
 
   const handleImageChange = (e) => {
     const file = e?.target?.files[0];
@@ -33,8 +33,8 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
   }
 
 
-  const [categories, setcategories,] = React.useState([]);
-  React.useEffect(() => {
+  const [categories, setcategories,] = useState([]);
+  useEffect(() => {
     const fetchDropdownData = async () => {
       try {
         const [categoryResponse] = await Promise.all([
@@ -51,21 +51,34 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
     fetchDropdownData();
   }, []);
 
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
   const handleIngredientSelection = (ingredients) => {
     setSelectedIngredients(ingredients); 
   };
 
 
   const onSubmit = async (data) => {
-    const formData = { ...data, dishImage: dishImage,ingredients: selectedIngredients };
-  
+   
+    const formData = new FormData();
     
     
+    formData.append('name', data.name);
+    formData.append('desc', data.desc);
+    formData.append('cost', data.cost);
+    formData.append('price', data.price);
+    formData.append('categoryId', data.categoryId);
+    formData.append('ingredients', JSON.stringify(selectedIngredients));
+
+    
+    if (data?.dishImage && data?.dishImage[0]) {
+      formData.append('dishImage', data?.dishImage[0]); 
+    }
+   
     const response = await postApi(urls?.item?.create, formData);
     fetchData();
     reset();
     onClose();
-    setSnackbarMessage('Category added successfully!');
+    setSnackbarMessage('Item added successfully!');
   setSnackbarOpen(true);
   };
 
@@ -240,6 +253,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
               <input
                 type="file"
                 accept="image/*"
+                
                 onChange={handleImageChange}
                 style={{ display: 'none' }}
                 id="image-upload"
