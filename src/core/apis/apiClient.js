@@ -2,15 +2,11 @@ import axios from 'axios';
 
 export const sentApi = async (url, data) => {
     try {
-       
-        
-
         const response = await axios.post(url, data, {
-            headers :{
-             'Content-Type': 'multipart/form-data',
-           }
-           
-         });
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('API Error:', error.response || error.message);
@@ -50,11 +46,11 @@ export const getApi = async (url, params = {}, headers = {}) => {
 
 export const updateApi = async (url, data, headers = {}) => {
     try {
-       
+
         const isFormData = data instanceof FormData;
 
         const defaultHeaders = {
-          
+
             ...headers,
             ...(isFormData ? {} : { 'Content-Type': 'application/json' })
         };

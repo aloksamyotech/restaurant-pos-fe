@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem,
   InputAdornment, Typography,
@@ -12,12 +12,12 @@ import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 
 
-const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
+const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const { control, handleSubmit, reset, formState: { errors } } = useForm();
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState("");
- 
+
 
   const handleImageChange = (e) => {
     const file = e?.target?.files[0];
@@ -28,7 +28,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
   };
 
   const handleClose = () => {
-    
+
     onClose();
   }
 
@@ -53,33 +53,28 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
 
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const handleIngredientSelection = (ingredients) => {
-    setSelectedIngredients(ingredients); 
+    setSelectedIngredients(ingredients);
   };
 
 
   const onSubmit = async (data) => {
-   
-    const formData = new FormData();
-    
-    
-    formData.append('name', data.name);
-    formData.append('desc', data.desc);
-    formData.append('cost', data.cost);
-    formData.append('price', data.price);
-    formData.append('categoryId', data.categoryId);
-    formData.append('ingredients', JSON.stringify(selectedIngredients));
-
-    
-    if (data?.dishImage && data?.dishImage[0]) {
-      formData.append('dishImage', data?.dishImage[0]); 
-    }
-   
-    const response = await postApi(urls?.item?.create, formData);
+    let obj = {}
+    Object.assign(obj, {
+      name: data.name,
+      desc: data.desc,
+      cost: data.cost,
+      price: data.price,
+      categoryId: data.categoryId,
+      ingredients: selectedIngredients,
+      dishImage: dishImage
+    })
+    const response = await postApi(urls?.item?.create, obj,
+    );
     fetchData();
     reset();
     onClose();
     setSnackbarMessage('Item added successfully!');
-  setSnackbarOpen(true);
+    setSnackbarOpen(true);
   };
 
 
@@ -113,9 +108,10 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Item Name is required',
+                rules={{
+                  required: 'Item Name is required',
                   maxLength: { value: 50, message: 'Item Name must be at most 50 characters' }
-                 }}
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -135,7 +131,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
                 defaultValue=""
                 rules={{
                   validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
@@ -218,8 +214,8 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
             </Grid>
 
             <Grid item xs={6}>
-          <MultipleSelect onSelectionChange={handleIngredientSelection}/>
-      </Grid>
+              <MultipleSelect onSelectionChange={handleIngredientSelection} />
+            </Grid>
 
             <Grid item xs={6}>
               <Controller
@@ -253,7 +249,7 @@ const AddItemDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbar
               <input
                 type="file"
                 accept="image/*"
-                
+
                 onChange={handleImageChange}
                 style={{ display: 'none' }}
                 id="image-upload"
