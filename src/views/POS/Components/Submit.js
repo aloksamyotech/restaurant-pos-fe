@@ -14,9 +14,38 @@ import {
   Avatar,
   Grid,
 } from "@mui/material";
+import { useForm } from 'react-hook-form';
+import { urls } from "core/constant/urls";
+import { postApi } from 'core/apis/apiClient.js';
+import {CrossIcon} from 'common/crossIcon';
+
 
 const CartDialog = ({ open, onClose, cartItems }) => {
+  const { handleSubmit,reset } = useForm();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
+
+
+  const onSubmit = async () => {
+
+    let items = cartItems.map((item) => {
+      return {
+        id: item?.id,
+        quantity: item?.quantity,
+        name: item?.name,
+        price: item?.price,
+      };
+    });
+    const payload = {
+      items,
+      totalPrice,
+    };
+   
+    
+     const response = await postApi(urls?.order?.create, payload);
+     reset();
+     onClose();
+     navigate("/invoice", { state: { items, totalPrice } });
+    };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -34,6 +63,8 @@ const CartDialog = ({ open, onClose, cartItems }) => {
 
       
       <DialogContent sx={{ padding: "16px", backgroundColor: "#f9f9f9" }}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <CrossIcon/>
         {cartItems?.length > 0 ? (
           <>
           
@@ -85,7 +116,7 @@ const CartDialog = ({ open, onClose, cartItems }) => {
               sx={{
                 textAlign: "right",
                 backgroundColor: "#fff",
-                padding: "16px",
+                padding: "16px",  
                 borderRadius: "8px",
                 
               }}
@@ -111,7 +142,7 @@ const CartDialog = ({ open, onClose, cartItems }) => {
             Your cart is empty.
           </Typography>
         )}
-      </DialogContent>
+      
 
       
       <DialogActions
@@ -121,6 +152,9 @@ const CartDialog = ({ open, onClose, cartItems }) => {
           padding: "16px",
         }}
       >
+         <Button type="submit" variant="contained" color="primary">
+                      Place the order
+                    </Button>
         <Button
           onClick={onClose}
           variant="contained"
@@ -130,6 +164,8 @@ const CartDialog = ({ open, onClose, cartItems }) => {
           Close
         </Button>
       </DialogActions>
+      </form>
+      </DialogContent>
     </Dialog>
   );
 };
