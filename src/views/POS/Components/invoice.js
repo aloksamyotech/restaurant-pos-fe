@@ -16,6 +16,7 @@ const Invoice = () => {
  const [rowData, setrowdata] = useState({});
 
   const fetchData = async () => {
+    
     const response = await getApi(urls?.order.getbyid.replace(':id', orderId));
   
    
@@ -33,6 +34,7 @@ const Invoice = () => {
       tax: order?.tax?.toFixed(2) || "0.00",
       paymentStatus: order?.paymentStatus === 1 ? "Paid" : "Unpaid",
       chef: order?.chef || "N/A",
+      paymentMode: order?.paymentMode || "N/A",
       type: order?.type || "N/A",
       status: order?.status || "Pending",
       expectedTime: order?.expectedTime ? `${order.expectedTime} min` : "N/A",
@@ -59,13 +61,13 @@ const Invoice = () => {
 
   const columns = [
     {
-      field: 'serial', headerName: 'S.No', width: 20, headerAlign: 'center',
+      field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center',
       align: 'center',
     },
     {
       field: 'items',
       headerName: 'Item Name',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
     },
@@ -73,7 +75,7 @@ const Invoice = () => {
     {
         field: 'price',
         headerName: 'Price',
-        width: 150,
+        flex: 1,
         headerAlign: 'center',
         align: 'center',
         
@@ -83,7 +85,7 @@ const Invoice = () => {
       {
         field: 'quantity',
         headerName: 'Quantity ',
-        width: 150,
+        flex: 1,
         headerAlign: 'center',
         align: 'center',
         
@@ -106,7 +108,7 @@ const Invoice = () => {
                 <Divider sx={{ mb: 3 }} />
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h5" textAlign="left" color="" >
-                        Order ID: {orderId}
+                        Order ID: {orderId ? `ORD-${orderId.slice(-6).toUpperCase()}` : "N/A"}
                     </Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
@@ -150,7 +152,7 @@ const Invoice = () => {
                             Payment Status :
                         </Typography>
                         <Typography variant="h5" textAlign="left" color="" >
-                            Payment Type:
+                            Payment Type:{rowData?.paymentMode}
                         </Typography>
                         <Typography variant="h5" textAlign="left" color="" >
                             Payment Date:
@@ -162,7 +164,7 @@ const Invoice = () => {
                             Total Price:{rowData?.totalPrice}
                         </Typography>
                         <Typography variant="h5" textAlign="left" color="" >
-                            Discount :
+                            Discount :{rowData?.discount}
                         </Typography>
                         <Typography variant="h5" textAlign="left" color="" >
                             Tax:

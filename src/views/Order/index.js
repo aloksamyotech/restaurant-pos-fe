@@ -41,6 +41,7 @@ const navigate=useNavigate();
 
   }
   const handleViewClick = (row) => {
+    
     navigate(`/dashboard/order/orderview/${row.id}`, { state: row });
   };
   const columns = [

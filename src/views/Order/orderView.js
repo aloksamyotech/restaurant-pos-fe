@@ -43,6 +43,7 @@ const OrderView = () => {
 
 
   const [rowData, setrowdata] = useState({});
+  
   const fetchData = async () => {
     const response = await getApi(urls?.order.getbyid.replace(':id', id));
    
@@ -171,7 +172,7 @@ const OrderView = () => {
                     <strong>totalPrice:</strong> {rowData?.totalPrice}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>Discount:</strong> ${ }
+                    <strong>Discount:</strong> {rowData?.discount }
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>Tax:</strong> { }

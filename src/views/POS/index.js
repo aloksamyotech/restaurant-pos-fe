@@ -48,10 +48,10 @@ const POS = () => {
     <>
       <Container maxWidth="xl" >
       <Card sx={{p:1,m:1}}>
-        <Stack direction="row" alignItems="flex-start" spacing={1} >
-          <SearchBar setSearchQuery={setSearchQuery} />
-        <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />
-        <Button variant="outlined" sx={{ mt: "3" }}  onClick={handleDialogOpen}>Submit</Button>
+        <Stack direction="row" alignItems="flex-start" spacing={1} sx={{ width: '100%' }}>
+          <SearchBar setSearchQuery={setSearchQuery}  sx={{ width: '70%'  }}/>
+        <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow}  sx={{  width: '15%'}} />
+        <Button variant="outlined"  sx={{ flex: 1, mt: 3 }} onClick={handleDialogOpen} >Submit</Button>
         </Stack>
       
       </Card>
@@ -77,7 +77,7 @@ const POS = () => {
       <CartDialog open={dialogOpen} onClose={handleDialogClose} cartItems={cartStore} />
 
 
-
+          
     </>
   );
 };
