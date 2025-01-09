@@ -67,7 +67,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'pos/invoice',
+          path: 'pos/invoice/:orderId',
           element: <Invoice/>
         }
       ]

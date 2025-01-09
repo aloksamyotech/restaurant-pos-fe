@@ -2,48 +2,94 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Grid, Paper, Button, Card } from "@mui/material";
 import { Stack } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
+import { useParams } from "react-router";
+import { getApi } from 'core/apis/apiClient.js';
+import { urls } from "core/constant/urls";
 
 
-const Invoice = ({ order }) => {
-    const { items, totalPrice } = order || {
-        items: [],
-        totalPrice: 0,
-    };
+const Invoice = () => {
    
 
-    const columns = [
-        {
-            field: 'serial', headerName: 'S.No', width: 20, headerAlign: 'center',
-            align: 'center',
-        },
-        {
-            field: 'items',
-            headerName: 'Item Name',
-            width: 150,
-            headerAlign: 'center',
-            align: 'center',
-        },
+    const { orderId } = useParams();
 
-        {
-            field: 'price',
-            headerName: 'Price',
-            width: 150,
-            headerAlign: 'center',
-            align: 'center',
+   
+ const [rowData, setrowdata] = useState({});
 
-        },
+  const fetchData = async () => {
+    const response = await getApi(urls?.order.getbyid.replace(':id', orderId));
+  
+   
+    const order = response?.data;
+   
+    
+
+   
+    const formattedData = {
+      id: order?._id,
+      customer: order?.customer || "N/A",
+      employee: order?.employee || "N/A",
+      totalPrice: order?.totalPrice?.toFixed(2) || "0.00",
+      discount: order?.discount?.toFixed(2) || "0.00",
+      tax: order?.tax?.toFixed(2) || "0.00",
+      paymentStatus: order?.paymentStatus === 1 ? "Paid" : "Unpaid",
+      chef: order?.chef || "N/A",
+      type: order?.type || "N/A",
+      status: order?.status || "Pending",
+      expectedTime: order?.expectedTime ? `${order.expectedTime} min` : "N/A",
+   
+    };
+   
+    const formattedItemRows = order?.items?.map((item, index) => ({
+      id: index + 1,
+      serial: index + 1,
+      items: item?.name || "N/A",
+      price: item?.price?.toFixed(2) || "0.00",
+      quantity: item?.quantity || "0",
+    })) || [];
+
+    setrowdata(formattedData);
+    setitemRow(formattedItemRows);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [orderId]);
+  
 
 
-        {
-            field: 'quantity',
-            headerName: 'Quantity ',
-            width: 150,
-            headerAlign: 'center',
-            align: 'center',
-
-        }
-    ];
-    const [itemRow, setitemRow] = useState([]);
+  const columns = [
+    {
+      field: 'serial', headerName: 'S.No', width: 20, headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: 'items',
+      headerName: 'Item Name',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    
+    {
+        field: 'price',
+        headerName: 'Price',
+        width: 150,
+        headerAlign: 'center',
+        align: 'center',
+        
+      },
+     
+     
+      {
+        field: 'quantity',
+        headerName: 'Quantity ',
+        width: 150,
+        headerAlign: 'center',
+        align: 'center',
+        
+      }
+   ];
+   const [itemRow, setitemRow] = useState([]); 
 
     return (
         <Box sx={{ padding: 4, maxWidth: "100%", margin: "0 auto" }}>
@@ -60,7 +106,7 @@ const Invoice = ({ order }) => {
                 <Divider sx={{ mb: 3 }} />
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h5" textAlign="left" color="" >
-                        Order ID:
+                        Order ID: {orderId}
                     </Typography>
                 </Box>
                 <Box sx={{ display: "flex", justifyContent: "right" }}>
@@ -113,7 +159,7 @@ const Invoice = ({ order }) => {
                     </Stack>
                     <Stack direction="column" spacing={1} sx={{}}>
                         <Typography variant="h5" textAlign="left" color="" >
-                            Total Price:
+                            Total Price:{rowData?.totalPrice}
                         </Typography>
                         <Typography variant="h5" textAlign="left" color="" >
                             Discount :
@@ -142,35 +188,13 @@ const Invoice = ({ order }) => {
                 </Card >
 
 
-                <Box>
-                    {items?.map((item, index) => (
-                        <Grid
-                            container
-                            key={index}
-                            spacing={2}
-                            sx={{ mb: 2, alignItems: "center" }}
-                        >
-                            <Grid item xs={6}>
-                                <Typography variant="body1">{item?.name}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Quantity: {item?.quantity}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6} textAlign="right">
-                                <Typography variant="body1">Rs. {item?.price.toFixed(2)}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Subtotal: Rs. {(item?.price * item?.quantity).toFixed(2)}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    ))}
-                </Box>
+              
 
                 <Divider sx={{ my: 3 }} />
 
                 <Box textAlign="left">
                     <Typography variant="h4" color="primary">
-                        Total: Rs. {totalPrice?.toFixed(2)}
+                        Total: Rs. {rowData?.totalPrice}
                     </Typography>
                 </Box>
 

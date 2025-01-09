@@ -13,15 +13,24 @@ import {
   Box,
   Avatar,
   Grid,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useForm } from 'react-hook-form';
 import { urls } from "core/constant/urls";
 import { postApi } from 'core/apis/apiClient.js';
 import {CrossIcon} from 'common/crossIcon';
+import { useNavigate } from "react-router";
+import { useState } from "react";
 
 
 const CartDialog = ({ open, onClose, cartItems }) => {
+  
   const { handleSubmit,reset } = useForm();
+  const navigate=useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
 
@@ -42,9 +51,19 @@ const CartDialog = ({ open, onClose, cartItems }) => {
    
     
      const response = await postApi(urls?.order?.create, payload);
+     const orderId = response?.data?._id;
+     
      reset();
      onClose();
-     navigate("/invoice", { state: { items, totalPrice } });
+     navigate(`invoice/${orderId}`);
+    };
+   
+    const [paymentMode, setPaymentMode] = useState("cash");   
+  
+   
+  
+    const handlePaymentModeChange = (event) => {
+      setPaymentMode(event.target.value);
     };
 
   return (
@@ -108,6 +127,43 @@ const CartDialog = ({ open, onClose, cartItems }) => {
                 </ListItem>
               ))}
             </List>
+            <Grid container spacing={2}>
+            <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
+        <Select
+          labelId="payment-mode-label"
+          id="payment-mode"
+          value={paymentMode}
+          onChange={handlePaymentModeChange}
+          label="Payment Mode"
+        >
+          <MenuItem value="cash">Cash</MenuItem>
+          <MenuItem value="upi">UPI</MenuItem>
+        </Select>
+      </FormControl>
+      </Grid>
+            <Grid item xs={6}>
+            <TextField
+        label="Discount"
+        type="number"
+        variant="outlined"
+        
+        fullWidth
+      />
+      </Grid>
+      <Grid item xs={6}>
+       <TextField
+        label="Total Price"
+        type="number"
+        variant="outlined"
+       
+        fullWidth
+      />
+      </Grid>
+
+      
+      </Grid>
 
             <Divider sx={{ my: 2 }} />
 
