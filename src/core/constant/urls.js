@@ -40,7 +40,7 @@ export const urls = Object.freeze({
         create: base + '/expense/addExpense',
         get: base + '/expense/getExpenses',
         update: base + '/expense/updateExpense/:id', 
-        delete:  base + '/expense/deleteExpense/:id' 
+        delete:  base + '/expense/deleteExpense/:id',
     },
     order: {
         create: base + '/order/addorder',
