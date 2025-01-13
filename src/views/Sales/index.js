@@ -57,13 +57,13 @@ const Lead = () => {
       field: 'action',
       headerName: 'Prepared At',
       flex: 1
-//       // eslint-disable-next-line arrow-body-style
+      //       // eslint-disable-next-line arrow-body-style
     },
     {
       field: '',
       headerName: 'Completed At',
       flex: 1
-//       // eslint-disable-next-line arrow-body-style
+      //       // eslint-disable-next-line arrow-body-style
     }
   ];
 

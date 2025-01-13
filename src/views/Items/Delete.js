@@ -1,5 +1,5 @@
-import React from "react";
-import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
+import React from 'react';
+import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 
 const DeleteConfirmationDialog = ({ open, onClose, onConfirm }) => {
   return (

@@ -1,26 +1,40 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 
 const AddUser = ({ open, onClose }) => {
-  const { control, handleSubmit, formState: { errors } } = useForm(); 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
-  const [image, setImage] = useState(null); 
-  const [dishImage, setDishImage] = useState(""); 
-  
+  const [image, setImage] = useState(null);
+  const [dishImage, setDishImage] = useState('');
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); 
-      setDishImage(file); 
+      setImage(URL.createObjectURL(file));
+      setDishImage(file);
     }
   };
 
-
   const onSubmit = (data) => {
-    const formData = { ...data, dishImage: dishImage }; 
-    console.log(formData); 
-    onClose();  
+    const formData = { ...data, dishImage: dishImage };
+    console.log(formData);
+    onClose();
   };
 
   return (
@@ -29,10 +43,6 @@ const AddUser = ({ open, onClose }) => {
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-           
-            
-
-            
             <Grid item xs={12}>
               <Controller
                 name="expense"
@@ -76,7 +86,6 @@ const AddUser = ({ open, onClose }) => {
               />
             </Grid>
 
-           
             <Grid item xs={12}>
               <Controller
                 name="amount"
@@ -105,25 +114,15 @@ const AddUser = ({ open, onClose }) => {
                 )}
               />
             </Grid>
-
-           
-           
-            
-
-            
-
-           
-            
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Add Item
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            
           </DialogActions>
         </form>
       </DialogContent>
@@ -131,4 +130,4 @@ const AddUser = ({ open, onClose }) => {
   );
 };
 
-export default AddUser ;
+export default AddUser;

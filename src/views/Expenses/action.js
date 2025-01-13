@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Dialog, DialogActions, DialogContent, DialogTitle, TextField,
-  Button, Grid, MenuItem, InputAdornment, Typography,IconButton
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { updateApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
-
-const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbarMessage }) => {
-  const { control, handleSubmit, formState: { errors }, reset } = useForm();
+const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
 
   useEffect(() => {
     if (tag) {
@@ -25,11 +38,8 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
     }
   }, [tag, reset]);
 
-
-
   const onSubmit = async (data) => {
     const formData = { ...data, id: tag?.id };
-
 
     const response = await updateApi(urls?.expense?.update?.replace(':id', tag?.id), formData);
 
@@ -41,22 +51,18 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
       setSnackbarMessage('Failed to edit Expense Type!');
       setSnackbarOpen(true);
     }
-  
+
     onClose();
-
-
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
-
 
   useEffect(() => {
     const fetchExpenseTypes = async () => {
       try {
         const response = await getApi(urls?.expenseType?.get);
         setExpenseTypes(response?.data);
-
       } catch (error) {
-        console.error("Failed to fetch expense types:", error);
+        console.error('Failed to fetch expense types:', error);
       }
     };
 
@@ -69,8 +75,7 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -78,8 +83,8 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
@@ -113,12 +118,11 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
+                  validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
-
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -157,7 +161,6 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
               />
             </Grid>
 
-
             <Grid item xs={12}>
               <Controller
                 name="amount"
@@ -169,7 +172,7 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid amount format'
                   },
-                  validate: value => (value >= 0) || 'amount must be positive',
+                  validate: (value) => value >= 0 || 'amount must be positive',
                   maxLength: { value: 10, message: 'amount must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -188,12 +191,6 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
                 )}
               />
             </Grid>
-
-
-
-
-
-
           </Grid>
 
           <DialogActions>
@@ -203,7 +200,6 @@ const EditDialog = ({ open, onClose, tag, fetchData,setSnackbarOpen, setSnackbar
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-
           </DialogActions>
         </form>
       </DialogContent>

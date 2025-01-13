@@ -1,25 +1,40 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
+const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
-const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
+  const onSubmit = async (data) => {
+    const formData = { ...data };
 
-  
-  const onSubmit =async (data) => {
-    const formData = { ...data}; 
-   
-    const response = await postApi(urls?.expenseType?.create, formData); 
-    
+    const response = await postApi(urls?.expenseType?.create, formData);
+
     fetchData();
     reset();
     onClose();
     setSnackbarMessage('Expense Type added successfully!');
-  setSnackbarOpen(true);  
+    setSnackbarOpen(true);
   };
 
   return (
@@ -28,8 +43,7 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -37,22 +51,19 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-            
-             <Grid mt={1} item xs={12}>
+
+            <Grid mt={1} item xs={12}>
               <Controller
                 name="expenseName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense Name is required',
-                  maxLength: { value: 50, message: 'Expense must be at most 50 characters' }
-                    
-                 }}
+                rules={{ required: 'Expense Name is required', maxLength: { value: 50, message: 'Expense must be at most 50 characters' } }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -66,46 +77,38 @@ const AddExpensesTypeDialog = ({ open, onClose,fetchData,setSnackbarMessage, set
               />
             </Grid>
 
-              <Grid mt={1} item xs={12}>
-                          <Controller
-                            name="desc"
-                            control={control}
-                            defaultValue=""
-                            rules={{
-                              validate: value => {
-                                const wordCount = value.trim().split(/\s+/).length; 
-                                return wordCount <= 200 || 'Description must be at most 200 words';
-                              }
-                            }}
-                            
-                            render={({ field }) => (
-                              <TextField
-                                {...field}
-                                label="Description"
-                                variant="outlined"
-                                fullWidth
-                                error={!!errors.desc}
-                                helperText={errors.desc ? errors.desc.message : ''}
-                              />
-                            )}
-                          />
-                        </Grid>
-
-          
-            
-
-
-           
+            <Grid mt={1} item xs={12}>
+              <Controller
+                name="desc"
+                control={control}
+                defaultValue=""
+                rules={{
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
+                    return wordCount <= 200 || 'Description must be at most 200 words';
+                  }
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Description"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.desc}
+                    helperText={errors.desc ? errors.desc.message : ''}
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            
           </DialogActions>
         </form>
       </DialogContent>

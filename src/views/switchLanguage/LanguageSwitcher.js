@@ -13,7 +13,7 @@ const LanguageSwitcher = () => {
     <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
       <LanguageIcon />
       <Box>
-        <FormControl sx={{ fontSize: '0.875rem', pl: '10px',pr: '10px' }}>
+        <FormControl sx={{ fontSize: '0.875rem', pl: '10px', pr: '10px' }}>
           <InputLabel sx={{ padding: '15px', display: 'flex', alignItems: 'center' }} id="language-select-label">
             Language
           </InputLabel>
