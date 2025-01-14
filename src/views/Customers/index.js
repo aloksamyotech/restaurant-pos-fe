@@ -6,9 +6,12 @@ import Customer from './Customers';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { urls } from 'core/constant/urls';
+import { getApi } from 'core/apis/apiClient.js';
+import { useEffect } from 'react';
 
 const columns = [
-  { field: 'id', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
 
   {
     field: 'customer',
@@ -61,14 +64,6 @@ const columns = [
   }
 ];
 
-const rows = [
-  { id: 1, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '' },
-  { id: 2, customer: 'Rahul', email: 'rahul@gmail.com', phone: 9876543210, address: '' },
-  { id: 3, customer: 'Rohit', email: 'rohit@gmail.com', phone: 9876543210, address: '' },
-  { id: 4, customer: 'Neeraj', email: 'neeraj@gmail.com', phone: 9876543210, address: '' },
-  { id: 5, customer: 'Jairaj', email: 'jairaj@gmail.com', phone: 9876543210, address: '' }
-];
-
 const Categories = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -76,7 +71,6 @@ const Categories = () => {
   const handleDialogClose = () => setDialogOpen(false);
   function handleClick(event) {
     event?.preventDefault();
-    console?.info('You clicked a breadcrumb.');
   }
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
@@ -89,6 +83,22 @@ const Categories = () => {
       customer
     </Typography>
   ];
+  const [rows, setRows] = useState([]);
+  const fetchData = async () => {
+    const response = await getApi(urls?.customer?.get);
+    const formattedData = response?.data?.map((item, index) => ({
+      id: item?._id,
+      serial: index + 1,
+      name: item?.categoryName,
+      phone: item?.phone
+    }));
+
+    setRows(formattedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Container>
@@ -126,18 +136,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5
-                }
-              }
-            }}
-            pageSizeOptions={[5]}
-          />
+          <DataGrid rows={rows} columns={columns} />
         </Box>
       </Card>
     </Container>

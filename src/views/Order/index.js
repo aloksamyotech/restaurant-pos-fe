@@ -38,8 +38,8 @@ const Categories = () => {
       align: 'center'
     },
     {
-      field: 'customer',
-      headerName: 'Customer Name',
+      field: 'phone',
+      headerName: 'Phone No.',
       width: 150,
 
       headerAlign: 'center',
@@ -81,12 +81,12 @@ const Categories = () => {
   ];
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-    const response = await getApi(urls?.order.get);
+    const response = await getApi(urls?.order?.get);
 
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      customer: item?.customer || 'N/A',
+      phone: item?.phone || 'N/A',
 
       items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
 

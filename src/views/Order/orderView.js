@@ -25,6 +25,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { useParams } from 'react-router';
+import Invoice from 'views/POS/Components/invoice';
 
 const OrderView = () => {
   const { id } = useParams();
@@ -45,6 +46,7 @@ const OrderView = () => {
   }
 
   const [rowData, setrowdata] = useState({});
+  const [invoiceID, setinvoiceID] = useState();
 
   const fetchData = async () => {
     const response = await getApi(urls?.order.getbyid.replace(':id', id));
@@ -81,6 +83,18 @@ const OrderView = () => {
     fetchData();
   }, [id]);
 
+  const fetchDataByOrderId = async () => {
+    const response = await getApi(urls?.invoice?.getbyorderid.replace(':id', id));
+
+    const invoice = response?.data._id;
+
+    setinvoiceID(invoice);
+  };
+
+  useEffect(() => {
+    fetchDataByOrderId();
+  }, [id]);
+
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -89,14 +103,14 @@ const OrderView = () => {
     {
       field: 'serial',
       headerName: 'S.No',
-      width: 20,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'items',
       headerName: 'Item Name',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -104,7 +118,7 @@ const OrderView = () => {
     {
       field: 'price',
       headerName: 'Price',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -112,11 +126,12 @@ const OrderView = () => {
     {
       field: 'quantity',
       headerName: 'Quantity ',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     }
   ];
+
   const [itemRow, setitemRow] = useState([]);
 
   return (
@@ -134,86 +149,95 @@ const OrderView = () => {
 
       <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
         <Tabs variant="scrollable" value={tabValue} onChange={handleChange}>
-          <Tab label="Order" />
-          <Tab label="Invoice" />
+          <Tab value={0} label="Order" />
+          <Tab value={1} label="Invoice" />
         </Tabs>
         <Divider sx={{ borderColor: 'grey.300' }} />
         {tabValue === 0 && (
-          <Grid container padding={2} spacing={3}>
-            <Grid item xs={12} md={3.5}>
-              <Box sx={{ width: '100%' }}>
-                <Card
-                  sx={{
-                    border: '1px solid',
-                    borderColor: 'divider'
-                  }}
-                >
-                  <CardContent>
-                    <Box sx={{ textAlign: 'left', mb: 1 }}>
-                      <Typography variant="body1" sx={{ mt: 2 }}>
-                        <strong>Customer:</strong>
-                        {}
+          <>
+            <Grid container padding={2} spacing={3}>
+              <Grid item xs={6}>
+                <Box sx={{ width: '100%' }}>
+                  <Card
+                    sx={{
+                      border: '1px solid',
+                      borderColor: 'divider'
+                    }}
+                  >
+                    <CardContent>
+                      <Box sx={{ textAlign: 'left', mb: 1 }}>
+                        <Typography variant="body1" sx={{ mt: 2 }}>
+                          <strong>Customer:</strong>
+                          {}
+                        </Typography>
+                      </Box>
+                      <Typography variant="body1">
+                        <strong>Employee:</strong> {}
                       </Typography>
-                    </Box>
-                    <Typography variant="body1">
-                      <strong>Employee:</strong> {}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>totalPrice:</strong> {rowData?.totalPrice}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Discount:</strong> {rowData?.discount}
-                    </Typography>
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Tax:</strong> {}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-            </Grid>
-
-            <Grid item xs={12} md={8.5}>
-              <Box sx={{ width: '40%' }}>
-                <Card
-                  sx={{
-                    border: '1px solid',
-                    borderColor: 'divider'
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Payment Status:</strong> {}
-                    </Typography>
-
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography mt={1} variant="body1">
-                        <strong>Status:</strong> {}
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>totalPrice:</strong> {rowData?.totalPrice}
                       </Typography>
-                    </Box>
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Discount:</strong> {rowData?.discount}
+                      </Typography>
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Tax:</strong> {}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
 
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Expected Time:</strong>
-                    </Typography>
+              <Grid item xs={6}>
+                <Box sx={{ width: '100%' }}>
+                  <Card
+                    sx={{
+                      border: '1px solid',
+                      borderColor: 'divider'
+                    }}
+                  >
+                    <CardContent>
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Payment Status:</strong> {}
+                      </Typography>
 
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Chef:</strong>
-                    </Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography mt={1} variant="body1">
+                          <strong>Status:</strong> {}
+                        </Typography>
+                      </Box>
 
-                    <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Table Type:</strong>
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Box>
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Expected Time:</strong>
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Chef:</strong>
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 1 }}>
+                        <strong>Table Type:</strong>
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+            <Card>
+              <Box sx={{ height: 'auto', width: '100%' }}>
+                <DataGrid
+                  rows={itemRow}
+                  columns={columns}
+                  components={{
+                    Pagination: () => null
+                  }}
+                />
+              </Box>
+            </Card>
+          </>
         )}
       </Box>
-      <Card>
-        <Box sx={{ height: 400 }}>
-          <DataGrid rows={itemRow} columns={columns} />
-        </Box>
-      </Card>
+      {tabValue === 1 && <Invoice invoiceId={invoiceID} />}
     </Container>
   );
 };
