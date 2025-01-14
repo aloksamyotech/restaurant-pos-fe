@@ -1,23 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem,
-  InputAdornment, Typography,
-  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import MultipleSelect from './multiDropDown';
 import CloseIcon from '@mui/icons-material/Close';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 
-
 const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
   const [image, setImage] = useState(null);
-  const [dishImage, setDishImage] = useState("");
-
+  const [dishImage, setDishImage] = useState('');
 
   const handleImageChange = (e) => {
     const file = e?.target?.files[0];
@@ -28,19 +39,14 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
   };
 
   const handleClose = () => {
-
     onClose();
-  }
+  };
 
-
-  const [categories, setcategories,] = useState([]);
+  const [categories, setcategories] = useState([]);
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [categoryResponse] = await Promise.all([
-
-          getApi(urls?.foodCategory?.get),
-        ]);
+        const [categoryResponse] = await Promise.all([getApi(urls?.foodCategory?.get)]);
 
         setcategories(categoryResponse.data);
       } catch (error) {
@@ -56,9 +62,8 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
     setSelectedIngredients(ingredients);
   };
 
-
   const onSubmit = async (data) => {
-    let obj = {}
+    let obj = {};
     Object.assign(obj, {
       name: data.name,
       desc: data.desc,
@@ -67,9 +72,8 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
       categoryId: data.categoryId,
       ingredients: selectedIngredients,
       dishImage: dishImage
-    })
-    const response = await postApi(urls?.item?.create, obj,
-    );
+    });
+    const response = await postApi(urls?.item?.create, obj);
     fetchData();
     reset();
     onClose();
@@ -77,14 +81,12 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
     setSnackbarOpen(true);
   };
 
-
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add New Item</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2} marginTop={"1px"}>
-
+          <Grid container spacing={2} marginTop={'1px'}>
             <IconButton
               onClick={onClose}
               sx={{
@@ -93,15 +95,12 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-
-
-
 
             <Grid item xs={12}>
               <Controller
@@ -130,7 +129,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
+                  validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
@@ -148,8 +147,6 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
               />
             </Grid>
 
-
-
             <Grid item xs={6}>
               <Controller
                 name="cost"
@@ -161,7 +158,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -181,7 +178,6 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
               />
             </Grid>
 
-
             <Grid item xs={6}>
               <Controller
                 name="price"
@@ -193,7 +189,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
                   },
-                  validate: value => (value >= 0) || 'Price must be positive',
+                  validate: (value) => value >= 0 || 'Price must be positive',
                   maxLength: { value: 10, message: 'Price must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -243,26 +239,25 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
               />
             </Grid>
 
-
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ mb: 1 }}>Upload Dish Image</Typography>
-              <input
-                type="file"
-                accept="image/*"
-
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-                id="image-upload"
-              />
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                Upload Dish Image
+              </Typography>
+              <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} id="image-upload" />
               <label htmlFor="image-upload">
-                <Button variant="contained" color="primary" component="span">Choose Image</Button>
+                <Button variant="contained" color="primary" component="span">
+                  Choose Image
+                </Button>
               </label>
-              {image && <img src={image} alt="Dish preview" style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }} />}
+              {image && (
+                <img
+                  src={image}
+                  alt="Dish preview"
+                  style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
+                />
+              )}
               {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}
             </Grid>
-
-
-
           </Grid>
 
           <DialogActions>
@@ -272,7 +267,6 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-
           </DialogActions>
         </form>
       </DialogContent>

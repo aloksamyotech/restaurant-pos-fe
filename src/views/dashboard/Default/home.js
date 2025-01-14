@@ -8,9 +8,9 @@ const Image = () => (
     src={restaurantImage}
     alt="Restaurant"
     sx={{
-      maxWidth: '100%', 
-      height: 'auto',   
-      display: 'block',
+      maxWidth: '100%',
+      height: 'auto',
+      display: 'block'
     }}
   />
 );

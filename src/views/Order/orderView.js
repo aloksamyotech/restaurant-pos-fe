@@ -1,78 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
-  Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton,
-  Grid, Breadcrumbs, Link, Tab,
+  Stack,
+  Button,
+  Container,
+  Typography,
+  Card,
+  Box,
+  TextField,
+  Checkbox,
+  IconButton,
+  Grid,
+  Breadcrumbs,
+  Link,
+  Tab,
   Tabs,
   Divider,
-  CardContent,
-} from "@mui/material";
+  CardContent
+} from '@mui/material';
 
-import Iconify from "../../ui-component/iconify";
+import Iconify from '../../ui-component/iconify';
 import { getApi } from 'core/apis/apiClient.js';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { useParams } from "react-router";
+import { useParams } from 'react-router';
 
 const OrderView = () => {
   const { id } = useParams();
-
 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
     </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="primary"
-      href="/material-ui/getting-started/installation/"
-      onClick={handleClick}
-    >
+    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
       Orders
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
       Orders
-    </Typography>,
+    </Typography>
   ];
   function handleClick(event) {
     event?.preventDefault();
-
   }
 
-
   const [rowData, setrowdata] = useState({});
-  
+
   const fetchData = async () => {
     const response = await getApi(urls?.order.getbyid.replace(':id', id));
-   
+
     const order = response?.data;
 
-    
-
-   
     const formattedData = {
       id: order?._id,
-      customer: order?.customer || "N/A",
-      employee: order?.employee || "N/A",
-      totalPrice: order?.totalPrice?.toFixed(2) || "0.00",
-      discount: order?.discount?.toFixed(2) || "0.00",
-      tax: order?.tax?.toFixed(2) || "0.00",
-      paymentStatus: order?.paymentStatus === 1 ? "Paid" : "Unpaid",
-      chef: order?.chef || "N/A",
-      type: order?.type || "N/A",
-      status: order?.status || "Pending",
-      expectedTime: order?.expectedTime ? `${order.expectedTime} min` : "N/A",
-   
+      customer: order?.customer || 'N/A',
+      employee: order?.employee || 'N/A',
+      totalPrice: order?.totalPrice?.toFixed(2) || '0.00',
+      discount: order?.discount?.toFixed(2) || '0.00',
+      tax: order?.tax?.toFixed(2) || '0.00',
+      paymentStatus: order?.paymentStatus === 1 ? 'Paid' : 'Unpaid',
+      chef: order?.chef || 'N/A',
+      type: order?.type || 'N/A',
+      status: order?.status || 'Pending',
+      expectedTime: order?.expectedTime ? `${order.expectedTime} min` : 'N/A'
     };
-    const formattedItemRows = order?.items?.map((item, index) => ({
-      id: index + 1,
-      serial: index + 1,
-      items: item?.name || "N/A",
-      price: item?.price?.toFixed(2) || "0.00",
-      quantity: item?.quantity || "0",
-    })) || [];
+    const formattedItemRows =
+      order?.items?.map((item, index) => ({
+        id: index + 1,
+        serial: index + 1,
+        items: item?.name || 'N/A',
+        price: item?.price?.toFixed(2) || '0.00',
+        quantity: item?.quantity || '0'
+      })) || [];
 
     setrowdata(formattedData);
     setitemRow(formattedItemRows);
@@ -81,7 +80,6 @@ const OrderView = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
-  
 
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -89,45 +87,40 @@ const OrderView = () => {
   };
   const columns = [
     {
-      field: 'serial', headerName: 'S.No', width: 20, headerAlign: 'center',
-      align: 'center',
+      field: 'serial',
+      headerName: 'S.No',
+      width: 20,
+      headerAlign: 'center',
+      align: 'center'
     },
     {
       field: 'items',
       headerName: 'Item Name',
       width: 150,
       headerAlign: 'center',
-      align: 'center',
+      align: 'center'
     },
-    
+
     {
-        field: 'price',
-        headerName: 'Price',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        
-      },
-     
-     
-      {
-        field: 'quantity',
-        headerName: 'Quantity ',
-        width: 150,
-        headerAlign: 'center',
-        align: 'center',
-        
-      }
-   ];
-   const [itemRow, setitemRow] = useState([]);  
+      field: 'price',
+      headerName: 'Price',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
 
-
-
-
+    {
+      field: 'quantity',
+      headerName: 'Quantity ',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center'
+    }
+  ];
+  const [itemRow, setitemRow] = useState([]);
 
   return (
     <Container sx={{}}>
-
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -140,99 +133,87 @@ const OrderView = () => {
       </Card>
 
       <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-        <Tabs variant="scrollable" value={tabValue} onChange={handleChange} >
+        <Tabs variant="scrollable" value={tabValue} onChange={handleChange}>
           <Tab label="Order" />
           <Tab label="Invoice" />
-
         </Tabs>
-        <Divider sx={{ borderColor: "grey.300" }} />
+        <Divider sx={{ borderColor: 'grey.300' }} />
         {tabValue === 0 && (
           <Grid container padding={2} spacing={3}>
             <Grid item xs={12} md={3.5}>
               <Box sx={{ width: '100%' }}>
                 <Card
-                sx={{
-                  border: "1px solid",
-                  borderColor: "divider",
-                  
-                }}
-              >
-                <CardContent>
-                  <Box sx={{ textAlign: "left", mb: 1 }}>
-                    <Typography variant="body1" sx={{ mt: 2 }}>
-                    <strong>Customer:</strong>{ }
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'divider'
+                  }}
+                >
+                  <CardContent>
+                    <Box sx={{ textAlign: 'left', mb: 1 }}>
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                        <strong>Customer:</strong>
+                        {}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body1">
+                      <strong>Employee:</strong> {}
                     </Typography>
-                   
-
-                  </Box>
-                  <Typography variant="body1">
-                    <strong>Employee:</strong> { }
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>totalPrice:</strong> {rowData?.totalPrice}
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>Discount:</strong> {rowData?.discount }
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>Tax:</strong> { }
-                  </Typography>
-                  
-                </CardContent>
-              </Card>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>totalPrice:</strong> {rowData?.totalPrice}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Discount:</strong> {rowData?.discount}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Tax:</strong> {}
+                    </Typography>
+                  </CardContent>
+                </Card>
               </Box>
             </Grid>
 
-
             <Grid item xs={12} md={8.5}>
-            <Box sx={{ width: '40%' }}> 
-              <Card sx={{
-                border: "1px solid",
-                borderColor: "divider",
-              }}>
-                <CardContent>
-                <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>Payment Status:</strong> { }
-                  </Typography>
-                  
-                  <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography mt={1} variant="body1"><strong>Status:</strong> { }</Typography>
-                  </Box>
-                 
+              <Box sx={{ width: '40%' }}>
+                <Card
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'divider'
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Payment Status:</strong> {}
+                    </Typography>
 
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                  <strong>Expected Time:</strong>
-                  </Typography>
-                  
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                  <strong>Chef:</strong>
-                  </Typography>
-                  
-                  <Typography variant="body1" sx={{ mt: 1 }}>
-                  <strong>Table Type:</strong> 
-                  </Typography>
-                  
-                </CardContent>
-              </Card>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography mt={1} variant="body1">
+                        <strong>Status:</strong> {}
+                      </Typography>
+                    </Box>
+
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Expected Time:</strong>
+                    </Typography>
+
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Chef:</strong>
+                    </Typography>
+
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>Table Type:</strong>
+                    </Typography>
+                  </CardContent>
+                </Card>
               </Box>
             </Grid>
           </Grid>
         )}
       </Box>
       <Card>
-              <Box sx={{ height: 400,  }}>
-                <DataGrid
-                  rows={itemRow}
-                  
-                  columns={columns} 
-                   
-      
-      
-                />
-              </Box>
-            </Card >
-
-
+        <Box sx={{ height: 400 }}>
+          <DataGrid rows={itemRow} columns={columns} />
+        </Box>
+      </Card>
     </Container>
   );
 };

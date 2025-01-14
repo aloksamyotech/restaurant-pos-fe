@@ -1,33 +1,46 @@
-import React,{ useState,useEffect }  from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
-import {updateApi} from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
+const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
 
-const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, setSnackbarMessage }) => {
-  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
-  
   useEffect(() => {
     if (modifier) {
-        reset({
-          name: modifier?.name,
-          cost: modifier?.cost,
-          price: modifier?.price,
-          desc: modifier?.desc,
-        });
-      }
-    }, [modifier, reset]);
+      reset({
+        name: modifier?.name,
+        cost: modifier?.cost,
+        price: modifier?.price,
+        desc: modifier?.desc
+      });
+    }
+  }, [modifier, reset]);
 
-  
+  const onSubmit = async (data) => {
+    const formData = { ...data, id: modifier?.id };
 
-  const onSubmit =async(data) => {
-    const formData = { ...data,id: modifier?.id}; 
-    
     const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
-    
+
     if (response.success) {
       fetchData();
       setSnackbarMessage(' Edited successfully!');
@@ -36,10 +49,8 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, 
       setSnackbarMessage('Failed to Edit !');
       setSnackbarOpen(true);
     }
-  
+
     onClose();
-       
-     
   };
 
   return (
@@ -48,8 +59,7 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, 
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -57,14 +67,14 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, 
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-            
-             <Grid mt={1} item xs={12}>
+
+            <Grid mt={1} item xs={12}>
               <Controller
                 name="name"
                 control={control}
@@ -112,7 +122,6 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, 
               />
             </Grid>
 
-           
             <Grid item xs={6}>
               <Controller
                 name="price"
@@ -147,32 +156,27 @@ const EditModifierDialog = ({ open, onClose,modifier,fetchData,setSnackbarOpen, 
                 name="desc"
                 control={control}
                 defaultValue=""
-                
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Description"
                     variant="outlined"
                     fullWidth
-                    
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
                 )}
               />
             </Grid>
-
-           
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary" onClick={onClose}>
+            <Button type="submit" variant="contained" color="primary" onClick={onClose}>
               Edit Item
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            
           </DialogActions>
         </form>
       </DialogContent>

@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Grid } from "@mui/material";
-import DishCard from "./DishCard";
+import React from 'react';
+import { Box, Grid } from '@mui/material';
+import DishCard from './DishCard';
 
 const DishDataGrid = ({ dishes, dishesPerRow, onAddToCart }) => {
   const calculateGridColumns = () => {
@@ -10,10 +10,10 @@ const DishDataGrid = ({ dishes, dishesPerRow, onAddToCart }) => {
   return (
     <Box
       sx={{
-        height: "400px",
-        overflowY: "auto",
+        height: '400px',
+        overflowY: 'auto',
 
-        borderRadius: "8px",
+        borderRadius: '8px'
       }}
     >
       <Grid container spacing={0.1}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -17,56 +17,81 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem,
-} from "@mui/material";
+  MenuItem
+} from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { CrossIcon } from 'common/crossIcon';
-import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
-
-const CartDialog = ({ open, onClose, cartItems }) => {
-
-
+const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
   const { handleSubmit, reset } = useForm();
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
-
-
-
   const onSubmit = async () => {
-
     let items = cartItems.map((item) => {
       return {
         id: item?.id,
         quantity: item?.quantity,
         name: item?.name,
-        price: item?.price,
+        price: item?.price
       };
     });
+    const phonedata = {
+      phone: phone
+    };
+    const customerResponse = await postApi(urls?.customer?.create, phonedata);
+    const customerId = customerResponse?.data?._id;
+    console.log('customerId====', customerId);
+
+    if (!customerId) {
+      return;
+    }
     const payload = {
+      customerId,
       items,
       totalPrice,
-      discount, 
-    paymentMode
-      
+      discount,
+      paymentMode
     };
-
-
-    const response = await postApi(urls?.order?.create, payload);
-    const orderId = response?.data?._id;
-
+    const orderResponse = await postApi(urls?.order?.create, payload);
+    const orderId = orderResponse?.data?._id;
+    console.log('orderId====', orderId);
+    if (!orderId) {
+      return;
+    }
+    const paymentPayload = {
+      orderId,
+      paymentMode,
+      amount: totalPrice
+    };
+    const paymentResponse = await postApi(urls?.payment?.create, paymentPayload);
+    const paymentId = paymentResponse?.data?._id;
+    console.log('paymentId====', paymentId);
+    if (!paymentId) {
+      return;
+    }
+    const invoicePayload = {
+      paymentId,
+      customerId,
+      paymentMode,
+      amount: totalPrice,
+      discount,
+      items
+    };
+    const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
+    const invoiceId = invoiceResponse?.data?._id;
+    console.log('invoiceId====', invoiceId);
     reset();
+    resetCart();
     onClose();
-    navigate(`invoice/${orderId}`);
+    navigate(`invoice/${invoiceId}`);
   };
 
-  const [paymentMode, setPaymentMode] = useState("Cash");
-
-
+  const [paymentMode, setPaymentMode] = useState('Cash');
 
   const handlePaymentModeChange = (event) => {
     setPaymentMode(event.target.value);
@@ -77,58 +102,56 @@ const CartDialog = ({ open, onClose, cartItems }) => {
     const value = parseFloat(e.target.value);
     setDiscount(value);
   };
+  const [phone, setPhoneNumber] = useState('');
+  const handleMobileChange = (e) => {
+    const value = e.target.value;
+    setPhoneNumber(value);
+  };
+
   const adjustedPrice = totalPrice - discount;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-
       <DialogTitle
         sx={{
-          backgroundColor: "#1976d2",
-          color: "#fff",
-          textAlign: "center",
-          fontWeight: "bold",
+          backgroundColor: '#1976d2',
+          color: '#fff',
+          textAlign: 'center',
+          fontWeight: 'bold'
         }}
       >
         Cart Summary
       </DialogTitle>
 
-
-      <DialogContent sx={{ padding: "16px", backgroundColor: "#f9f9f9" }}>
+      <DialogContent sx={{ padding: '16px', backgroundColor: '#f9f9f9' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CrossIcon />
           {cartItems?.length > 0 ? (
             <>
-
               <List>
                 {cartItems.map((item) => (
                   <ListItem
                     key={item?.id}
                     sx={{
-                      backgroundColor: "#fff",
-                      borderRadius: "8px",
-                      mb: 2,
-
+                      backgroundColor: '#fff',
+                      borderRadius: '8px',
+                      mb: 2
                     }}
                   >
                     <Grid container alignItems="center" spacing={2}>
                       <Grid item xs={2}>
-                        <Avatar
-                          src={item?.image}
-                          alt={item?.name}
-                          sx={{ width: 56, height: 56 }}
-                        />
+                        <Avatar src={item?.image} alt={item?.name} sx={{ width: 56, height: 56 }} />
                       </Grid>
                       <Grid item xs={7}>
                         <ListItemText
                           primary={
-                            <Typography sx={{ fontWeight: "bold" }}>
+                            <Typography sx={{ fontWeight: 'bold' }}>
                               {item?.name} (x{item?.quantity})
                             </Typography>
                           }
                         />
                       </Grid>
-                      <Grid item xs={3} sx={{ textAlign: "right" }}>
+                      <Grid item xs={3} sx={{ textAlign: 'right' }}>
                         <Typography variant="body2" color="textSecondary">
                           Price: Rs. {item?.price.toFixed(2)}
                         </Typography>
@@ -157,46 +180,24 @@ const CartDialog = ({ open, onClose, cartItems }) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    label="Discount"
-                    type="number"
-                    value={discount}
-                    onChange={handleDiscountChange}
-                    variant="outlined"
-                    fullWidth
-
-                  />
+                  <TextField label="Discount" type="number" value={discount} onChange={handleDiscountChange} variant="outlined" fullWidth />
                 </Grid>
-                {/* <Grid item xs={6}>
-       <TextField
-        label="Total Price"
-        type="number"
-        variant="outlined"
-       
-        fullWidth
-      />
-      </Grid> */}
-
-
+                <Grid item xs={6}>
+                  <TextField fullWidth label="Mobile Number" variant="outlined" value={phone} onChange={handleMobileChange} />
+                </Grid>
               </Grid>
 
               <Divider sx={{ my: 2 }} />
 
-
               <Box
                 sx={{
-                  textAlign: "right",
-                  backgroundColor: "#fff",
-                  padding: "16px",
-                  borderRadius: "8px",
-
+                  textAlign: 'right',
+                  backgroundColor: '#fff',
+                  padding: '16px',
+                  borderRadius: '8px'
                 }}
               >
-                <Typography
-                  variant="h6"
-                  color="primary"
-                  sx={{ fontWeight: "bold", mb: 1 }}
-                >
+                <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
                   Total Price
                 </Typography>
                 <Typography variant="h5" color="secondary">
@@ -205,33 +206,22 @@ const CartDialog = ({ open, onClose, cartItems }) => {
               </Box>
             </>
           ) : (
-            <Typography
-              variant="body1"
-              color="textSecondary"
-              sx={{ textAlign: "center" }}
-            >
+            <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
               Your cart is empty.
             </Typography>
           )}
 
-
-
           <DialogActions
             sx={{
-              justifyContent: "center",
-              backgroundColor: "#f9f9f9",
-              padding: "16px",
+              justifyContent: 'center',
+              backgroundColor: '#f9f9f9',
+              padding: '16px'
             }}
           >
             <Button type="submit" variant="contained" color="primary">
               Place the order
             </Button>
-            <Button
-              onClick={onClose}
-              variant="contained"
-              color="primary"
-              sx={{ fontWeight: "bold" }}
-            >
+            <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
               Close
             </Button>
           </DialogActions>
@@ -242,4 +232,3 @@ const CartDialog = ({ open, onClose, cartItems }) => {
 };
 
 export default CartDialog;
-

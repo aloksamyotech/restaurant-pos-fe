@@ -10,8 +10,6 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 
-
-
 import {
   IconHome,
   IconCalendarEvent,
@@ -25,8 +23,7 @@ import {
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
-  IconClipboardList,
-  
+  IconClipboardList
 } from '@tabler/icons';
 
 // constant
@@ -54,7 +51,6 @@ const icons = {
   RestaurantIcon,
   PointOfSaleIcon,
   ReorderSharpIcon
-
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
@@ -78,9 +74,9 @@ export const dashboard = {
       url: '/dashboard/sales',
       icon: icons.IconAntennaBars5,
       breadcrumbs: false
-    }]
+    }
+  ]
 };
-
 
 export const dashboard1 = {
   title: 'Portal',
@@ -154,8 +150,6 @@ export const dashboard3 = {
   title: 'Expenses',
   type: 'group',
   children: [
-
-
     {
       id: '08',
       title: 'Expense Type',
@@ -172,15 +166,12 @@ export const dashboard3 = {
       icon: icons.Payments,
       breadcrumbs: false
     }
-   
   ]
 };
 export const dashboard4 = {
   title: 'People',
   type: 'group',
   children: [
-
-
     {
       id: '10',
       title: 'Users',
@@ -189,8 +180,8 @@ export const dashboard4 = {
       icon: icons.IconUsers,
       breadcrumbs: false
     },
-  
-{
+
+    {
       id: '12',
       title: 'Customers',
       type: 'item',
@@ -200,7 +191,3 @@ export const dashboard4 = {
     }
   ]
 };
-
-
-
-

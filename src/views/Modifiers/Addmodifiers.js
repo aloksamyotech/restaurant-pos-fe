@@ -1,29 +1,40 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
+const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessage, setSnackbarOpen }) => {
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
-const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
+  const onSubmit = async (data) => {
+    const formData = { ...data };
 
-  
-
-  const onSubmit =async(data) => {
-    const formData = { ...data}; 
-    
     const response = await postApi(urls?.modifier?.create, formData);
-    
-    
+
     fetchData();
     reset();
     onClose();
     setSnackbarMessage('Modifier added successfully!');
-  setSnackbarOpen(true);
-       
-     
+    setSnackbarOpen(true);
   };
 
   return (
@@ -32,8 +43,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -41,21 +51,22 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-            
-             <Grid mt={1} item xs={12}>
+
+            <Grid mt={1} item xs={12}>
               <Controller
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Modifier Name is required',
+                rules={{
+                  required: 'Modifier Name is required',
                   maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
-                 }}
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -69,9 +80,6 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
               />
             </Grid>
 
-            
-
-          
             <Grid item xs={6}>
               <Controller
                 name="cost"
@@ -83,7 +91,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -103,7 +111,6 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
               />
             </Grid>
 
-           
             <Grid item xs={6}>
               <Controller
                 name="price"
@@ -115,7 +122,7 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -141,37 +148,32 @@ const AddModifierDialog = ({ open, onClose,fetchData,setRows,setSnackbarMessage,
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
-                
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Description"
                     variant="outlined"
                     fullWidth
-                    
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
                 )}
               />
             </Grid>
-
-           
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary" >
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            
           </DialogActions>
         </form>
       </DialogContent>

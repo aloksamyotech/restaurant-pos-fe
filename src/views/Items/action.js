@@ -1,60 +1,70 @@
-import React,{ useState,useEffect }  from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, 
-    Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
-import {getApi, updateApi} from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { getApi, updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import MultipleSelect from './multiDropDown';
 
-const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMessage }) => {
-  const { control, handleSubmit,formState: { errors },reset } = useForm(); 
+const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm();
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   useEffect(() => {
     if (tag) {
-     
       reset({
-          name: tag?.name,
-          cost: tag?.cost,
-          price: tag?.price,
-          desc: tag?.desc,
-          ingredient: tag?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
-          categoryId: tag?.categoryId.categoryName,
-          isAvailable: tag?.true
-        });
-        setSelectedIngredients(tag?.ingredientId?.map((ingredient) => ingredient?._id) || []);
+        name: tag?.name,
+        cost: tag?.cost,
+        price: tag?.price,
+        desc: tag?.desc,
+        ingredient: tag?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
+        categoryId: tag?.categoryId.categoryName,
+        isAvailable: tag?.true
+      });
+      setSelectedIngredients(tag?.ingredientId?.map((ingredient) => ingredient?._id) || []);
+    }
+  }, [tag, reset]);
+
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const categoryResponse = await getApi(urls?.foodCategory?.get);
+
+        setCategories(categoryResponse?.data);
+      } catch (error) {
+        setSnackbarMessage('Failed to load dropdown data');
+        setSnackbarOpen(true);
       }
-    }, [tag, reset]);
-
- 
-    useEffect(() => {
-      const fetchDropdownData = async () => {
-        try {
-          const categoryResponse = await getApi(urls?.foodCategory?.get);
-          
-          setCategories(categoryResponse?.data);
-        } catch (error) {
-          setSnackbarMessage('Failed to load dropdown data');
-          setSnackbarOpen(true);
-        }
-      };
-      fetchDropdownData();
-    }, []);
-
-    const handleIngredientSelectionChange = (selectedValues) => {
-      setSelectedIngredients(selectedValues); 
     };
+    fetchDropdownData();
+  }, []);
 
-  const onSubmit =async(data) => {
-    const formData = { ...data,id: tag?.id,
-      ingredientIds: selectedIngredients,
-    }; 
-    
-   
+  const handleIngredientSelectionChange = (selectedValues) => {
+    setSelectedIngredients(selectedValues);
+  };
+
+  const onSubmit = async (data) => {
+    const formData = { ...data, id: tag?.id, ingredientIds: selectedIngredients };
+
     const response = await updateApi(urls?.item?.update?.replace(':id', tag?.id), formData);
-    
-   
+
     if (response?.success) {
       fetchData();
       setSnackbarMessage('Edited successfully!');
@@ -63,10 +73,8 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
       setSnackbarMessage('Failed to edit !');
       setSnackbarOpen(true);
     }
-  
+
     onClose();
-       
-     
   };
 
   return (
@@ -74,8 +82,7 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
       <DialogTitle>Edit Item</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2} marginTop={"1px"}>
-
+          <Grid container spacing={2} marginTop={'1px'}>
             <IconButton
               onClick={onClose}
               sx={{
@@ -84,24 +91,19 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-
-
-
 
             <Grid item xs={12}>
               <Controller
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Item Name is required',
-                  maxLength: { value: 50, message: 'Item Name must be at most 50 characters' }
-                 }}
+                rules={{ required: 'Item Name is required', maxLength: { value: 50, message: 'Item Name must be at most 50 characters' } }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -120,8 +122,8 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
@@ -131,15 +133,12 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                     label="Description"
                     variant="outlined"
                     fullWidth
-                    
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
                 )}
               />
             </Grid>
-
-
 
             <Grid item xs={6}>
               <Controller
@@ -152,7 +151,7 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -172,7 +171,6 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
               />
             </Grid>
 
-
             <Grid item xs={6}>
               <Controller
                 name="price"
@@ -184,7 +182,7 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
                   },
-                  validate: value => (value >= 0) || 'Price must be positive',
+                  validate: (value) => value >= 0 || 'Price must be positive',
                   maxLength: { value: 10, message: 'Price must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -205,8 +203,8 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
             </Grid>
 
             <Grid item xs={6}>
-            <MultipleSelect onSelectionChange={handleIngredientSelectionChange} />
-      </Grid>
+              <MultipleSelect onSelectionChange={handleIngredientSelectionChange} />
+            </Grid>
 
             <Grid item xs={6}>
               <Controller
@@ -233,12 +231,6 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
                 )}
               />
             </Grid>
-
-
-            
-
-
-
           </Grid>
 
           <DialogActions>
@@ -248,7 +240,6 @@ const EditDialog = ({ open, onClose,tag,fetchData,setSnackbarOpen, setSnackbarMe
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-
           </DialogActions>
         </form>
       </DialogContent>

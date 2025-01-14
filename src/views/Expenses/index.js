@@ -1,45 +1,33 @@
-import React, { useState, useEffect } from "react";
-import {
-  Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link,
-} from "@mui/material";
-import SortIcon from "@mui/icons-material/Sort";
-import Iconify from "../../ui-component/iconify";
-import AddExpensesDialog from "./AddExpenses";
+import React, { useState, useEffect } from 'react';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import SortIcon from '@mui/icons-material/Sort';
+import Iconify from '../../ui-component/iconify';
+import AddExpensesDialog from './AddExpenses';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditDialog from "./action";
+import EditDialog from './action';
 import { deleteApi } from 'core/apis/apiClient.js';
-import DeleteConfirmationDialog from "./Delete.js";
+import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
 
-
 const Categories = () => {
-
-
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
     </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="primary"
-      href="/material-ui/getting-started/installation/"
-      onClick={handleClick}
-    >
+    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
       Expenses
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
       Expenses
-    </Typography>,
+    </Typography>
   ];
   function handleClick(event) {
     event?.preventDefault();
-
   }
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -50,22 +38,19 @@ const Categories = () => {
   const [selectedTag, setSelectedTag] = useState(null);
 
   const handleEditDialogOpen = (tag) => {
-
     setSelectedTag(tag);
     setEditDialogOpen(true);
   };
-  const handleEditDialogClose = () =>{
+  const handleEditDialogClose = () => {
     setEditDialogOpen(false);
-    
   };
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center', },
+    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
 
     {
       field: 'name',
@@ -73,7 +58,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true,
+      editable: true
     },
     {
       field: 'desc',
@@ -81,9 +66,8 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true,
+      editable: true
     },
-
 
     {
       field: 'amount',
@@ -92,8 +76,7 @@ const Categories = () => {
       sortable: false,
       flex: 1,
       headerAlign: 'center',
-      align: 'center',
-
+      align: 'center'
     },
     {
       field: 'expenseNameId',
@@ -102,11 +85,8 @@ const Categories = () => {
       sortable: false,
       flex: 1,
       headerAlign: 'center',
-      align: 'center',
-
+      align: 'center'
     },
-
-
 
     {
       field: 'action',
@@ -116,15 +96,27 @@ const Categories = () => {
 
       flex: 1,
       renderCell: (params) => (
-
         <Stack direction="row" spacing={4}>
-
-          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params?.row)} />
-          <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData}
-            tag={selectedTag} />
+          <EditIcon
+            color="primary"
+            onClick={() => handleEditDialogOpen(params?.row)}
+            sx={{
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'blue'
+              }
+            }}
+          />
+          <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} tag={selectedTag} />
 
           <DeleteIcon
-            sx={{ color: "red", cursor: "pointer" }}
+            sx={{
+              color: 'red',
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'blue'
+              }
+            }}
             onClick={() => setDeleteDialogOpen(params?.row?.id)}
           />
           <DeleteConfirmationDialog
@@ -137,20 +129,15 @@ const Categories = () => {
               setSnackbarOpen(true);
               setSnackbarMessage('Expense deleted successfully!');
               setDeleteDialogOpen(null);
-
             }}
           />
         </Stack>
-
-
-      ),
+      )
     }
   ];
 
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-
-
     const response = await getApi(urls?.expense?.get);
     const formattedData = response.data.map((item, index) => ({
       id: item?._id,
@@ -160,31 +147,24 @@ const Categories = () => {
       expenseNameId: item?.expenseNameId?.expenseName,
       amount: item?.amount,
       isAvailable: item?.true
-
     }));
 
     setRows(formattedData);
-
-
   };
 
   useEffect(() => {
-
     fetchData();
   }, []);
 
-
-
   return (
     <Container>
-      
- <Snackbar
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            message={snackbarMessage}
-            onClose={() => setSnackbarOpen(false)}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
-          />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      />
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -202,20 +182,18 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Expense
           </Button>
-          
-          <AddExpensesDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData}
-           setSnackbarMessage={setSnackbarMessage}
-           setSnackbarOpen={setSnackbarOpen} />
+
+          <AddExpensesDialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            fetchData={fetchData}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
-            <TextField
-              select
-              size="small"
-              defaultValue="Created"
-              SelectProps={{ native: true }}
-              sx={{ width: "120px" }}
-            >
+            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
               <option value="Created">Created</option>
               <option value="Name">Name</option>
             </TextField>
@@ -228,16 +206,9 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-
-
-
-
-          />
+          <DataGrid rows={rows} columns={columns} />
         </Box>
-      </Card >
+      </Card>
     </Container>
   );
 };

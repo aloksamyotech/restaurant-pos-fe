@@ -4,18 +4,17 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
-
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js'))); 
-const Sales = Loadable(lazy(() => import('views/Sales')));  
-const POS = Loadable(lazy(() => import('views/POS'))); 
-const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));   
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
+const Sales = Loadable(lazy(() => import('views/Sales')));
+const POS = Loadable(lazy(() => import('views/POS')));
+const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
 const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
-const Categories = Loadable(lazy(() => import('views/Categories')));    
-const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  
-const Order = Loadable(lazy(() => import('views/Order'))); 
-const OrderView = Loadable(lazy(() => import('views/Order/orderView'))); 
+const Categories = Loadable(lazy(() => import('views/Categories')));
+const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
+const Order = Loadable(lazy(() => import('views/Order')));
+const OrderView = Loadable(lazy(() => import('views/Order/orderView')));
 const Items = Loadable(lazy(() => import('views/Items')));
 const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
@@ -24,7 +23,6 @@ const Users = Loadable(lazy(() => import('views/Users')));
 
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
-
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -59,7 +57,7 @@ const MainRoutes = {
       children: [
         {
           path: 'pos',
-          element: <POS/>
+          element: <POS />
         }
       ]
     },
@@ -67,8 +65,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'pos/invoice/:orderId',
-          element: <Invoice/>
+          path: 'pos/invoice/:invoiceId',
+          element: <Invoice />
         }
       ]
     },
@@ -86,7 +84,7 @@ const MainRoutes = {
       children: [
         {
           path: 'kitchen',
-          element: <Kitchen/>
+          element: <Kitchen />
         }
       ]
     },
@@ -95,7 +93,7 @@ const MainRoutes = {
       children: [
         {
           path: 'order',
-          element: <Order/>
+          element: <Order />
         }
       ]
     },
@@ -104,11 +102,11 @@ const MainRoutes = {
       children: [
         {
           path: 'order/orderview/:id',
-          element: <OrderView/>
+          element: <OrderView />
         }
       ]
     },
-     {
+    {
       path: 'dashboard',
       children: [
         {
@@ -117,7 +115,7 @@ const MainRoutes = {
         }
       ]
     },
-   
+
     {
       path: 'dashboard',
       children: [
@@ -163,7 +161,7 @@ const MainRoutes = {
         }
       ]
     },
-   
+
     {
       path: 'dashboard',
       children: [
@@ -178,12 +176,10 @@ const MainRoutes = {
       children: [
         {
           path: 'customer/customerview',
-          element: <CustomersView/>
+          element: <CustomersView />
         }
       ]
     }
-  
-    
   ]
 };
 
