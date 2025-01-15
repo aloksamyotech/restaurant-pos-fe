@@ -54,7 +54,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
       items,
       totalPrice,
       discount,
-      paymentMode
+      paymentMode,
+      phone
     };
     const orderResponse = await postApi(urls?.order?.create, payload);
     const orderId = orderResponse?.data?._id;

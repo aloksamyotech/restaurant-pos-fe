@@ -175,7 +175,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'customer/customerview',
+          path: 'customer/customerview/:id',
           element: <CustomersView />
         }
       ]

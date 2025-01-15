@@ -1,76 +1,21 @@
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link, CardContent } from '@mui/material';
 
 import Iconify from '../../ui-component/iconify';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
+import { urls } from 'core/constant/urls';
+import { getApi } from 'core/apis/apiClient.js';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useParams } from 'react-router';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useNavigate } from 'react-router';
 
-const columns = [
-  { field: 'id', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
 
-  {
-    field: 'customer',
-    headerName: 'Customer ',
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center',
-    editable: true
-  },
 
-  {
-    field: 'email',
-    headerName: 'Email',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'phone',
-    headerName: 'Phone',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'address',
-    headerName: 'Address',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'date',
-    headerName: 'Date',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'invoice',
-    headerName: 'Invoice',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  }
-];
-const rows = [
-  { id: 1, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '', date: '10-12-24,4:00 PM', invoice: 'Bill' },
-  { id: 2, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '', date: '10-12-24,4:00 PM', invoice: 'Bill' },
-  { id: 3, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '', date: '10-12-24,4:00 PM', invoice: 'Bill' },
-  { id: 4, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '', date: '10-12-24,4:00 PM', invoice: 'Bill' },
-  { id: 5, customer: 'Shubham', email: 'shubh@gmail.com', phone: 9876543210, address: '', date: '10-12-24,4:00 PM', invoice: 'Bill' }
-];
 
-const customerView = () => {
+const CustomerView = () => {
+    const navigate = useNavigate();
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/">
       <HomeIcon />
@@ -82,9 +27,100 @@ const customerView = () => {
       Details
     </Typography>
   ];
-
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/order/orderview/${row.id}`, { state: row });
+  };
+  const columns = [
+    {
+      field: 'serial',
+      headerName: 'S.No',
+      width: 20,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    
+  
+    {
+      field: 'items',
+      headerName: 'Item Details',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+  
+    {
+      field: 'totalPrice',
+      headerName: 'Total ',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+  
+    {
+      field: 'paymentStatus',
+      headerName: 'Payment Status',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center'
+    },
+  
+    {
+      field: 'action',
+      headerName: 'Action',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />
+    }
+  ];
+  
+  const { id} = useParams();
+   const [rows, setRows] = useState([]);
+  
+    const fetchData = async () => {
+      const response = await getApi(urls?.customer?.getbyid.replace(':id',id));
+      
+      
+      
+      setRows(response.data);
+    };
+    
+    useEffect(() => {
+      fetchData();
+    }, []);
+    const [order, setOrders] = useState([]);
+  
+    const fetchOrderData = async () => {
+      const response = await getApi(urls?.order?.getorderbycustomerid.replace(':id',id));
+      
+      
+      const formattedData = response.data.map((item, index) => ({
+        id: item?._id,
+        serial: index + 1,
+        phone: item?.phone || 'N/A',
+  
+        items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
+  
+        totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
+  
+        paymentStatus: 'Paid',
+        chef: item?.chef || 'N/A',
+        type: item?.type || 'N/A'
+      }));
+      
+      
+      setOrders(formattedData);
+    };
+    
+    useEffect(() => {
+      fetchOrderData();
+    }, []);
+  
+    
   return (
     <>
+    
+
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -95,10 +131,30 @@ const customerView = () => {
           </Breadcrumbs>
         </Stack>
       </Card>
+      <Card sx={{m:1, height:"100px", p:3}} >
+      <Stack direction="row" spacing={50} sx={{}}>
+          <Stack direction="column" spacing={1} sx={{}}>
+            <Typography variant="h5"  color="" sx={{m:3}}>
+              Name :{}
+            </Typography>
+            <Typography variant="h5" textAlign="" color="">
+              Email :{}
+            </Typography>
+          </Stack>
+          <Stack direction="column" spacing={1} sx={{}}>
+            <Typography variant="h5" textAlign="left" color="">
+              Address :{}
+            </Typography>
+            <Typography variant="h5" textAlign="left" color="">
+              Phone :{rows.phone}
+            </Typography>
+          </Stack>
+        </Stack>
+        </Card>
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={rows}
+            rows={order}
             columns={columns}
             initialState={{
               pagination: {
@@ -114,4 +170,4 @@ const customerView = () => {
     </>
   );
 };
-export default customerView;
+export default CustomerView;

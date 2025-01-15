@@ -15,6 +15,7 @@ const DishDataGrid = ({ dishes, dishesPerRow, onAddToCart }) => {
 
         borderRadius: '8px'
       }}
+      
     >
       <Grid container spacing={0.1}>
         {dishes.map((dish) => (

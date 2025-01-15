@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   Stack,
-  Button,
+  
   Container,
   Typography,
   Card,
   Box,
-  TextField,
-  Checkbox,
-  IconButton,
+ 
   Grid,
   Breadcrumbs,
   Link,
@@ -60,7 +58,7 @@ const OrderView = () => {
       totalPrice: order?.totalPrice?.toFixed(2) || '0.00',
       discount: order?.discount?.toFixed(2) || '0.00',
       tax: order?.tax?.toFixed(2) || '0.00',
-      paymentStatus: order?.paymentStatus === 1 ? 'Paid' : 'Unpaid',
+      paymentStatus: 'Paid',
       chef: order?.chef || 'N/A',
       type: order?.type || 'N/A',
       status: order?.status || 'Pending',
@@ -198,7 +196,7 @@ const OrderView = () => {
                   >
                     <CardContent>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Payment Status:</strong> {}
+                        <strong>Payment Status:</strong> {rowData?.paymentStatus}
                       </Typography>
 
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
