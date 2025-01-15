@@ -45,7 +45,6 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     };
     const customerResponse = await postApi(urls?.customer?.create, phonedata);
     const customerId = customerResponse?.data?._id;
-    console.log('customerId====', customerId);
 
     if (!customerId) {
       return;
@@ -59,7 +58,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     };
     const orderResponse = await postApi(urls?.order?.create, payload);
     const orderId = orderResponse?.data?._id;
-    console.log('orderId====', orderId);
+
     if (!orderId) {
       return;
     }
@@ -70,13 +69,14 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     };
     const paymentResponse = await postApi(urls?.payment?.create, paymentPayload);
     const paymentId = paymentResponse?.data?._id;
-    console.log('paymentId====', paymentId);
+
     if (!paymentId) {
       return;
     }
     const invoicePayload = {
       paymentId,
       customerId,
+      orderId,
       paymentMode,
       amount: totalPrice,
       discount,
@@ -84,7 +84,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     };
     const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
     const invoiceId = invoiceResponse?.data?._id;
-    console.log('invoiceId====', invoiceId);
+
     reset();
     resetCart();
     onClose();

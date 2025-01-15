@@ -5,11 +5,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
+import css from 'assets/printInvoice.css';
 
-const Invoice = () => {
+const Invoice = (props) => {
   const params = useParams();
 
-  const invoiceId = params?.invoiceId;
+  const invoiceId = params?.invoiceId || props?.invoiceId;
 
   const [rowData, setrowdata] = useState({});
 
@@ -25,13 +26,15 @@ const Invoice = () => {
       totalPrice: invoice?.amount?.toFixed(2) || '0.00',
       discount: invoice?.discount?.toFixed(2) || '0.00',
       tax: invoice?.tax?.toFixed(2) || '0.00',
-      paymentStatus: invoice?.paymentStatus === 1 ? 'Paid' : 'Unpaid',
+      paymentStatus: 'Paid',
       chef: invoice?.chef || 'N/A',
       paymentMode: invoice?.paymentMode || 'N/A',
       type: invoice?.type || 'N/A',
       status: invoice?.status || 'Pending',
       expectedTime: invoice?.expectedTime ? `${invoice.expectedTime} min` : 'N/A',
-      phone: invoice?.customerId?.phone || 'N/A'
+      phone: invoice?.customerId?.phone || 'N/A',
+      address: invoice?.customerId?.address || 'N/A',
+      email: invoice?.customerId?.email || 'N/A'
     };
 
     const formattedItemRows =
@@ -85,8 +88,12 @@ const Invoice = () => {
   ];
   const [itemRow, setitemRow] = useState([]);
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <Box sx={{ padding: 4, maxWidth: '100%', margin: '0 auto' }}>
+    <Box sx={{ padding: 4, maxWidth: '100%', margin: '0 auto' }} id="invoice-print">
       <Paper elevation={3} sx={{ padding: 4 }}>
         <Typography variant="h3" textAlign="center" color="primary" gutterBottom>
           Invoice
@@ -116,15 +123,15 @@ const Invoice = () => {
         <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              Name :
+              Name :{rowData?.customer}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
-              Email :
+              Email :{rowData?.email}
             </Typography>
           </Stack>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              Address :
+              Address :{rowData?.address}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
               Phone :{rowData?.phone}
@@ -139,13 +146,13 @@ const Invoice = () => {
         <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              Payment Status :
+              Payment Status :{rowData?.paymentStatus}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
               Payment Type:{rowData?.paymentMode}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
-              Payment Date:
+              Payment Date:{new Date().toLocaleDateString()}
             </Typography>
           </Stack>
           <Stack direction="column" spacing={1} sx={{}}>
@@ -165,21 +172,28 @@ const Invoice = () => {
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <Card>
-          <Box sx={{ height: 400 }}>
-            <DataGrid rows={itemRow} columns={columns} />
+          <Box sx={{ height: 'auto', width: '100%' }}>
+            <DataGrid
+              rows={itemRow}
+              columns={columns}
+              pagination
+              components={{
+                Pagination: () => null
+              }}
+            />
           </Box>
         </Card>
 
         <Divider sx={{ my: 3 }} />
 
-        <Box textAlign="left">
+        <Box textAlign="right">
           <Typography variant="h4" color="primary">
             Total: Rs. {rowData?.totalPrice}
           </Typography>
         </Box>
 
         <Box textAlign="center" mt={4}>
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={handlePrint}>
             Print Invoice
           </Button>
         </Box>

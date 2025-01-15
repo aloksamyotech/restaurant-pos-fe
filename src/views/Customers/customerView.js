@@ -75,17 +75,11 @@ const customerView = () => {
     <Link underline="hover" key="1" color="primary" href="/">
       <HomeIcon />
     </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="primary"
-      href="/material-ui/getting-started/installation/"
-      //   onClick={handleClick}
-    >
-      Customer History
+    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/">
+      Customer Details
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      history
+      Details
     </Typography>
   ];
 
@@ -94,7 +88,7 @@ const customerView = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Customer History
+            <Iconify icon="" /> Customer Details
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}

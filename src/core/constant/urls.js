@@ -60,6 +60,7 @@ export const urls = Object.freeze({
   invoice: {
     create: base + '/invoice/addInvoice',
     get: base + '/invoice/getInvoices',
-    getbyid: base + '/invoice/fetchInvoice/:id'
+    getbyid: base + '/invoice/fetchInvoice/:id',
+    getbyorderid: base + '/invoice/fetchInvoiceByOrderId/:id'
   }
 });
