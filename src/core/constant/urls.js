@@ -45,12 +45,15 @@ export const urls = Object.freeze({
   order: {
     create: base + '/order/addorder',
     get: base + '/order/getorders',
-    getbyid: base + '/order/fetchOrder/:id'
+    getbyid: base + '/order/fetchOrder/:id',
+    getorderbycustomerid: base + '/order/getorderbycustomerid/:id'
   },
   customer: {
     create: base + '/customer/addCustomer',
     get: base + '/customer/getCustomers',
-    getbyid: base + '/customer/fetchCustomer/:id'
+    getbyid: base + '/customer/fetchCustomer/:id',
+    getCustomerByPhone: base + '/customer/getCustomerByPhone/:id',
+    
   },
   payment: {
     create: base + '/payment/addPayment',

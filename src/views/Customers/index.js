@@ -9,62 +9,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
-
-const columns = [
-  { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
-
-  {
-    field: 'customer',
-    headerName: 'Customer ',
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center',
-    editable: true
-  },
-
-  {
-    field: 'email',
-    headerName: 'Email',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'phone',
-    headerName: 'Phone',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'address',
-    headerName: 'Address',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'action',
-    headerName: 'Action',
-    headerAlign: 'center',
-    align: 'center',
-
-    flex: 1,
-    renderCell: (params) => (
-      <Link fontSize={0} color="inherit" href="/dashboard/customer/customerview">
-        <VisibilityIcon color="primary" />
-      </Link>
-    )
-  }
-];
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDialogOpen = () => setDialogOpen(true);
@@ -83,6 +31,63 @@ const Categories = () => {
       customer
     </Typography>
   ];
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/customer/customerview/${row.id}`, { state: row });
+  };
+  const columns = [
+    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
+  
+    {
+      field: 'customer',
+      headerName: 'Customer ',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true
+    },
+  
+    {
+      field: 'email',
+      headerName: 'Email',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'address',
+      headerName: 'Address',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerAlign: 'center',
+      align: 'center',
+  
+      flex: 1,
+      renderCell: (params) => (
+      
+          <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)}  />
+      
+      )
+    }
+  ];
+  
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.customer?.get);
