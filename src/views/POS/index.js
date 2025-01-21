@@ -6,6 +6,7 @@ import useDishes from './Components/Dishes';
 import Cart from './Components/Cart';
 import Dropdown from './Components/dropDown';
 import CartDialog from './Components/Submit';
+import { width } from '@mui/system';
 
 const POS = () => {
   const [cartStore, setCart] = useState([]);
@@ -37,25 +38,33 @@ const POS = () => {
 
   return (
     <>
-      <Container maxWidth="xl">
+      <Container >
         <Card sx={{ p: 1, m: 1 }}>
-          <Stack direction="row" alignItems="flex-start" spacing={1} sx={{ width: '100%' }}>
-            <SearchBar setSearchQuery={setSearchQuery} sx={{ width: '70%' }} />
-            <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} sx={{ width: '15%' }} />
-            <Button variant="outlined" sx={{ flex: 1, mt: 3 }} onClick={handleDialogOpen}>
-              Submit
-            </Button>
-          </Stack>
+         
+          <Grid container spacing={1} >
+          <Grid item xs={9}>
+            <SearchBar setSearchQuery={setSearchQuery}  />
+            </Grid>
+            <Grid item xs={3}>
+            <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow}/>
+            </Grid>
+            </Grid>
+          
+         
         </Card>
 
         <Grid container spacing={0.5}>
           <Grid item xs={12} md={8}>
-            <DishesGrid dishes={filteredDishes} onAddToCart={handleAddToCart} dishesPerRow={dishesPerRow} />
+            <DishesGrid dishes={filteredDishes} onAddToCart={handleAddToCart} dishesPerRow={dishesPerRow}  />
           </Grid>
 
           <Grid item xs={12} md={4}>
             <Card sx={{ p: 0, width: '110%' }}>
-              <Cart cartItems={cartStore} setCart={setCart} />
+              <Cart cartItems={cartStore} setCart={setCart} 
+              dialogOpen={dialogOpen} 
+              handleDialogOpen={handleDialogOpen} 
+              handleDialogClose={handleDialogClose}
+              resetCart={resetCart} />
             </Card>
           </Grid>
         </Grid>

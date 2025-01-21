@@ -168,6 +168,21 @@ export const dashboard3 = {
     }
   ]
 };
+export const dashboard5 = {
+  title: 'Report',
+  type: 'group',
+  children: [
+    {
+      id: '14',
+      title: 'Overall Report',
+      type: 'item',
+      url: '/dashboard/overallReport',
+      icon: icons.AccountBalanceWallet,
+      breadcrumbs: false
+    }
+   
+  ]
+};
 export const dashboard4 = {
   title: 'People',
   type: 'group',
