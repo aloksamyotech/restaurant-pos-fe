@@ -34,7 +34,7 @@ const CustomerView = () => {
     {
       field: 'serial',
       headerName: 'S.No',
-      width: 20,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -43,7 +43,7 @@ const CustomerView = () => {
     {
       field: 'items',
       headerName: 'Item Details',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -51,7 +51,7 @@ const CustomerView = () => {
     {
       field: 'totalPrice',
       headerName: 'Total ',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -59,7 +59,7 @@ const CustomerView = () => {
     {
       field: 'paymentStatus',
       headerName: 'Payment Status',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -67,7 +67,7 @@ const CustomerView = () => {
     {
       field: 'action',
       headerName: 'Action',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />

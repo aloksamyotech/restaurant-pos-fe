@@ -7,8 +7,8 @@ const Dropdown = ({ dishesPerRow, setDishesPerRow }) => {
   };
 
   return (
-    <Box sx={{ width: '50%', margin: '1Px' }}>
-      <Select value={dishesPerRow} onChange={handleDishesPerRowChange} fullWidth variant="outlined">
+    <Box>
+      <Select value={dishesPerRow} onChange={handleDishesPerRowChange} variant="outlined" fullWidth>
         <MenuItem value={2}>2 Dishes Per Row</MenuItem>
         <MenuItem value={3}>3 Dishes Per Row</MenuItem>
         <MenuItem value={4}>4 Dishes Per Row</MenuItem>

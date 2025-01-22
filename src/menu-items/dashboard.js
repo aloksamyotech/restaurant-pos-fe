@@ -19,7 +19,7 @@ import {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-  // IconCategoryFilled,
+ 
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -36,7 +36,7 @@ const icons = {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-  // IconCategoryFilled,
+  
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -55,7 +55,7 @@ const icons = {
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-export const dashboard = {
+export const POS   = {
   title: 'Restaurant POS',
   type: 'group',
   children: [
@@ -78,7 +78,7 @@ export const dashboard = {
   ]
 };
 
-export const dashboard1 = {
+export const Portal = {
   title: 'Portal',
   type: 'group',
   children: [
@@ -108,7 +108,7 @@ export const dashboard1 = {
     }
   ]
 };
-export const dashboard2 = {
+export const Food = {
   title: 'FOOD',
   type: 'group',
   children: [
@@ -146,7 +146,7 @@ export const dashboard2 = {
     }
   ]
 };
-export const dashboard3 = {
+export const Expenses = {
   title: 'Expenses',
   type: 'group',
   children: [
@@ -168,7 +168,22 @@ export const dashboard3 = {
     }
   ]
 };
-export const dashboard4 = {
+export const Report = {
+  title: 'Report',
+  type: 'group',
+  children: [
+    {
+      id: '14',
+      title: 'Overall Report',
+      type: 'item',
+      url: '/dashboard/overallReport',
+      icon: icons.AccountBalanceWallet,
+      breadcrumbs: false
+    }
+   
+  ]
+};
+export const People = {
   title: 'People',
   type: 'group',
   children: [

@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box } from '@mui/material';
 import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CartDialog from './Submit';
 
-const Cart = ({ cartItems, setCart }) => {
+const Cart = ({ cartItems, setCart,dialogOpen, handleDialogOpen, handleDialogClose, resetCart}) => {
+ 
+  
+ 
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
   const handleRemoveDish = (id) => {
@@ -25,9 +29,9 @@ const Cart = ({ cartItems, setCart }) => {
   const handleClearCart = () => {
     setCart([]);
   };
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const handleDialogClose = () => setDialogOpen(false);
-  const handleDialogOpen = () => setDialogOpen(true);
+
+ 
+  
 
   return (
     <>
@@ -152,6 +156,7 @@ const Cart = ({ cartItems, setCart }) => {
           </Button>
         </Box>
       </Paper>
+      
     </>
   );
 };

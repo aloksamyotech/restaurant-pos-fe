@@ -23,6 +23,7 @@ const Users = Loadable(lazy(() => import('views/Users')));
 
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
+const OverallReport = Loadable(lazy(() => import('views/Reports')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -140,6 +141,15 @@ const MainRoutes = {
         {
           path: 'expenseType',
           element: <ExpenseType />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'overallReport',
+          element: <OverallReport />
         }
       ]
     },

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-import Customer from './Customers';
+
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -13,10 +13,7 @@ import { useNavigate } from 'react-router';
 
 const Categories = () => {
   const navigate = useNavigate();
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
+ 
   function handleClick(event) {
     event?.preventDefault();
   }
@@ -121,10 +118,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
-          <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add User
-          </Button>
-          <Customer open={dialogOpen} onClose={handleDialogClose} />
+         
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
