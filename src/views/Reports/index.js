@@ -86,7 +86,7 @@ const OverallReport = () => {
 
   const fetchData = async () => {
     const response = await getApi(urls?.order?.get);
-    console.log('rsponse', response);
+    
 
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
