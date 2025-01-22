@@ -3,11 +3,11 @@ import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 import sandwich from '../../../assets/images/sandwich.jpg';
 
 const DishCard = ({ dish, onAddToCart }) => {
-  const { id, name, image, price } = dish;
+  const { id, name, image, price, cost } = dish;
   return (
     <Card
       variant="outlined"
-      onClick={() => onAddToCart({ id, name, image, price })}
+      onClick={() => onAddToCart({ id, name, image, price, cost })}
       sx={{
         margin: '2px',
         cursor: 'pointer',

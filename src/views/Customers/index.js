@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 
 const Categories = () => {
   const navigate = useNavigate();
- 
+
   function handleClick(event) {
     event?.preventDefault();
   }
@@ -33,7 +33,7 @@ const Categories = () => {
   };
   const columns = [
     { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
-  
+
     {
       field: 'customer',
       headerName: 'Customer ',
@@ -42,7 +42,7 @@ const Categories = () => {
       align: 'center',
       editable: true
     },
-  
+
     {
       field: 'email',
       headerName: 'Email',
@@ -75,16 +75,12 @@ const Categories = () => {
       headerName: 'Action',
       headerAlign: 'center',
       align: 'center',
-  
+
       flex: 1,
-      renderCell: (params) => (
-      
-          <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)}  />
-      
-      )
+      renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />
     }
   ];
-  
+
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.customer?.get);
@@ -118,7 +114,6 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
-         
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>

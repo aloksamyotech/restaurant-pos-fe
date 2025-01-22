@@ -1,20 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Stack,
-  
-  Container,
-  Typography,
-  Card,
-  Box,
- 
-  Grid,
-  Breadcrumbs,
-  Link,
-  Tab,
-  Tabs,
-  Divider,
-  CardContent
-} from '@mui/material';
+import { Stack, Container, Typography, Card, Box, Grid, Breadcrumbs, Link, Tab, Tabs, Divider, CardContent } from '@mui/material';
 
 import Iconify from '../../ui-component/iconify';
 import { getApi } from 'core/apis/apiClient.js';

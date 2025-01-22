@@ -8,7 +8,7 @@ const SearchBar = ({ setSearchQuery }) => {
 
   return (
     <Box>
-      <TextField label="Search Dish" variant="outlined" onChange={handleSearchChange}  fullWidth/>
+      <TextField label="Search Dish" variant="outlined" onChange={handleSearchChange} fullWidth />
     </Box>
   );
 };

@@ -4,10 +4,7 @@ import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import CartDialog from './Submit';
 
-const Cart = ({ cartItems, setCart,dialogOpen, handleDialogOpen, handleDialogClose, resetCart}) => {
- 
-  
- 
+const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
   const handleRemoveDish = (id) => {
@@ -29,9 +26,6 @@ const Cart = ({ cartItems, setCart,dialogOpen, handleDialogOpen, handleDialogClo
   const handleClearCart = () => {
     setCart([]);
   };
-
- 
-  
 
   return (
     <>
@@ -156,7 +150,6 @@ const Cart = ({ cartItems, setCart,dialogOpen, handleDialogOpen, handleDialogClo
           </Button>
         </Box>
       </Paper>
-      
     </>
   );
 };
