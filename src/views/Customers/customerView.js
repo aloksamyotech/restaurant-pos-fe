@@ -1,4 +1,18 @@
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link, CardContent } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Container,
+  Typography,
+  Card,
+  Box,
+  TextField,
+  Checkbox,
+  IconButton,
+  Grid,
+  Breadcrumbs,
+  Link,
+  CardContent
+} from '@mui/material';
 
 import Iconify from '../../ui-component/iconify';
 import HomeIcon from '@mui/icons-material/Home';
@@ -11,11 +25,8 @@ import { useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router';
 
-
-
-
 const CustomerView = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/">
       <HomeIcon />
@@ -38,8 +49,7 @@ const CustomerView = () => {
       headerAlign: 'center',
       align: 'center'
     },
-    
-  
+
     {
       field: 'items',
       headerName: 'Item Details',
@@ -47,7 +57,7 @@ const CustomerView = () => {
       headerAlign: 'center',
       align: 'center'
     },
-  
+
     {
       field: 'totalPrice',
       headerName: 'Total ',
@@ -55,7 +65,7 @@ const CustomerView = () => {
       headerAlign: 'center',
       align: 'center'
     },
-  
+
     {
       field: 'paymentStatus',
       headerName: 'Payment Status',
@@ -63,7 +73,7 @@ const CustomerView = () => {
       headerAlign: 'center',
       align: 'center'
     },
-  
+
     {
       field: 'action',
       headerName: 'Action',
@@ -73,54 +83,47 @@ const CustomerView = () => {
       renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />
     }
   ];
-  
-  const { id} = useParams();
-   const [rows, setRows] = useState([]);
-  
-    const fetchData = async () => {
-      const response = await getApi(urls?.customer?.getbyid.replace(':id',id));
-      
-      
-      
-      setRows(response.data);
-    };
-    
-    useEffect(() => {
-      fetchData();
-    }, []);
-    const [order, setOrders] = useState([]);
-  
-    const fetchOrderData = async () => {
-      const response = await getApi(urls?.order?.getorderbycustomerid.replace(':id',id));
-      
-      
-      const formattedData = response.data.map((item, index) => ({
-        id: item?._id,
-        serial: index + 1,
-        phone: item?.phone || 'N/A',
-  
-        items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
-  
-        totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
-  
-        paymentStatus: 'Paid',
-        chef: item?.chef || 'N/A',
-        type: item?.type || 'N/A'
-      }));
-      
-      
-      setOrders(formattedData);
-    };
-    
-    useEffect(() => {
-      fetchOrderData();
-    }, []);
-  
-    
+
+  const { id } = useParams();
+  const [rows, setRows] = useState([]);
+
+  const fetchData = async () => {
+    const response = await getApi(urls?.customer?.getbyid.replace(':id', id));
+
+    setRows(response.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const [order, setOrders] = useState([]);
+
+  const fetchOrderData = async () => {
+    const response = await getApi(urls?.order?.getorderbycustomerid.replace(':id', id));
+
+    const formattedData = response.data.map((item, index) => ({
+      id: item?._id,
+      serial: index + 1,
+      phone: item?.phone || 'N/A',
+
+      items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
+
+      totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
+
+      paymentStatus: 'Paid',
+      chef: item?.chef || 'N/A',
+      type: item?.type || 'N/A'
+    }));
+
+    setOrders(formattedData);
+  };
+
+  useEffect(() => {
+    fetchOrderData();
+  }, []);
+
   return (
     <>
-    
-
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -131,10 +134,10 @@ const CustomerView = () => {
           </Breadcrumbs>
         </Stack>
       </Card>
-      <Card sx={{m:1, height:"100px", p:3}} >
-      <Stack direction="row" spacing={50} sx={{}}>
+      <Card sx={{ m: 1, height: '100px', p: 3 }}>
+        <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
-            <Typography variant="h5"  color="" sx={{m:3}}>
+            <Typography variant="h5" color="" sx={{ m: 3 }}>
               Name :{}
             </Typography>
             <Typography variant="h5" textAlign="" color="">
@@ -150,7 +153,7 @@ const CustomerView = () => {
             </Typography>
           </Stack>
         </Stack>
-        </Card>
+      </Card>
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid

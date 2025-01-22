@@ -27,7 +27,12 @@ import { useNavigate } from 'react-router';
 import { useState } from 'react';
 
 const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
-  const { handleSubmit, reset, register, formState: { errors } } = useForm();
+  const {
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors }
+  } = useForm();
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
@@ -37,7 +42,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
         id: item?.id,
         quantity: item?.quantity,
         name: item?.name,
-        price: item?.price
+        price: item?.price,
+        cost: item?.cost
       };
     });
     const phonedata = {
@@ -184,10 +190,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                   <TextField label="Discount" type="number" value={discount} onChange={handleDiscountChange} variant="outlined" fullWidth />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField fullWidth label="Mobile Number" variant="outlined" value={phone} onChange={handleMobileChange}
-                  />
-   
-
+                  <TextField fullWidth label="Mobile Number" variant="outlined" value={phone} onChange={handleMobileChange} />
                 </Grid>
               </Grid>
 

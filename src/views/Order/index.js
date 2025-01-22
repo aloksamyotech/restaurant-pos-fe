@@ -92,7 +92,7 @@ const Categories = () => {
 
       totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
 
-      paymentStatus:'Paid',
+      paymentStatus: 'Paid',
       chef: item?.chef || 'N/A',
       type: item?.type || 'N/A'
     }));

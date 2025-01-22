@@ -38,33 +38,33 @@ const POS = () => {
 
   return (
     <>
-      <Container >
+      <Container>
         <Card sx={{ p: 1, m: 1 }}>
-         
-          <Grid container spacing={1} >
-          <Grid item xs={9}>
-            <SearchBar setSearchQuery={setSearchQuery}  />
+          <Grid container spacing={1}>
+            <Grid item xs={9}>
+              <SearchBar setSearchQuery={setSearchQuery} />
             </Grid>
             <Grid item xs={3}>
-            <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow}/>
+              <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />
             </Grid>
-            </Grid>
-          
-         
+          </Grid>
         </Card>
 
         <Grid container spacing={0.5}>
           <Grid item xs={12} md={8}>
-            <DishesGrid dishes={filteredDishes} onAddToCart={handleAddToCart} dishesPerRow={dishesPerRow}  />
+            <DishesGrid dishes={filteredDishes} onAddToCart={handleAddToCart} dishesPerRow={dishesPerRow} />
           </Grid>
 
           <Grid item xs={12} md={4}>
             <Card sx={{ p: 0, width: '110%' }}>
-              <Cart cartItems={cartStore} setCart={setCart} 
-              dialogOpen={dialogOpen} 
-              handleDialogOpen={handleDialogOpen} 
-              handleDialogClose={handleDialogClose}
-              resetCart={resetCart} />
+              <Cart
+                cartItems={cartStore}
+                setCart={setCart}
+                dialogOpen={dialogOpen}
+                handleDialogOpen={handleDialogOpen}
+                handleDialogClose={handleDialogClose}
+                resetCart={resetCart}
+              />
             </Card>
           </Grid>
         </Grid>

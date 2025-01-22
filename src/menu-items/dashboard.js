@@ -19,7 +19,6 @@ import {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
- 
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -36,7 +35,7 @@ const icons = {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-  
+
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -55,7 +54,7 @@ const icons = {
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-export const POS   = {
+export const POS = {
   title: 'Restaurant POS',
   type: 'group',
   children: [
@@ -180,7 +179,6 @@ export const Report = {
       icon: icons.AccountBalanceWallet,
       breadcrumbs: false
     }
-   
   ]
 };
 export const People = {

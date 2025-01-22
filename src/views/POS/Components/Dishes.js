@@ -13,7 +13,8 @@ const useDishes = () => {
 
       image: item?.image,
 
-      price: item?.price
+      price: item?.price,
+      cost: item?.cost
     }));
     setRows(formattedData);
   };

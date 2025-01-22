@@ -52,8 +52,7 @@ export const urls = Object.freeze({
     create: base + '/customer/addCustomer',
     get: base + '/customer/getCustomers',
     getbyid: base + '/customer/fetchCustomer/:id',
-    getCustomerByPhone: base + '/customer/getCustomerByPhone/:id',
-    
+    getCustomerByPhone: base + '/customer/getCustomerByPhone/:id'
   },
   payment: {
     create: base + '/payment/addPayment',
