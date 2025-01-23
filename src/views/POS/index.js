@@ -3,7 +3,7 @@ import SearchBar from './Components/SearchBar';
 import DishesGrid from './Components/DishesGrid';
 import { Container, Grid, Paper, Typography, Card, Button, Stack } from '@mui/material';
 import useDishes from './Components/Dishes';
-import Cart from './Components/Cart';
+import Cart from './Components/cart';
 import Dropdown from './Components/dropDown';
 import CartDialog from './Components/Submit';
 import { width } from '@mui/system';

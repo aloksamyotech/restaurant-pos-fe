@@ -18,6 +18,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
+import { sentApi } from 'core/apis/apiClient.js';
 
 const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -63,18 +64,20 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
   };
 
   const onSubmit = async (data) => {
-    let obj = {};
-    Object.assign(obj, {
-      name: data.name,
-      desc: data.desc,
-      cost: data.cost,
-      price: data.price,
-      categoryId: data.categoryId,
-      ingredients: selectedIngredients,
-      dishImage: dishImage
-    });
-    const response = await postApi(urls?.item?.create, obj);
-    fetchData();
+    const formData = new FormData();
+    formData.append('name', data?.name);
+    formData.append('desc', data?.desc);
+    formData.append('cost', data?.cost);
+    formData.append('price', data?.price);
+    formData.append('categoryId', data?.categoryId);
+    formData.append('ingredients', JSON.stringify(selectedIngredients));
+
+    if (dishImage) {
+      formData.append('itemImage', dishImage);
+    }
+
+    const response = await sentApi(urls?.item?.create, formData);
+
     reset();
     onClose();
     setSnackbarMessage('Item added successfully!');

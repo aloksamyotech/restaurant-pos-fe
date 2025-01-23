@@ -11,7 +11,7 @@ const useDishes = () => {
       id: item?._id,
       name: item?.name,
 
-      image: item?.image,
+      image: item?.itemImage,
 
       price: item?.price,
       cost: item?.cost
