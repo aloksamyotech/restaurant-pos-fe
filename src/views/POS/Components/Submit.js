@@ -17,14 +17,16 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  IconButton
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
-import { CrossIcon } from 'common/crossIcon';
+
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 
 const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
   const {
@@ -132,7 +134,20 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
 
       <DialogContent sx={{ padding: '16px', backgroundColor: '#f9f9f9' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <CrossIcon />
+          <IconButton
+            onClick={onClose}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              color: 'grey',
+              '&:hover': {
+                color: 'red'
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           {cartItems?.length > 0 ? (
             <>
               <List>

@@ -27,6 +27,7 @@ import EditDialog from './action';
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
+import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 
 const Categories = () => {
   const breadcrumbs = [
@@ -160,12 +161,13 @@ const Categories = () => {
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.foodCategory?.get);
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       name: item?.categoryName,
       desc: item?.desc,
-      categoryImage: item?.categoryImage ? `http://localhost:7200${item.categoryImage}` : null,
+      categoryImage: item?.categoryImage ? `http://localhost:7200${item.categoryImage}` : Dummy_Image,
 
       isAvailable: item.true
     }));
@@ -226,7 +228,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} rowHeight={75} columns={columns} />
+          <DataGrid rows={rows} rowHeight={100} columns={columns} />
         </Box>
       </Card>
     </Container>

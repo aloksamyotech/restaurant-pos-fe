@@ -18,6 +18,8 @@ import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 
 import { Stack } from '@mui/system';
+import {enums} from 'core/constant/constant';
+
 const OverallReport = () => {
   const columns = [
     {
@@ -31,11 +33,9 @@ const OverallReport = () => {
       field: 'phone',
       headerName: 'Phone No.',
       flex: 1,
-
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'cost',
       headerName: 'Cost',
@@ -43,7 +43,6 @@ const OverallReport = () => {
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'price',
       headerName: 'Price ',
@@ -51,7 +50,6 @@ const OverallReport = () => {
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'discount',
       headerName: 'Discount',
@@ -83,23 +81,63 @@ const OverallReport = () => {
   ];
 
   const [rows, setRows] = useState([]);
+  const [duration, setDuration] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  const fetchData = async () => {
+  const handleDurationChange = (event) => {
+    setDuration(event.target.value);
+    const now = new Date();
+
+    if (event.target.value === enums.Daily) {
+      const startOfDay = new Date(now.setHours(0, 0, 0, 0)).toISOString();
+      const endOfDay = new Date(now.setHours(23, 59, 59, 999)).toISOString();
+      setStartDate(startOfDay);
+      setEndDate(endOfDay);
+      fetchData(startOfDay, endOfDay);
+    } else if (event.target.value === enums.Weekly) {
+      const startOfWeek = new Date(now);
+      startOfWeek.setDate(now.getDate() - 6);
+      startOfWeek.setHours(0, 0, 0, 0);
+
+      const endOfWeek = new Date();
+      endOfWeek.setHours(23, 59, 59, 999);
+      setStartDate(startOfWeek.toISOString());
+      setEndDate(endOfWeek.toISOString());
+      fetchData(startOfWeek.toISOString(), endOfWeek.toISOString());
+    } else if (event.target.value === enums.Monthly) {
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      firstDayOfMonth.setHours(0, 0, 0, 0);
+      const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      lastDayOfMonth.setHours(23, 59, 59, 999);
+      setStartDate(firstDayOfMonth.toISOString());
+      setEndDate(lastDayOfMonth.toISOString());
+      fetchData(firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString());
+    }
+  };
+
+  const fetchData = async (startDate, endDate) => {
     const response = await getApi(urls?.order?.get);
-    
 
-    const formattedData = response?.data?.map((item, index) => ({
+    const filteredData = response?.data?.filter((item) => {
+      const itemDate = new Date(item?.createdAt);
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      return (!startDate || itemDate >= start) && (!endDate || itemDate <= end);
+    });
+
+    const formattedData = filteredData.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       phone: item?.phone || 'N/A',
       price: item?.totalPrice || 'N/A',
       discount: item?.discount,
-
       cost: item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0),
       profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0) + item?.discount),
       payable: item?.totalPrice - item?.discount,
       createdAt: item?.createdAt
-        ? new Date(item.createdAt).toLocaleString('en-GB', {
+        ? new Date(item?.createdAt).toLocaleString('en-GB', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
@@ -117,68 +155,20 @@ const OverallReport = () => {
     fetchData();
   }, []);
 
-  const calculateTotalCost = () => {
-    const totalCostSum = rows.reduce((acc, row) => {
-      return acc + row.cost;
-    }, 0);
-
-    return totalCostSum;
-  };
-
-  const calculateTotalPrice = () => {
-    const totalPriceSum = rows.reduce((acc, row) => {
-      return acc + row.price;
-    }, 0);
-
-    return totalPriceSum;
-  };
-
-  const calculateTotalPayable = () => {
-    const totalPayableSum = rows.reduce((acc, row) => {
-      return acc + row.payable;
-    }, 0);
-
-    return totalPayableSum;
-  };
-
-  const calculateTotalDiscount = () => {
-    const totalDiscountSum = rows.reduce((acc, row) => {
-      return acc + row.discount;
-    }, 0);
-
-    return totalDiscountSum;
-  };
-
-  const calculateTotalProfit = () => {
-    const totalProfitSum = rows.reduce((acc, row) => {
-      return acc + row.profit;
-    }, 0);
-
-    return totalProfitSum;
-  };
-
-  const totalCost = calculateTotalCost();
-  const totalPrice = calculateTotalPrice();
-  const totalPayable = calculateTotalPayable();
-  const totalDiscount = calculateTotalDiscount();
-  const totalProfit = calculateTotalProfit();
-
   const summaryData = [
-    { label: 'Total sale amount', value: 'Rs.' + totalPrice },
-    { label: 'Total cost amount', value: 'Rs.' + totalCost },
-    { label: 'Total discount amount', value: 'Rs.' + totalDiscount },
-    { label: 'Total profit amount', value: 'Rs.' + totalProfit },
-    { label: 'Total tax amount', value: '0' },
-    { label: 'Total payable amount', value: 'Rs.' + totalPayable }
+    { label: 'Total sale amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.price, 0) },
+    { label: 'Total cost amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.cost, 0) },
+    { label: 'Total discount amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.discount, 0) },
+    { label: 'Total profit amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.profit, 0) },
+    { label: 'Total payable amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) }
   ];
 
   return (
     <>
       <Stack direction="row" spacing={50}>
-        <Typography variant="h1" color="Highlight" sx={{}}>
+        <Typography variant="h1" color="Highlight">
           Overall Report
         </Typography>
-        <Typography variant="h4">Report created at:</Typography>
       </Stack>
 
       <Card sx={{ p: 2, m: 2 }}>
@@ -187,25 +177,23 @@ const OverallReport = () => {
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined">
                 <InputLabel>By Duration</InputLabel>
-                <Select label="By Duration">
-                  <MenuItem value={10}>Daily</MenuItem>
-                  <MenuItem value={20}>Monthly</MenuItem>
-                  <MenuItem value={30}>Yearly</MenuItem>
+                <Select label="By Duration" value={duration} onChange={handleDurationChange}>
+                  <MenuItem value="Daily">Daily</MenuItem>
+                  <MenuItem value="Weekly">Weekly</MenuItem>
+                  <MenuItem value="Monthly">Monthly</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField fullWidth label="Starting date" type="date" InputLabelProps={{ shrink: true }} />
+              <TextField fullWidth label="Starting date" type="date" value={startDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth label="Ending date" type="date" InputLabelProps={{ shrink: true }} />
+              <TextField fullWidth label="Ending date" type="date" value={endDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
             </Grid>
           </Grid>
-
-          <Grid container spacing={2}></Grid>
         </Box>
       </Card>
 

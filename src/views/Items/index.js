@@ -14,6 +14,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import EditDialog from './action';
 import { Snackbar } from '@mui/material';
 
+import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
+
 const Categories = () => {
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
@@ -52,14 +54,14 @@ const Categories = () => {
     {
       field: 'serial',
       headerName: 'S.No',
-      width: 20,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'name',
       headerName: 'Item Name',
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center'
@@ -67,7 +69,7 @@ const Categories = () => {
     {
       field: 'desc',
       headerName: 'Description',
-      width: 150,
+      flex: 1,
 
       headerAlign: 'center',
       align: 'center',
@@ -77,18 +79,21 @@ const Categories = () => {
     {
       field: 'image',
       headerName: 'Dish Image',
-      width: 100,
+      width: 150,
       editable: true,
-      renderCell: (params) => (
-        <img src={params?.row?.image} alt={params?.row?.image} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
-      )
+      renderCell: (params) =>
+        params.value ? (
+          <img src={params.value} alt="Category" style={{ maxWidth: '100px', height: 'auto' }} />
+        ) : (
+          <Typography>No Image</Typography>
+        )
     },
 
     {
       field: 'cost',
       headerName: 'Cost',
       type: 'number',
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center'
@@ -98,7 +103,7 @@ const Categories = () => {
       headerName: 'Price',
       type: 'number',
       sortable: false,
-      width: 100,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -106,7 +111,7 @@ const Categories = () => {
       field: 'categoryId',
       headerName: 'Category',
       type: 'string',
-      width: 110,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center'
@@ -115,7 +120,7 @@ const Categories = () => {
       field: 'ingredient',
       headerName: 'Ingredients',
       type: [],
-      width: 110,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
       align: 'center'
@@ -126,7 +131,7 @@ const Categories = () => {
       headerAlign: 'center',
       align: 'center',
 
-      width: 110,
+      flex: 1,
       renderCell: (params) => (
         <Stack direction="row" spacing={4}>
           <EditIcon
@@ -178,14 +183,14 @@ const Categories = () => {
 
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-    const response = await getApi(urls?.item.get);
+    const response = await getApi(urls?.item?.get);
 
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       name: item?.name,
       desc: item?.desc,
-      image: item?.image,
+      image: item?.itemImage ? `http://localhost:7200${item.itemImage}` : Dummy_Image,
       cost: item?.cost,
       price: item?.price,
       categoryId: item?.categoryId?.categoryName,
@@ -248,7 +253,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} rowHeight={75} columns={columns} />
+          <DataGrid rows={rows} rowHeight={100} columns={columns} />
         </Box>
       </Card>
     </Container>

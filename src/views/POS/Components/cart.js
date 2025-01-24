@@ -3,6 +3,7 @@ import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box } fr
 import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import CartDialog from './Submit';
+import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 
 const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
@@ -79,7 +80,8 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      mr: 2
+                      mr: 2,
+                      height: 80
                     }}
                   >
                     <Avatar
@@ -87,7 +89,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                       alt={cartItem?.name}
                       sx={{
                         width: 80,
-                        height: 80,
+                        height: 50,
                         borderRadius: 0,
                         border: '1px solid #ccc'
                       }}
