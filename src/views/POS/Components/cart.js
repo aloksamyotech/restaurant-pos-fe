@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box } from '@mui/material';
+import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box, Snackbar, Alert } from '@mui/material';
 import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import CartDialog from './Submit';
@@ -28,8 +28,23 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
     setCart([]);
   };
 
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+          Add Items in the Cart
+        </Alert>
+      </Snackbar>
       <Paper
         sx={{
           display: 'flex',
@@ -143,7 +158,16 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
           <Typography variant="h6" color="primary">
             Total: Rs. {totalPrice.toFixed(2)}
           </Typography>
-          <Button variant="contained" onClick={handleDialogOpen} sx={{}}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (cartItems.length === 0) {
+                setSnackbarOpen(true);
+                return;
+              }
+              handleDialogOpen();
+            }}
+          >
             Submit
           </Button>
 

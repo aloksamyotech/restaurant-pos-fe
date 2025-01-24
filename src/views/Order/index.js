@@ -33,14 +33,14 @@ const Categories = () => {
     {
       field: 'serial',
       headerName: 'S.No',
-      width: 20,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'phone',
       headerName: 'Phone No.',
-      width: 150,
+      flex: 1,
 
       headerAlign: 'center',
       align: 'center'
@@ -49,7 +49,7 @@ const Categories = () => {
     {
       field: 'items',
       headerName: 'Item Details',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -57,7 +57,7 @@ const Categories = () => {
     {
       field: 'totalPrice',
       headerName: 'Total ',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -65,7 +65,7 @@ const Categories = () => {
     {
       field: 'paymentStatus',
       headerName: 'Payment Status',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
@@ -73,10 +73,21 @@ const Categories = () => {
     {
       field: 'action',
       headerName: 'Action',
-      width: 150,
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />
+      renderCell: (params) => (
+        <VisibilityIcon
+          color="primary"
+          onClick={() => handleViewClick(params.row)}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              boxShadow: 3
+            }
+          }}
+        />
+      )
     }
   ];
   const [rows, setRows] = useState([]);

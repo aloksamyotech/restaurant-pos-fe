@@ -9,6 +9,7 @@ import Payments from '@mui/icons-material/Payments';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 import {
   IconHome,
@@ -35,7 +36,7 @@ const icons = {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-
+  SummarizeIcon,
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -65,14 +66,6 @@ export const POS = {
       url: '/dashboard/default',
       icon: icons.IconHome,
       breadcrumbs: false
-    },
-    {
-      id: '01',
-      title: 'Sales',
-      type: 'item',
-      url: '/dashboard/sales',
-      icon: icons.IconAntennaBars5,
-      breadcrumbs: false
     }
   ]
 };
@@ -89,14 +82,7 @@ export const Portal = {
       icon: icons.PointOfSaleIcon,
       breadcrumbs: false
     },
-    {
-      id: '03',
-      title: 'Kitchen',
-      type: 'item',
-      url: '/dashboard/kitchen',
-      icon: icons.RestaurantIcon,
-      breadcrumbs: false
-    },
+
     {
       id: '13',
       title: 'Order',
@@ -176,7 +162,7 @@ export const Report = {
       title: 'Overall Report',
       type: 'item',
       url: '/dashboard/overallReport',
-      icon: icons.AccountBalanceWallet,
+      icon: icons.SummarizeIcon,
       breadcrumbs: false
     }
   ]

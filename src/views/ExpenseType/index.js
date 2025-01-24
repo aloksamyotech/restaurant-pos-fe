@@ -83,7 +83,7 @@ const Categories = () => {
             sx={{
               cursor: 'pointer',
               '&:hover': {
-                backgroundColor: 'blue'
+                boxShadow: 3
               }
             }}
           />
@@ -101,7 +101,7 @@ const Categories = () => {
               color: 'red',
               cursor: 'pointer',
               '&:hover': {
-                backgroundColor: 'blue'
+                boxShadow: 3
               }
             }}
             onClick={() => setDeleteDialogOpen(params.row.id)}

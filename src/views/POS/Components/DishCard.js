@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
+import { urls } from 'core/constant/urls';
 
 const DishCard = ({ dish, onAddToCart }) => {
   const { id, name, image, price, cost } = dish;
@@ -20,7 +21,7 @@ const DishCard = ({ dish, onAddToCart }) => {
       <CardMedia
         component="img"
         height="129px"
-        image={image ? `http://localhost:7200${image}` : Dummy_Image}
+        image={image ? `${urls?.item?.image}${image}` : Dummy_Image}
         alt={name}
         sx={{ borderRadius: '8px', padding: '4px' }}
       />

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Divider, Grid, Paper, Button, Card } from '@mui/material';
+import { Box, Typography, Divider, Grid, Paper, Button, Card, IconButton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import css from 'assets/printInvoice.css';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Invoice = (props) => {
   const params = useParams();
@@ -92,6 +93,11 @@ const Invoice = (props) => {
     window.print();
   };
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+
   return (
     <Box sx={{ padding: 4, maxWidth: '100%', margin: '0 auto' }} id="invoice-print">
       <Paper elevation={3} sx={{ padding: 4 }}>
@@ -110,13 +116,9 @@ const Invoice = (props) => {
             Order ID: {invoiceId ? `ORD-${invoiceId.slice(-6).toUpperCase()}` : 'N/A'}
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-          <Typography variant="h5" textAlign="Right" color="">
-            Assisted By:
-          </Typography>
-        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'right' }}></Box>
 
-        <Typography variant="h4" textAlign="left" color="" gutterBottom>
+        <Typography variant="h4" textAlign="left" color="" gutterBottom sx={{ mt: 3 }}>
           Customer Details
         </Typography>
         <Divider sx={{ mb: 3 }} />

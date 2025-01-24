@@ -64,7 +64,6 @@ const Categories = () => {
   const handleDialogClose = () => setDialogOpen(false);
   function handleClick(event) {
     event?.preventDefault();
-    console?.info('You clicked a breadcrumb.');
   }
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>

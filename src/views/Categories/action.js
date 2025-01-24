@@ -43,7 +43,7 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
 
         desc: category?.desc
       });
-      setImage(category?.categoryImage ? `http://localhost:7200${category.categoryImage}` : null);
+      setImage(category?.categoryImage ? `${urls?.foodCategory?.image}${category.categoryImage}` : null);
     }
   }, [category, reset]);
 
