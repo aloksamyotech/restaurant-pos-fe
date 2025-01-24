@@ -18,6 +18,7 @@ import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 
 import { Stack } from '@mui/system';
+import {enums} from 'core/constant/constant';
 
 const OverallReport = () => {
   const columns = [
@@ -88,13 +89,13 @@ const OverallReport = () => {
     setDuration(event.target.value);
     const now = new Date();
 
-    if (event.target.value === 'Daily') {
+    if (event.target.value === enums.Daily) {
       const startOfDay = new Date(now.setHours(0, 0, 0, 0)).toISOString();
       const endOfDay = new Date(now.setHours(23, 59, 59, 999)).toISOString();
       setStartDate(startOfDay);
       setEndDate(endOfDay);
       fetchData(startOfDay, endOfDay);
-    } else if (event.target.value === 'Weekly') {
+    } else if (event.target.value === enums.Weekly) {
       const startOfWeek = new Date(now);
       startOfWeek.setDate(now.getDate() - 6);
       startOfWeek.setHours(0, 0, 0, 0);
@@ -104,7 +105,7 @@ const OverallReport = () => {
       setStartDate(startOfWeek.toISOString());
       setEndDate(endOfWeek.toISOString());
       fetchData(startOfWeek.toISOString(), endOfWeek.toISOString());
-    } else if (event.target.value === 'Monthly') {
+    } else if (event.target.value === enums.Monthly) {
       const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       firstDayOfMonth.setHours(0, 0, 0, 0);
       const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
