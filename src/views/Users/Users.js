@@ -33,7 +33,7 @@ const AddUser = ({ open, onClose }) => {
 
   const onSubmit = (data) => {
     const formData = { ...data, dishImage: dishImage };
-    console.log(formData);
+
     onClose();
   };
 

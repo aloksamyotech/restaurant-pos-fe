@@ -113,10 +113,10 @@ const Categories = () => {
               color="primary"
               onClick={() => handleEditDialogOpen(params.row)}
               sx={{
-                color: 'green',
+                color: 'blue',
                 cursor: 'pointer',
                 '&:hover': {
-                  backgroundColor: 'blue'
+                  boxShadow: 3
                 }
               }}
             />
@@ -134,7 +134,7 @@ const Categories = () => {
                 color: 'red',
                 cursor: 'pointer',
                 '&:hover': {
-                  backgroundColor: 'blue'
+                  boxShadow: 3
                 }
               }}
               onClick={() => setDeleteDialogOpen(params.row.id)}
@@ -167,7 +167,7 @@ const Categories = () => {
       serial: index + 1,
       name: item?.categoryName,
       desc: item?.desc,
-      categoryImage: item?.categoryImage ? `http://localhost:7200${item.categoryImage}` : Dummy_Image,
+      categoryImage: item?.categoryImage ? `${urls?.item?.image}${item.categoryImage}` : Dummy_Image,
 
       isAvailable: item.true
     }));

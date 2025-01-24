@@ -140,7 +140,7 @@ const Categories = () => {
             sx={{
               cursor: 'pointer',
               '&:hover': {
-                backgroundColor: 'blue'
+                boxShadow: 3
               }
             }}
           />
@@ -158,7 +158,7 @@ const Categories = () => {
               color: 'red',
               cursor: 'pointer',
               '&:hover': {
-                backgroundColor: 'blue'
+                boxShadow: 3
               }
             }}
             onClick={() => setDeleteDialogOpen(params?.row?.id)}
@@ -190,7 +190,7 @@ const Categories = () => {
       serial: index + 1,
       name: item?.name,
       desc: item?.desc,
-      image: item?.itemImage ? `http://localhost:7200${item.itemImage}` : Dummy_Image,
+      image: item?.itemImage ? `${urls?.item?.image}${item.itemImage}` : Dummy_Image,
       cost: item?.cost,
       price: item?.price,
       categoryId: item?.categoryId?.categoryName,

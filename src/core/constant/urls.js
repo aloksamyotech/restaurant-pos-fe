@@ -1,4 +1,6 @@
 const base = 'http://localhost:7200/api/v1';
+const imageBase = 'http://localhost:7200';
+// let base = 'http://165.22.218.55:7200/api/v1'
 export const urls = Object.freeze({
   base,
   user: {
@@ -10,13 +12,15 @@ export const urls = Object.freeze({
     create: base + '/category/addCategory',
     get: base + '/category/getCategory',
     update: base + '/category/updateCategory/:id',
-    delete: base + '/category/deleteCategory/:id'
+    delete: base + '/category/deleteCategory/:id',
+    image: imageBase
   },
   item: {
     create: base + '/item/addItem',
     get: base + '/item/getItems',
     update: base + '/item/updateItem/:id',
-    delete: base + '/item/deleteItem/:id'
+    delete: base + '/item/deleteItem/:id',
+    image: imageBase
   },
   modifier: {
     create: base + '/modifier/addModifier',

@@ -1,5 +1,5 @@
 export const enums = Object.freeze({
-    Daily:'Daily',
-    Weekly:'Weekly',
-    Monthly:'Monthly'
+  Daily: 'Daily',
+  Weekly: 'Weekly',
+  Monthly: 'Monthly'
 });

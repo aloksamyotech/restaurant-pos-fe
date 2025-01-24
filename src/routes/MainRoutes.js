@@ -5,14 +5,14 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
-// const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
-const Sales = Loadable(lazy(() => import('views/Sales')));
+
 const POS = Loadable(lazy(() => import('views/POS')));
 const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
 const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
 const Categories = Loadable(lazy(() => import('views/Categories')));
-const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
+
 const Order = Loadable(lazy(() => import('views/Order')));
 const OrderView = Loadable(lazy(() => import('views/Order/orderView')));
 const Items = Loadable(lazy(() => import('views/Items')));
@@ -44,15 +44,7 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'sales',
-          element: <Sales />
-        }
-      ]
-    },
+
     {
       path: 'dashboard',
       children: [
@@ -80,15 +72,7 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'kitchen',
-          element: <Kitchen />
-        }
-      ]
-    },
+
     {
       path: 'dashboard',
       children: [

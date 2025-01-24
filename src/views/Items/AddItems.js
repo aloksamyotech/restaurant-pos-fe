@@ -77,7 +77,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
     }
 
     const response = await sentApi(urls?.item?.create, formData);
-
+    fetchData();
     reset();
     onClose();
     setSnackbarMessage('Item added successfully!');

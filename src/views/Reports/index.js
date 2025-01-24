@@ -18,7 +18,7 @@ import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 
 import { Stack } from '@mui/system';
-import {enums} from 'core/constant/constant';
+import { enums } from 'core/constant/constant';
 
 const OverallReport = () => {
   const columns = [
@@ -165,7 +165,13 @@ const OverallReport = () => {
 
   return (
     <>
-      <Stack direction="row" spacing={50}>
+      <Stack
+        direction="row"
+        spacing={50}
+        sx={{
+          justifyContent: 'center'
+        }}
+      >
         <Typography variant="h1" color="Highlight">
           Overall Report
         </Typography>

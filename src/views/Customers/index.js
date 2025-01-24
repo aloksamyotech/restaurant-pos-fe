@@ -77,7 +77,18 @@ const Categories = () => {
       align: 'center',
 
       flex: 1,
-      renderCell: (params) => <VisibilityIcon color="primary" onClick={() => handleViewClick(params.row)} />
+      renderCell: (params) => (
+        <VisibilityIcon
+          color="primary"
+          onClick={() => handleViewClick(params.row)}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              boxShadow: 3
+            }
+          }}
+        />
+      )
     }
   ];
 
