@@ -160,7 +160,8 @@ const OverallReport = () => {
     { label: 'Total cost amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.cost, 0) },
     { label: 'Total discount amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.discount, 0) },
     { label: 'Total profit amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.profit, 0) },
-    { label: 'Total payable amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) }
+    { label: 'Total payable amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) },
+    { label: 'Tax', value: 'Rs.' + 0 }
   ];
 
   return (

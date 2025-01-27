@@ -7,16 +7,17 @@ import {
   TextField,
   Button,
   Grid,
-  MenuItem,
-  InputAdornment,
+  
   Typography,
   IconButton
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { postApi } from 'core/apis/apiClient.js';
+
 import { sentApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
+
 
 const AddCategoryDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -36,15 +37,18 @@ const AddCategoryDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSn
       setDishImage(file);
     }
   };
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
     if (dishImage) {
       formData.append('categoryImage', dishImage);
     }
-
+    setIsLoading(true);
+    try{
     const response = await sentApi(urls?.foodCategory?.create, formData);
 
     fetchData();
@@ -52,12 +56,21 @@ const AddCategoryDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSn
     onClose();
     setSnackbarMessage('Category added successfully!');
     setSnackbarOpen(true);
+  }
+  catch (error) {
+    console.error(error);
+    
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add New Category</DialogTitle>
       <DialogContent>
+      {isLoading && (<Loader isVisible={isLoading}></Loader>
+          )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton
@@ -143,7 +156,7 @@ const AddCategoryDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSn
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">

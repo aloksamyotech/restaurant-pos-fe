@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box, Snackbar, Alert } from '@mui/material';
 import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import CartDialog from './Submit';
-import Dummy_Image from '../../../assets/images/Dummy_Image.png';
+
+import { urls } from 'core/constant/urls';
 
 const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
+  
+  
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
-
+  
   const handleRemoveDish = (id) => {
     setCart((prevCart) => prevCart.filter((cartItem) => cartItem?.id !== id));
   };
@@ -15,14 +17,15 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
   const handleIncrementQuantity = (id) => {
     setCart((prevCart) => prevCart.map((cartItem) => (cartItem?.id === id ? { ...cartItem, quantity: cartItem?.quantity + 1 } : cartItem)));
   };
-
+  
   const handleDecrementQuantity = (id) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
         cartItem?.id === id && cartItem?.quantity > 1 ? { ...cartItem, quantity: cartItem?.quantity - 1 } : cartItem
-      )
-    );
-  };
+  )
+);
+};
+
 
   const handleClearCart = () => {
     setCart([]);
@@ -100,7 +103,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                     }}
                   >
                     <Avatar
-                      src={cartItem?.image}
+                      src={`${urls?.item?.image}${cartItem?.image}`}
                       alt={cartItem?.name}
                       sx={{
                         width: 80,
