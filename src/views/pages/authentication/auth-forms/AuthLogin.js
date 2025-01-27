@@ -37,6 +37,7 @@ import Google from 'assets/images/icons/social-google.svg';
 import { postApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import { toast } from 'react-toastify';
+import { enums } from 'core/constant/constant';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -140,13 +141,13 @@ const FirebaseLogin = ({ ...others }) => {
               
               
               const Role = response.data.loginUser.role;
-              if (Role === 'superAdmin') {
+              if (Role === enums?.superAdmin) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Manager') {
+              } else if (Role === enums?.Admin) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Staff') {
+              } else if (Role === enums?.Staff) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Company') {
+              } else if (Role === enums?.Company) {
                 window.location.replace('/dashboard/default');
               }
             }
