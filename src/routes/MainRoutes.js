@@ -25,6 +25,7 @@ const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
 
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -174,6 +175,7 @@ const MainRoutes = {
         }
       ]
     }
+    
   ]
 };
 

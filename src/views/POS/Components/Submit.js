@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -19,112 +19,107 @@ import {
   Select,
   MenuItem,
   IconButton,
-  Snackbar
+  Snackbar,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
-
 import { useNavigate } from 'react-router';
-import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
-  const {
-    handleSubmit,
-    reset,
-    register,
-    formState: { errors }
-  } = useForm();
+  const { handleSubmit, reset, register, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
-  const onSubmit = async () => {
-    let items = cartItems.map((item) => {
-      return {
-        id: item?.id,
-        quantity: item?.quantity,
-        name: item?.name,
-        price: item?.price,
-        cost: item?.cost
-      };
-    });
-    const phonedata = {
-      phone: phone
-    };
-    const customerResponse = await postApi(urls?.customer?.create, phonedata);
-    const customerId = customerResponse?.data?._id;
-
-    if (!customerId) {
-      return;
-    }
-    const payload = {
-      customerId,
-      items,
-      totalPrice,
-      discount,
-      paymentMode,
-      phone
-    };
-    const orderResponse = await postApi(urls?.order?.create, payload);
-    const orderId = orderResponse?.data?._id;
-
-    if (!orderId) {
-      return;
-    }
-    const paymentPayload = {
-      orderId,
-      paymentMode,
-      amount: totalPrice
-    };
-    const paymentResponse = await postApi(urls?.payment?.create, paymentPayload);
-    const paymentId = paymentResponse?.data?._id;
-
-    if (!paymentId) {
-      return;
-    }
-    const invoicePayload = {
-      paymentId,
-      customerId,
-      orderId,
-      paymentMode,
-      amount: totalPrice,
-      discount,
-      items
-    };
-    const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
-    const invoiceId = invoiceResponse?.data?._id;
-
-    onClose();
-
-    setSnackbarOpen(true);
-
-    setNavigateTo(`invoice/${invoiceId}`);
-    reset();
-    resetCart();
-  };
-
+  const [loading, setLoading] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
   const [paymentMode, setPaymentMode] = useState('Cash');
+  const [discount, setDiscount] = useState(0);
+  const [phone, setPhoneNumber] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [navigateTo, setNavigateTo] = useState('');
 
   const handlePaymentModeChange = (event) => {
     setPaymentMode(event.target.value);
   };
 
-  const [discount, setDiscount] = useState(0);
   const handleDiscountChange = (e) => {
     const value = parseFloat(e.target.value);
     setDiscount(value);
   };
-  const [phone, setPhoneNumber] = useState('');
+
   const handleMobileChange = (e) => {
     const value = e.target.value;
-    setPhoneNumber(value);
+    if (/^\d{0,10}$/.test(value)) {
+      setPhoneNumber(value);
+    }
   };
 
   const adjustedPrice = totalPrice - discount;
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [navigateTo, setNavigateTo] = useState('');
+  const onSubmit = async () => {
+    setLoading(true); 
+    try {
+      let items = cartItems.map((item) => ({
+        id: item?.id,
+        quantity: item?.quantity,
+        name: item?.name,
+        price: item?.price,
+        cost: item?.cost,
+      }));
+
+      const phonedata = { phone };
+      const customerResponse = await postApi(urls?.customer?.create, phonedata);
+      const customerId = customerResponse?.data?._id;
+
+      if (!customerId) {
+        return;
+      }
+      const payload = {
+        customerId,
+        items,
+        totalPrice,
+        discount,
+        paymentMode,
+        phone,
+      };
+      const orderResponse = await postApi(urls?.order?.create, payload);
+      const orderId = orderResponse?.data?._id;
+
+      if (!orderId) {
+        return;
+      }
+      const paymentPayload = {
+        orderId,
+        paymentMode,
+        amount: totalPrice,
+      };
+      const paymentResponse = await postApi(urls?.payment?.create, paymentPayload);
+      const paymentId = paymentResponse?.data?._id;
+
+      if (!paymentId) {
+        return;
+      }
+      const invoicePayload = {
+        paymentId,
+        customerId,
+        orderId,
+        paymentMode,
+        amount: totalPrice,
+        discount,
+        items,
+      };
+      const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
+      const invoiceId = invoiceResponse?.data?._id;
+
+      setSnackbarOpen(true); 
+      setNavigateTo(`invoice/${invoiceId}`);
+      reset();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -134,7 +129,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
             backgroundColor: '#1976d2',
             color: '#fff',
             textAlign: 'center',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           }}
         >
           Cart Summary
@@ -150,8 +145,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red'
-                }
+                  color: 'red',
+                },
               }}
             >
               <CloseIcon />
@@ -165,12 +160,12 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                       sx={{
                         backgroundColor: '#fff',
                         borderRadius: '8px',
-                        mb: 2
+                        mb: 2,
                       }}
                     >
                       <Grid container alignItems="center" spacing={2}>
                         <Grid item xs={2}>
-                          <Avatar src={item?.image} alt={item?.name} sx={{ width: 56, height: 56 }} />
+                          <Avatar src={`${urls?.item?.image}${item?.image}`} alt={item?.name} sx={{ width: 56, height: 56 }} />
                         </Grid>
                         <Grid item xs={7}>
                           <ListItemText
@@ -206,7 +201,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                       >
                         <MenuItem value="Cash">Cash</MenuItem>
                         <MenuItem value="UPI">UPI</MenuItem>
-                        <MenuItem value="UPI">Card</MenuItem>
+                        <MenuItem value="Card">Card</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
@@ -226,13 +221,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                       label="Mobile Number"
                       variant="outlined"
                       value={phone}
-                      onChange={(e) => {
-                        const input = e.target.value;
-
-                        if (/^\d{0,10}$/.test(input)) {
-                          setPhoneNumber(input);
-                        }
-                      }}
+                      onChange={handleMobileChange}
                       error={phone.length > 0 && phone.length !== 10}
                       helperText={phone.length > 0 && phone.length !== 10 ? 'Mobile number must be exactly 10 digits.' : ''}
                     />
@@ -246,7 +235,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                     textAlign: 'right',
                     backgroundColor: '#fff',
                     padding: '16px',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
                   }}
                 >
                   <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -267,11 +256,11 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               sx={{
                 justifyContent: 'center',
                 backgroundColor: '#f9f9f9',
-                padding: '16px'
+                padding: '16px',
               }}
             >
-              <Button type="submit" variant="contained" color="primary">
-                Place the order
+              <Button type="submit" variant="contained" color="primary" disabled={loading}>
+                {loading ? 'Placing Order...' : 'Place the order'}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
                 Close
@@ -291,6 +280,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               color="primary"
               onClick={() => {
                 setSnackbarOpen(false);
+                setOrderPlaced(true);
+                setLoading(false);
                 navigate(navigateTo);
               }}
             >
@@ -300,6 +291,10 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               color="secondary"
               onClick={() => {
                 setSnackbarOpen(false);
+                resetCart();
+                setOrderPlaced(false);
+                setLoading(false);
+                onClose();
                 navigate('/dashboard/pos');
               }}
             >

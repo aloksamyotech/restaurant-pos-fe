@@ -34,6 +34,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
+import { postApi } from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { toast } from 'react-toastify';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -78,7 +81,7 @@ const FirebaseLogin = ({ ...others }) => {
                 <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
               </Box>
               Sign in with Google
-            </Button>
+            </Button>   
           </AnimateButton>
         </Grid>
         <Grid item xs={12}>
@@ -120,26 +123,38 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: 'admin@gmail.com',
+          password: 'admin123',
           submit: null
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        onSubmit={async (values) => {
           try {
-            if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
+            const response = await postApi(urls?.login, values);
+            if (response.success === true) {
+              toast.success('Login Successfull');
+              localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.accessToken);
+              
+              
+              const Role = response.data.loginUser.role;
+              if (Role === 'superAdmin') {
+                window.location.replace('/dashboard/default');
+              } else if (Role === 'Manager') {
+                window.location.replace('/dashboard/default');
+              } else if (Role === 'Staff') {
+                window.location.replace('/dashboard/default');
+              } else if (Role === 'Company') {
+                window.location.replace('/dashboard/default');
+              }
             }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
+          } catch (error) {
+            if (error.response) {
+              toast.error(error.response.data.error || 'Unexpected error');
+            } else {
+              toast.error('Unexpected Error Occurred');
             }
           }
         }}

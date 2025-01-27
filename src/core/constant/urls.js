@@ -68,5 +68,10 @@ export const urls = Object.freeze({
     get: base + '/invoice/getInvoices',
     getbyid: base + '/invoice/fetchInvoice/:id',
     getbyorderid: base + '/invoice/fetchInvoiceByOrderId/:id'
-  }
+  },
+   
+    login: base + '/user/login',
+    
+  
+
 });

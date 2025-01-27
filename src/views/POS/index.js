@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import SearchBar from './Components/SearchBar';
 import DishesGrid from './Components/DishesGrid';
-import { Container, Grid, Paper, Typography, Card, Button, Stack } from '@mui/material';
+import { Container, Grid, Card, } from '@mui/material';
 import useDishes from './Components/Dishes';
 import Cart from './Components/cart';
 import Dropdown from './Components/dropDown';
 import CartDialog from './Components/Submit';
-import { width } from '@mui/system';
+
 
 const POS = () => {
   const [cartStore, setCart] = useState([]);
@@ -30,10 +30,10 @@ const POS = () => {
   };
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
-  const [cartItems, setCartItems] = useState([]);
+ 
 
   const resetCart = () => {
-    setCartItems([]);
+    setCart([]);
   };
 
   return (
