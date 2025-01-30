@@ -1,82 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-
+import { getApi } from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { urls } from 'core/constant/urls';
-import { getApi } from 'core/apis/apiClient.js';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 const Categories = () => {
   const navigate = useNavigate();
 
-  function handleClick(event) {
-    event?.preventDefault();
-  }
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
-      Customers
+      Orders
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      customer
+      Orders
     </Typography>
   ];
+  function handleClick(event) {
+    event?.preventDefault();
+  }
   const handleViewClick = (row) => {
-    navigate(`/dashboard/customer/customerview/${row.id}`, { state: row });
+    navigate(`/dashboard/order/orderview/${row.id}`, { state: row });
   };
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
-
     {
-      field: 'customer',
-      headerName: 'Customer ',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      editable: true
-    },
-
-    {
-      field: 'email',
-      headerName: 'Email',
-      type: 'string',
-      sortable: false,
+      field: 'serial',
+      headerName: 'S.No',
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'phone',
-      headerName: 'Phone',
-      type: 'string',
-      sortable: false,
+      headerName: 'Phone No.',
       flex: 1,
+
       headerAlign: 'center',
       align: 'center'
     },
+
     {
-      field: 'address',
-      headerName: 'Address',
-      type: 'string',
-      sortable: false,
+      field: 'items',
+      headerName: 'Item Details',
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
+
+    {
+      field: 'totalPrice',
+      headerName: 'Total ',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+
+    {
+      field: 'paymentStatus',
+      headerName: 'Payment Status',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+
     {
       field: 'action',
       headerName: 'Action',
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
-
-      flex: 1,
       renderCell: (params) => (
         <VisibilityIcon
           color="primary"
@@ -91,15 +90,22 @@ const Categories = () => {
       )
     }
   ];
-
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-    const response = await getApi(urls?.customer?.get);
+    const response = await getApi(urls?.order?.get);
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      name: item?.categoryName,
-      phone: item?.phone
+      phone: item?.phone || 'N/A',
+
+      items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
+
+      totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
+
+      paymentStatus: 'Paid',
+      chef: item?.chef || 'N/A',
+      type: item?.type || 'N/A'
     }));
 
     setRows(formattedData);
@@ -110,11 +116,11 @@ const Categories = () => {
   }, []);
 
   return (
-    <Container>
+    <Container sx={{}}>
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Customers
+            <Iconify icon="" /> Orders
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -140,8 +146,8 @@ const Categories = () => {
       </Card>
 
       <Card>
-        <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} columns={columns} />
+        <Box sx={{ height: 400 }}>
+          <DataGrid rows={rows} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

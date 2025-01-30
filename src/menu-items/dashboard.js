@@ -8,8 +8,8 @@ import AccountBalanceWallet from '@mui/icons-material/AccountBalanceWallet';
 import Payments from '@mui/icons-material/Payments';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-
-
+import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 import {
   IconHome,
@@ -20,12 +20,10 @@ import {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-  // IconCategoryFilled,
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
-  IconClipboardList,
-  
+  IconClipboardList
 } from '@tabler/icons';
 
 // constant
@@ -38,7 +36,7 @@ const icons = {
   IconPhoneCall,
   IconAntennaBars5,
   IconChecklist,
-  // IconCategoryFilled,
+  SummarizeIcon,
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
@@ -51,13 +49,13 @@ const icons = {
   AccountBalanceWallet,
   Payments,
   RestaurantIcon,
-  PointOfSaleIcon
-
+  PointOfSaleIcon,
+  ReorderSharpIcon
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-export const dashboard = {
+export const POS = {
   title: 'Restaurant POS',
   type: 'group',
   children: [
@@ -68,19 +66,11 @@ export const dashboard = {
       url: '/dashboard/default',
       icon: icons.IconHome,
       breadcrumbs: false
-    },
-    {
-      id: '01',
-      title: 'Sales',
-      type: 'item',
-      url: '/dashboard/sales',
-      icon: icons.IconAntennaBars5,
-      breadcrumbs: false
-    }]
+    }
+  ]
 };
 
-
-export const dashboard1 = {
+export const Portal = {
   title: 'Portal',
   type: 'group',
   children: [
@@ -92,17 +82,18 @@ export const dashboard1 = {
       icon: icons.PointOfSaleIcon,
       breadcrumbs: false
     },
+
     {
-      id: '03',
-      title: 'Kitchen',
+      id: '13',
+      title: 'Order',
       type: 'item',
-      url: '/dashboard/kitchen',
-      icon: icons.RestaurantIcon,
+      url: '/dashboard/order',
+      icon: icons.ReorderSharpIcon,
       breadcrumbs: false
     }
   ]
 };
-export const dashboard2 = {
+export const Food = {
   title: 'FOOD',
   type: 'group',
   children: [
@@ -140,12 +131,10 @@ export const dashboard2 = {
     }
   ]
 };
-export const dashboard3 = {
+export const Expenses = {
   title: 'Expenses',
   type: 'group',
   children: [
-
-
     {
       id: '08',
       title: 'Expense Type',
@@ -162,15 +151,26 @@ export const dashboard3 = {
       icon: icons.Payments,
       breadcrumbs: false
     }
-   
   ]
 };
-export const dashboard4 = {
+export const Report = {
+  title: 'Report',
+  type: 'group',
+  children: [
+    {
+      id: '14',
+      title: 'Overall Report',
+      type: 'item',
+      url: '/dashboard/overallReport',
+      icon: icons.SummarizeIcon,
+      breadcrumbs: false
+    }
+  ]
+};
+export const People = {
   title: 'People',
   type: 'group',
   children: [
-
-
     {
       id: '10',
       title: 'Users',
@@ -179,8 +179,8 @@ export const dashboard4 = {
       icon: icons.IconUsers,
       breadcrumbs: false
     },
-  
-{
+
+    {
       id: '12',
       title: 'Customers',
       type: 'item',
@@ -190,7 +190,3 @@ export const dashboard4 = {
     }
   ]
 };
-
-
-
-

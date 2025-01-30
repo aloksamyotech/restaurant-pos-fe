@@ -1,51 +1,39 @@
-import React, { useState, useEffect } from "react";
-import {
-  Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link,
-} from "@mui/material";
-import SortIcon from "@mui/icons-material/Sort";
-import Iconify from "../../ui-component/iconify";
-import AddItemDialog from "./AddItems";
+import React, { useState, useEffect } from 'react';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import SortIcon from '@mui/icons-material/Sort';
+import Iconify from '../../ui-component/iconify';
+import AddItemDialog from './AddItems';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/apis/apiClient.js';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { deleteApi } from 'core/apis/apiClient.js';
-import DeleteConfirmationDialog from "./Delete.js";
+import DeleteConfirmationDialog from './Delete.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import EditDialog from "./action";
+import EditDialog from './action';
 import { Snackbar } from '@mui/material';
-import { getAllCategories, getAllItems } from "core/apis/allapis";
 
+import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 
 const Categories = () => {
-
-
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
       <HomeIcon />
     </Link>,
-    <Link
-      underline="hover"
-      key="2"
-      color="primary"
-      href="/material-ui/getting-started/installation/"
-      onClick={handleClick}
-    >
+    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
       Food Items
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
       Items
-    </Typography>,
+    </Typography>
   ];
   function handleClick(event) {
     event?.preventDefault();
-
   }
   const [dialogOpen, setDialogOpen] = useState(false);
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
-
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -56,89 +44,86 @@ const Categories = () => {
   };
   const handleEditDialogClose = () => {
     setEditDialogOpen(false);
-
   };
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-
   const columns = [
     {
-      field: 'serial', headerName: 'S.No', width: 20, headerAlign: 'center',
-      align: 'center',
+      field: 'serial',
+      headerName: 'S.No',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
     },
     {
       field: 'name',
       headerName: 'Item Name',
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'center'
     },
     {
       field: 'desc',
       headerName: 'Description',
-      width: 150,
+      flex: 1,
 
       headerAlign: 'center',
       align: 'center',
-      editable: true,
+      editable: true
     },
 
     {
       field: 'image',
       headerName: 'Dish Image',
-      width: 100,
+      width: 150,
       editable: true,
-      renderCell: (params) => (
-        <img
-          src={params?.row?.image}
-          alt={params?.row?.image}
-          style={{ width: '50px', height: '50px', borderRadius: '50%' }}
-        />
-      ),
+      renderCell: (params) =>
+        params.value ? (
+          <img src={params.value} alt="Category" style={{ maxWidth: '100px', height: 'auto' }} />
+        ) : (
+          <Typography>No Image</Typography>
+        )
     },
-
-
 
     {
       field: 'cost',
       headerName: 'Cost',
       type: 'number',
-      width: 100,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'center'
     },
     {
       field: 'price',
       headerName: 'Price',
       type: 'number',
       sortable: false,
-      width: 100,
+      flex: 1,
       headerAlign: 'center',
-      align: 'center',
-
+      align: 'center'
     },
     {
       field: 'categoryId',
       headerName: 'Category',
       type: 'string',
-      width: 110,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'center'
     },
     {
       field: 'ingredient',
       headerName: 'Ingredients',
       type: [],
-      width: 110,
+      flex: 1,
       editable: true,
       headerAlign: 'center',
-      align: 'center',
+      align: 'center'
     },
     {
       field: 'action',
@@ -146,18 +131,36 @@ const Categories = () => {
       headerAlign: 'center',
       align: 'center',
 
-      width: 110,
+      flex: 1,
       renderCell: (params) => (
-
         <Stack direction="row" spacing={4}>
-
-          <EditIcon color="primary" onClick={() => handleEditDialogOpen(params?.row)} />
-          <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData}
-            tag={selectedTag} setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen} />
+          <EditIcon
+            color="primary"
+            onClick={() => handleEditDialogOpen(params?.row)}
+            sx={{
+              cursor: 'pointer',
+              '&:hover': {
+                boxShadow: 3
+              }
+            }}
+          />
+          <EditDialog
+            open={editDialogOpen}
+            onClose={handleEditDialogClose}
+            fetchData={fetchData}
+            tag={selectedTag}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
 
           <DeleteIcon
-            sx={{ color: "red", cursor: "pointer" }}
+            sx={{
+              color: 'red',
+              cursor: 'pointer',
+              '&:hover': {
+                boxShadow: 3
+              }
+            }}
             onClick={() => setDeleteDialogOpen(params?.row?.id)}
           />
 
@@ -171,46 +174,33 @@ const Categories = () => {
               setSnackbarMessage('Item deleted successfully!');
               setSnackbarOpen(true);
               setDeleteDialogOpen(null);
-
             }}
           />
         </Stack>
-
-
-
-      ),
+      )
     }
   ];
 
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-    
-    const response = await getApi(urls?.item.get);
-       
+    const response = await getApi(urls?.item?.get);
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       name: item?.name,
       desc: item?.desc,
-      image: item?.image,
+      image: item?.itemImage ? `${urls?.item?.image}${item.itemImage}` : Dummy_Image,
       cost: item?.cost,
       price: item?.price,
       categoryId: item?.categoryId?.categoryName,
-      ingredient: item?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
-  
-
-      
+      ingredient: item?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A'
     }));
-   
-
 
     setRows(formattedData);
-
-
   };
 
   useEffect(() => {
-
     fetchData();
   }, []);
 
@@ -240,19 +230,17 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddItemDialog open={dialogOpen} onClose={handleDialogClose} fetchData={fetchData}
+          <AddItemDialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            fetchData={fetchData}
             setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen} />
+            setSnackbarOpen={setSnackbarOpen}
+          />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
-            <TextField
-              select
-              size="small"
-              defaultValue="Created"
-              SelectProps={{ native: true }}
-              sx={{ width: "120px" }}
-            >
+            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
               <option value="Created">Created</option>
               <option value="Name">Name</option>
             </TextField>
@@ -265,15 +253,9 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            rowHeight={75}
-            columns={columns}
-
-
-          />
+          <DataGrid rows={rows} rowHeight={100} columns={columns} />
         </Box>
-      </Card >
+      </Card>
     </Container>
   );
 };

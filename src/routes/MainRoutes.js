@@ -4,23 +4,26 @@ import { lazy } from 'react';
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
-
 // dashboard routing
-// const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js'))); 
-const Sales = Loadable(lazy(() => import('views/Sales')));  
-const POS = Loadable(lazy(() => import('views/POS')));    
+
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
+
+const POS = Loadable(lazy(() => import('views/POS')));
+const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
 const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
-const Categories = Loadable(lazy(() => import('views/Categories')));    
-const Kitchen = Loadable(lazy(() => import('views/Kitchen')));  
+const Categories = Loadable(lazy(() => import('views/Categories')));
+
+const Order = Loadable(lazy(() => import('views/Order')));
+const OrderView = Loadable(lazy(() => import('views/Order/orderView')));
 const Items = Loadable(lazy(() => import('views/Items')));
 const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Expenses = Loadable(lazy(() => import('views/Expenses')));
 const Users = Loadable(lazy(() => import('views/Users')));
-// const UserRoles = Loadable(lazy(() => import('views/UserRoles')));
+
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
+const OverallReport = Loadable(lazy(() => import('views/Reports')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -42,12 +45,13 @@ const MainRoutes = {
         }
       ]
     },
+
     {
       path: 'dashboard',
       children: [
         {
-          path: 'sales',
-          element: <Sales />
+          path: 'pos',
+          element: <POS />
         }
       ]
     },
@@ -55,8 +59,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'pos',
-          element: <POS/>
+          path: 'pos/invoice/:invoiceId',
+          element: <Invoice />
         }
       ]
     },
@@ -69,16 +73,26 @@ const MainRoutes = {
         }
       ]
     },
+
     {
       path: 'dashboard',
       children: [
         {
-          path: 'kitchen',
-          element: <Kitchen/>
+          path: 'order',
+          element: <Order />
         }
       ]
     },
-     {
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'order/orderview/:id',
+          element: <OrderView />
+        }
+      ]
+    },
+    {
       path: 'dashboard',
       children: [
         {
@@ -87,7 +101,7 @@ const MainRoutes = {
         }
       ]
     },
-   
+
     {
       path: 'dashboard',
       children: [
@@ -119,6 +133,15 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'overallReport',
+          element: <OverallReport />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'expenses',
           element: <Expenses />
         }
@@ -133,15 +156,7 @@ const MainRoutes = {
         }
       ]
     },
-    // {
-    //   path: 'dashboard',
-    //   children: [
-    //     {
-    //       path: 'userRoles',
-    //       element: <UserRoles />
-    //     }
-    //   ]
-    // },
+
     {
       path: 'dashboard',
       children: [
@@ -155,8 +170,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'customer/customerview',
-          element: <CustomersView/>
+          path: 'customer/customerview/:id',
+          element: <CustomersView />
         }
       ]
     }

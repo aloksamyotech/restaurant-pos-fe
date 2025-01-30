@@ -1,23 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
+import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
-
-const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit, reset,formState: { errors } } = useForm();
-
-
-
+const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
   const onSubmit = async (data) => {
-    const formData = { ...data,expenseNameId: data.expenseNameId };
- 
+    const formData = { ...data, expenseNameId: data.expenseNameId };
+
     const response = await postApi(urls?.expense?.create, formData);
-   
+
     fetchData();
     reset();
     onClose();
@@ -26,15 +39,13 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
 
-
   useEffect(() => {
     const fetchExpenseTypes = async () => {
       try {
         const response = await getApi(urls?.expenseType?.get);
         setExpenseTypes(response?.data);
-        
       } catch (error) {
-        console.error("Failed to fetch expense types:", error);
+        console.error('Failed to fetch expense types:', error);
       }
     };
 
@@ -47,8 +58,7 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -56,24 +66,19 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-
-
-
 
             <Grid mt={1} item xs={12}>
               <Controller
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense is required',
-                  maxLength: { value: 50, message: 'Expense must be at most 50 characters' }
-                 }}
+                rules={{ required: 'Expense is required', maxLength: { value: 50, message: 'Expense must be at most 50 characters' } }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -93,12 +98,11 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
-
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -138,7 +142,6 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
               />
             </Grid>
 
-
             <Grid item xs={12}>
               <Controller
                 name="amount"
@@ -150,7 +153,7 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid amount format'
                   },
-                  validate: value => (value >= 0) || 'amount must be positive',
+                  validate: (value) => value >= 0 || 'amount must be positive',
                   maxLength: { value: 10, message: 'amount must be at most 10 digits' }
                 }}
                 render={({ field }) => (
@@ -169,15 +172,6 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
                 )}
               />
             </Grid>
-
-
-
-
-
-
-
-
-
           </Grid>
 
           <DialogActions>
@@ -187,7 +181,6 @@ const AddExpense = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpe
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-
           </DialogActions>
         </form>
       </DialogContent>

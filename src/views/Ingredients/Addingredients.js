@@ -1,25 +1,39 @@
 import React, { useState } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, MenuItem, InputAdornment, Typography,IconButton } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  InputAdornment,
+  Typography,
+  IconButton
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { urls } from "core/constant/urls";
-import {postApi} from 'core/apis/apiClient.js';
+import { urls } from 'core/constant/urls';
+import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 
+const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm();
 
+  const onSubmit = async (data) => {
+    const formData = { ...data };
 
-const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSnackbarOpen }) => {
-  const { control, handleSubmit,reset, formState: { errors } } = useForm(); 
-
-  
-  const onSubmit =async (data) => {
-    const formData = { ...data}; 
-    
     const response = await postApi(urls?.ingredient?.create, formData);
     fetchData();
     reset();
     onClose();
     setSnackbarMessage('Ingredient added successfully!');
-  setSnackbarOpen(true); 
+    setSnackbarOpen(true);
   };
 
   return (
@@ -28,8 +42,7 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
-            
-          <IconButton
+            <IconButton
               onClick={onClose}
               sx={{
                 position: 'absolute',
@@ -37,21 +50,22 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
             </IconButton>
-            
-             <Grid mt={1} item xs={12}>
+
+            <Grid mt={1} item xs={12}>
               <Controller
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Ingredient Name is required',
+                rules={{
+                  required: 'Ingredient Name is required',
                   maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
-                 }}
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -71,12 +85,11 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                 control={control}
                 defaultValue=""
                 rules={{
-                  validate: value => {
-                    const wordCount = value.trim().split(/\s+/).length; 
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
                     return wordCount <= 200 || 'Description must be at most 200 words';
                   }
                 }}
-                
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -90,7 +103,6 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
               />
             </Grid>
 
-          
             <Grid item xs={6}>
               <Controller
                 name="cost"
@@ -102,9 +114,8 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid cost format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
-                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -123,7 +134,6 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
               />
             </Grid>
 
-           
             <Grid item xs={6}>
               <Controller
                 name="price"
@@ -135,9 +145,8 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid price format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
-                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -166,9 +175,8 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                     value: /^\d+(\.\d{1,2})?$/,
                     message: 'Invalid quantity format'
                   },
-                  validate: value => (value >= 0) || 'Cost must be positive',
+                  validate: (value) => value >= 0 || 'Cost must be positive',
                   maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
-                
                 }}
                 render={({ field }) => (
                   <TextField
@@ -179,52 +187,46 @@ const AddIngredientDialog = ({ open, onClose,fetchData,setSnackbarMessage, setSn
                     error={!!errors?.quantity}
                     helperText={errors?.quantity ? errors?.quantity?.message : ''}
                     type="number"
-                    
                   />
                 )}
               />
             </Grid>
             <Grid item xs={6}>
-  <Controller
-    name="unit"
-    control={control}
-    defaultValue=""
-    rules={{
-      required: 'Unit is required',
-    }}
-    render={({ field }) => (
-      <TextField
-        {...field}
-        select
-        label="Unit"
-        variant="outlined"
-        fullWidth
-        error={!!errors.unit}
-        helperText={errors?.unit ? errors?.unit.message : ''}
-      >
-        {['kg', 'ltr', 'pieces'].map((unit) => (
-          <MenuItem key={unit} value={unit}>
-            {unit}
-          </MenuItem>
-        ))}
-      </TextField>
-    )}
-  />
-</Grid>
-
-
-
-           
+              <Controller
+                name="unit"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: 'Unit is required'
+                }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    select
+                    label="Unit"
+                    variant="outlined"
+                    fullWidth
+                    error={!!errors.unit}
+                    helperText={errors?.unit ? errors?.unit.message : ''}
+                  >
+                    {['kg', 'ltr', 'pieces'].map((unit) => (
+                      <MenuItem key={unit} value={unit}>
+                        {unit}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
           </Grid>
 
           <DialogActions>
-          <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            
           </DialogActions>
         </form>
       </DialogContent>

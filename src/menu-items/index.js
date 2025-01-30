@@ -1,9 +1,9 @@
-import {dashboard,dashboard1,dashboard2,dashboard3,dashboard4} from './dashboard';
+import { POS, Portal, Food, Expenses, Report, People } from './dashboard';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard,dashboard1,dashboard2,dashboard3,dashboard4]
+  items: [POS, Portal, Food, Expenses, Report, People]
 };
 
 export default menuItems;
