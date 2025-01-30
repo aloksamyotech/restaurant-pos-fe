@@ -6,10 +6,8 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { urls } from 'core/constant/urls';
 
 const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
-  
-  
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
-  
+
   const handleRemoveDish = (id) => {
     setCart((prevCart) => prevCart.filter((cartItem) => cartItem?.id !== id));
   };
@@ -17,15 +15,14 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
   const handleIncrementQuantity = (id) => {
     setCart((prevCart) => prevCart.map((cartItem) => (cartItem?.id === id ? { ...cartItem, quantity: cartItem?.quantity + 1 } : cartItem)));
   };
-  
+
   const handleDecrementQuantity = (id) => {
     setCart((prevCart) =>
       prevCart.map((cartItem) =>
         cartItem?.id === id && cartItem?.quantity > 1 ? { ...cartItem, quantity: cartItem?.quantity - 1 } : cartItem
-  )
-);
-};
-
+      )
+    );
+  };
 
   const handleClearCart = () => {
     setCart([]);

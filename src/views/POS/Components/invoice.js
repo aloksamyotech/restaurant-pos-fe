@@ -7,6 +7,7 @@ import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import css from 'assets/printInvoice.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router';
 
 const Invoice = (props) => {
   const params = useParams();
@@ -55,6 +56,8 @@ const Invoice = (props) => {
     fetchData();
   }, [invoiceId]);
 
+  const finalPrice = rowData.totalPrice - rowData.discount;
+
   const columns = [
     {
       field: 'serial',
@@ -93,16 +96,14 @@ const Invoice = (props) => {
     window.print();
   };
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
-
   return (
     <Box sx={{ padding: 4, maxWidth: '100%', margin: '0 auto' }} id="invoice-print">
       <Paper elevation={3} sx={{ padding: 4 }}>
         <Typography variant="h3" textAlign="center" color="primary" gutterBottom>
           Invoice
+        </Typography>
+        <Typography variant="h3" textAlign="left" color="primary" gutterBottom>
+          Apna Restaurant
         </Typography>
         <Typography variant="h4" textAlign="Right" color="primary" gutterBottom>
           Date: {new Date().toLocaleDateString()}
@@ -190,7 +191,7 @@ const Invoice = (props) => {
 
         <Box textAlign="right">
           <Typography variant="h4" color="primary">
-            Total: Rs. {rowData?.totalPrice}
+            Total: Rs. {finalPrice}
           </Typography>
         </Box>
 

@@ -32,7 +32,8 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
         name: tag?.name,
         desc: tag?.desc,
         amount: tag?.amount,
-        expenseNameId: tag?.expenseNameId?.expenseName,
+        expenseNameId: tag?.expenseNameId,
+        expenseCategoryId: tag?.expenseCategoryId,
         isAvailable: tag?.true
       });
     }
@@ -137,9 +138,8 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
             </Grid>
             <Grid item xs={12}>
               <Controller
-                name="expenseNameId"
+                name="expenseCategoryId"
                 control={control}
-                defaultValue="expenseNameId"
                 rules={{ required: 'Category is required' }}
                 render={({ field }) => (
                   <TextField

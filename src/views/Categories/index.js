@@ -1,33 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Stack,
-  Button,
-  Container,
-  Typography,
-  Card,
-  Box,
-  TextField,
-  Checkbox,
-  IconButton,
-  Grid,
-  Breadcrumbs,
-  Link,
-  Tooltip
-} from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-import AddCategoryDialog from './AddCategories';
+
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditDialog from './action';
+
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
+import CategoryDialog from './Category';
 
 const Categories = () => {
   const breadcrumbs = [
@@ -47,19 +34,23 @@ const Categories = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogOpen = () => {
+    setSelectedCategory(null);
+    setIsEditMode(false);
+    setDialogOpen(true);
+  };
+
   const handleDialogClose = () => setDialogOpen(false);
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const handleEditDialogOpen = (category) => {
     setSelectedCategory(category);
-    setEditDialogOpen(true);
+    setIsEditMode(true);
+    setDialogOpen(true);
   };
-  const handleEditDialogClose = () => {
-    setEditDialogOpen(false);
-  };
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -113,20 +104,11 @@ const Categories = () => {
               color="primary"
               onClick={() => handleEditDialogOpen(params.row)}
               sx={{
-                color: 'blue',
                 cursor: 'pointer',
                 '&:hover': {
                   boxShadow: 3
                 }
               }}
-            />
-            <EditDialog
-              open={editDialogOpen}
-              onClose={handleEditDialogClose}
-              fetchData={fetchData}
-              category={selectedCategory}
-              setSnackbarMessage={setSnackbarMessage}
-              setSnackbarOpen={setSnackbarOpen}
             />
 
             <DeleteIcon
@@ -205,12 +187,15 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Category
           </Button>
-          <AddCategoryDialog
+
+          <CategoryDialog
             open={dialogOpen}
             onClose={handleDialogClose}
+            category={selectedCategory}
             fetchData={fetchData}
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
+            isEdit={isEditMode}
           />
 
           <Stack direction="row" alignItems="center" spacing={1}>

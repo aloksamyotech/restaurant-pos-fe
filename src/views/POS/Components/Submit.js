@@ -19,7 +19,7 @@ import {
   Select,
   MenuItem,
   IconButton,
-  Snackbar,
+  Snackbar
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
@@ -28,7 +28,12 @@ import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 
 const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
-  const { handleSubmit, reset, register, formState: { errors } } = useForm();
+  const {
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors }
+  } = useForm();
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
@@ -59,14 +64,14 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
   const adjustedPrice = totalPrice - discount;
 
   const onSubmit = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       let items = cartItems.map((item) => ({
         id: item?.id,
         quantity: item?.quantity,
         name: item?.name,
         price: item?.price,
-        cost: item?.cost,
+        cost: item?.cost
       }));
 
       const phonedata = { phone };
@@ -82,7 +87,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
         totalPrice,
         discount,
         paymentMode,
-        phone,
+        phone
       };
       const orderResponse = await postApi(urls?.order?.create, payload);
       const orderId = orderResponse?.data?._id;
@@ -93,7 +98,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
       const paymentPayload = {
         orderId,
         paymentMode,
-        amount: totalPrice,
+        amount: totalPrice
       };
       const paymentResponse = await postApi(urls?.payment?.create, paymentPayload);
       const paymentId = paymentResponse?.data?._id;
@@ -108,12 +113,12 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
         paymentMode,
         amount: totalPrice,
         discount,
-        items,
+        items
       };
       const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
       const invoiceId = invoiceResponse?.data?._id;
 
-      setSnackbarOpen(true); 
+      setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
       reset();
     } catch (error) {
@@ -129,7 +134,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
             backgroundColor: '#1976d2',
             color: '#fff',
             textAlign: 'center',
-            fontWeight: 'bold',
+            fontWeight: 'bold'
           }}
         >
           Cart Summary
@@ -145,8 +150,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                 right: 8,
                 color: 'grey',
                 '&:hover': {
-                  color: 'red',
-                },
+                  color: 'red'
+                }
               }}
             >
               <CloseIcon />
@@ -160,7 +165,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                       sx={{
                         backgroundColor: '#fff',
                         borderRadius: '8px',
-                        mb: 2,
+                        mb: 2
                       }}
                     >
                       <Grid container alignItems="center" spacing={2}>
@@ -235,7 +240,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                     textAlign: 'right',
                     backgroundColor: '#fff',
                     padding: '16px',
-                    borderRadius: '8px',
+                    borderRadius: '8px'
                   }}
                 >
                   <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
@@ -256,7 +261,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               sx={{
                 justifyContent: 'center',
                 backgroundColor: '#f9f9f9',
-                padding: '16px',
+                padding: '16px'
               }}
             >
               <Button type="submit" variant="contained" color="primary" disabled={loading}>
@@ -292,7 +297,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               onClick={() => {
                 setSnackbarOpen(false);
                 resetCart();
-                setOrderPlaced(false);
+                setOrderPlaced(true);
                 setLoading(false);
                 onClose();
                 navigate('/dashboard/pos');
@@ -302,6 +307,13 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
             </Button>
           </>
         }
+      />
+      <Snackbar
+        open={orderPlaced}
+        autoHideDuration={3000}
+        onClose={() => setOrderPlaced(false)}
+        message="Your order placed successfully !"
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       />
     </>
   );

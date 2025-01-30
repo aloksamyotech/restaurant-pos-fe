@@ -34,16 +34,12 @@ export default function MultipleSelect({ onSelectionChange }) {
     const {
       target: { value }
     } = event;
-    //   setPersonName(
 
-    //     typeof value === 'string' ? value.split(',') : value,
-    //   );
-    // };
     const selectedValues = typeof value === 'string' ? value.split(',') : value;
     setPersonName(selectedValues);
 
     if (onSelectionChange) {
-      onSelectionChange(selectedValues); // Send data to parent
+      onSelectionChange(selectedValues);
     }
   };
   const [ingredient, setingredients] = React.useState([]);

@@ -36,6 +36,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
         desc: tag?.desc,
         ingredient: tag?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
         categoryId: tag?.categoryId.categoryName,
+        itemCategoryId: tag?.itemCategoryId,
         isAvailable: tag?.true
       });
       setSelectedIngredients(tag?.ingredientId?.map((ingredient) => ingredient?._id) || []);
@@ -203,12 +204,15 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
             </Grid>
 
             <Grid item xs={6}>
-              <MultipleSelect onSelectionChange={handleIngredientSelectionChange} />
+              <MultipleSelect
+                // value={selectedIngredients}
+                onSelectionChange={handleIngredientSelectionChange}
+              />
             </Grid>
 
             <Grid item xs={6}>
               <Controller
-                name="categoryId"
+                name="itemCategoryId"
                 control={control}
                 defaultValue=""
                 rules={{ required: 'Category is required' }}

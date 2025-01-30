@@ -50,7 +50,7 @@ export const updateApi = async (url, data, headers = {}) => {
 
     const defaultHeaders = {
       ...headers,
-      ...(isFormData ? {} : { 'Content-Type': 'application/json' })
+      ...(isFormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' })
     };
 
     const response = await axios.put(url, data, { headers: defaultHeaders });
