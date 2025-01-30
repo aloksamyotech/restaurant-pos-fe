@@ -56,8 +56,8 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
-    localStorage.removeItem("$2b$10$ehdPSDmr6P")
-    navigate("/login")
+    localStorage.removeItem('$2b$10$ehdPSDmr6P');
+    navigate('/login');
     console.log('Logout');
   };
 

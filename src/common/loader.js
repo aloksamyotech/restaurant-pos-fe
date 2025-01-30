@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import css from "./loader.css"
+import css from './loader.css';
 const Loader = ({ isVisible }) => {
   if (!isVisible) return null;
   return (
@@ -15,7 +15,7 @@ const Loader = ({ isVisible }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1300,
+        zIndex: 1300
       }}
     >
       <div className="loader"></div>
@@ -23,6 +23,6 @@ const Loader = ({ isVisible }) => {
   );
 };
 Loader.propTypes = {
-  isVisible: PropTypes.bool.isRequired,
+  isVisible: PropTypes.bool.isRequired
 };
 export default Loader;

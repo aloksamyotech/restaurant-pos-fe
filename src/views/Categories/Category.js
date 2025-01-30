@@ -1,32 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  Grid,
-  MenuItem,
-  InputAdornment,
-  Typography,
-  IconButton
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, Typography, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { updateApi } from 'core/apis/apiClient.js';
+import { sentApi, updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
 
-const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage, setSnackbarOpen, isEdit }) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
-    reset
+    reset,
+    formState: { errors }
   } = useForm();
 
   const [image, setImage] = useState(null);
-  const [dishImage, setDishImage] = useState('');
+  const [dishImage, setDishImage] = useState(null);
+
+  useEffect(() => {
+    if (isEdit && category) {
+      reset({
+        categoryName: category?.name || '',
+        desc: category?.desc || ''
+      });
+      setImage(category?.categoryImage || null);
+    } else {
+      reset({
+        categoryName: '',
+        desc: ''
+      });
+      setImage(null);
+      setDishImage(null);
+    }
+  }, [category, isEdit, reset]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,44 +42,56 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
     }
   };
 
-  useEffect(() => {
-    if (category) {
-      reset({
-        categoryName: category?.name,
-
-        desc: category?.desc
-      });
-      setImage(category?.categoryImage ? `${urls?.foodCategory?.image}${category.categoryImage}` : null);
-    }
-  }, [category, reset]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
 
-    if (dishImage) {
-      formData?.append('categoryImage', dishImage);
-    }
+    formData.append('categoryImage', dishImage);
 
-    const response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
+    setIsLoading(true);
+    setTimeout(async () => {
+      try {
+        let response;
+        if (isEdit) {
+          response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
 
-    if (response.success) {
-      fetchData();
-      setSnackbarMessage('Edited successfully!');
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarMessage('Failed to edit !');
-      setSnackbarOpen(true);
-    }
+          reset();
+        } else {
+          response = await sentApi(urls?.foodCategory?.create, formData);
+          reset();
+        }
 
-    onClose();
+        if (response.success) {
+          fetchData();
+          reset();
+          setImage(null);
+          setDishImage(null);
+          onClose();
+          setSnackbarMessage(isEdit ? 'Category updated successfully!' : 'Category added successfully!');
+          setSnackbarOpen(true);
+        } else {
+          setSnackbarMessage(isEdit ? 'Failed to update category!' : 'Failed to add category!');
+          setSnackbarOpen(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setSnackbarMessage(isEdit ? 'Error updating category!' : 'Error adding category!');
+        setSnackbarOpen(true);
+      } finally {
+        setIsLoading(false);
+        setSnackbarOpen(true);
+      }
+    }, 1000);
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Edit Category</DialogTitle>
+      <DialogTitle padding={0}>{isEdit ? 'Edit Category' : 'Add New Category'}</DialogTitle>
       <DialogContent>
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton
@@ -96,15 +114,18 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
                 name="categoryName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Category Name is required' }}
+                rules={{
+                  required: 'Category Name is required',
+                  maxLength: { value: 50, message: 'Category Name must be at most 50 characters' }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Category Name"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.categoryName}
-                    helperText={errors.categoryName ? errors.categoryName.message : ''}
+                    error={!!errors?.categoryName}
+                    helperText={errors?.categoryName ? errors?.categoryName?.message : ''}
                   />
                 )}
               />
@@ -115,14 +136,20 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
                 name="desc"
                 control={control}
                 defaultValue=""
+                rules={{
+                  validate: (value) => {
+                    const wordCount = value.trim().split(/\s+/).length;
+                    return wordCount <= 200 || 'Description must be at most 200 words';
+                  }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     label="Description"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.desc}
-                    helperText={errors.desc ? errors.desc.message : ''}
+                    error={!!errors?.desc}
+                    helperText={errors?.desc ? errors?.desc?.message : ''}
                   />
                 )}
               />
@@ -151,7 +178,7 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary" onClick={onClose}>
+            <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
               Submit
             </Button>
             <Button onClick={onClose} color="secondary">
@@ -164,4 +191,4 @@ const EditDialog = ({ open, onClose, category, fetchData, setSnackbarOpen, setSn
   );
 };
 
-export default EditDialog;
+export default CategoryDialog;
