@@ -13,19 +13,17 @@ const Categories = () => {
   const navigate = useNavigate();
 
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/order')} sx={{ cursor: 'pointer' }}>
       Orders
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
       Orders
     </Typography>
   ];
-  function handleClick(event) {
-    event?.preventDefault();
-  }
+
   const handleViewClick = (row) => {
     navigate(`/dashboard/order/orderview/${row.id}`, { state: row });
   };

@@ -20,6 +20,7 @@ export const postApi = async (url, data, headers = {}) => {
       'Content-Type': 'application/json',
       ...headers
     };
+
     const response = await axios.post(url, data, { headers: defaultHeaders });
     return response.data;
   } catch (error) {

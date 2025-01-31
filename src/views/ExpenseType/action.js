@@ -16,6 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
 
 const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const {
@@ -24,6 +25,8 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
     formState: { errors },
     reset
   } = useForm();
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (tag) {
@@ -37,25 +40,35 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
   const onSubmit = async (data) => {
     const formData = { ...data, id: tag?.id };
-
-    const response = await updateApi(urls?.expenseType?.update.replace(':id', tag?.id), formData);
-
-    if (response.success) {
-      fetchData();
-      setSnackbarMessage('Expense Type edited successfully!');
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarMessage('Failed to edit Expense Type!');
-      setSnackbarOpen(true);
-    }
-
-    onClose();
+    setLoading(true);
+    setTimeout(async () => {
+      try {
+        const response = await updateApi(urls?.expenseType?.update.replace(':id', tag?.id), formData);
+        if (response.success) {
+          fetchData();
+          setSnackbarMessage('Expense Type edited successfully!');
+          setSnackbarOpen(true);
+          onClose();
+        } else {
+          setSnackbarMessage('Error editing Expense Type!');
+          setSnackbarOpen(true);
+        }
+      } catch (error) {
+        console.error(error);
+        setSnackbarMessage('Error editing Expense Type!');
+        setSnackbarOpen(true);
+      } finally {
+        setLoading(false);
+        setSnackbarOpen(true);
+      }
+    }, 1000);
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton

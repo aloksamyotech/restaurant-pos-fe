@@ -16,6 +16,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
+import { useState } from 'react';
 
 const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -25,22 +27,37 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
     formState: { errors }
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data) => {
     const formData = { ...data };
+    setLoading(true);
+    setTimeout(async () => {
+      try {
+        const response = await postApi(urls?.modifier?.create, formData);
 
-    const response = await postApi(urls?.modifier?.create, formData);
-
-    fetchData();
-    reset();
-    onClose();
-    setSnackbarMessage('Modifier added successfully!');
-    setSnackbarOpen(true);
+        fetchData();
+        reset();
+        onClose();
+        setSnackbarMessage('Modifier added successfully!');
+        setSnackbarOpen(true);
+      } catch (error) {
+        console.error(error);
+        setSnackbarMessage('Error adding Modifier!');
+        setSnackbarOpen(true);
+      } finally {
+        setLoading(false);
+        setSnackbarOpen(true);
+      }
+    }, 1000);
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add New Modifier</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton
