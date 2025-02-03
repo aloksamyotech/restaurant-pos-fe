@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-import AddUser from './Users';
+import AddUser from './Employees';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -94,7 +94,7 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add User
+            Add Employee
           </Button>
           <AddUser open={dialogOpen} onClose={handleDialogClose} />
 
@@ -113,18 +113,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5
-                }
-              }
-            }}
-            pageSizeOptions={[5]}
-          />
+          <DataGrid rows={rows} columns={columns} />
         </Box>
       </Card>
     </Container>

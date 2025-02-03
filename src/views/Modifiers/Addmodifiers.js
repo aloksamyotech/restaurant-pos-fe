@@ -32,24 +32,23 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
   const onSubmit = async (data) => {
     const formData = { ...data };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await postApi(urls?.modifier?.create, formData);
 
-        fetchData();
-        reset();
-        onClose();
-        setSnackbarMessage('Modifier added successfully!');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error(error);
-        setSnackbarMessage('Error adding Modifier!');
-        setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
-      }
-    }, 1000);
+    try {
+      const response = await postApi(urls?.modifier?.create, formData);
+
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Modifier added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Modifier!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (

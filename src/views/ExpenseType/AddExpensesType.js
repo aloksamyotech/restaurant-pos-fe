@@ -19,24 +19,23 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
   const onSubmit = async (data) => {
     const formData = { ...data };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await postApi(urls?.expenseType?.create, formData);
 
-        fetchData();
-        reset();
-        onClose();
-        setSnackbarMessage('Expense Type added successfully!');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error(error);
-        setSnackbarMessage('Error adding Expense Type!');
-        setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
-      }
-    }, 1000);
+    try {
+      const response = await postApi(urls?.expenseType?.create, formData);
+
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Expense Type added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Expense Type!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (

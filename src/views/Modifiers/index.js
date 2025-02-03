@@ -13,8 +13,10 @@ import { getApi } from 'core/apis/apiClient.js';
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDialogOpen = () => setDialogOpen(true);
@@ -127,19 +129,14 @@ const Categories = () => {
       )
     }
   ];
-  function handleClick(event) {
-    event?.preventDefault();
-  }
+
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
       Food Modifiers
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Modifiers
-    </Typography>
+    </Link>
   ];
 
   const [rows, setRows] = useState([]);

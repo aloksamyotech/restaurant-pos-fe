@@ -31,24 +31,23 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
   const onSubmit = async (data) => {
     const formData = { ...data, expenseNameId: data.expenseNameId };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await postApi(urls?.expense?.create, formData);
 
-        fetchData();
-        reset();
-        onClose();
-        setSnackbarMessage('Expense added successfully!');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error(error);
-        setSnackbarMessage('Error adding Expense!');
-        setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
-      }
-    }, 1000);
+    try {
+      const response = await postApi(urls?.expense?.create, formData);
+
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Expense added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Expense!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
 

@@ -31,28 +31,27 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
   const onSubmit = async (data) => {
     const formData = { ...data, id: modifier?.id };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
 
-        if (response.success) {
-          fetchData();
-          setSnackbarMessage('Modifier edited successfully!');
-          setSnackbarOpen(true);
-          onClose();
-        } else {
-          setSnackbarMessage('Error editing Modifier!');
-          setSnackbarOpen(true);
-        }
-      } catch (error) {
-        console.error(error);
+    try {
+      const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
+
+      if (response.success) {
+        fetchData();
+        setSnackbarMessage('Modifier edited successfully!');
+        setSnackbarOpen(true);
+        onClose();
+      } else {
         setSnackbarMessage('Error editing Modifier!');
         setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
       }
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error editing Modifier!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   useEffect(() => {

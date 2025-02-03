@@ -58,28 +58,27 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
   const onSubmit = async (data) => {
     const formData = { ...data, id: tag?.id };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await updateApi(urls?.expense?.update?.replace(':id', tag?.id), formData);
 
-        if (response.success) {
-          fetchData();
-          setSnackbarMessage('Expense edited successfully!');
-          setSnackbarOpen(true);
-          onClose();
-        } else {
-          setSnackbarMessage('Error editing Expense!');
-          setSnackbarOpen(true);
-        }
-      } catch (error) {
-        console.error(error);
+    try {
+      const response = await updateApi(urls?.expense?.update?.replace(':id', tag?.id), formData);
+
+      if (response.success) {
+        fetchData();
+        setSnackbarMessage('Expense edited successfully!');
+        setSnackbarOpen(true);
+        onClose();
+      } else {
         setSnackbarMessage('Error editing Expense!');
         setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
       }
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error editing Expense!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (

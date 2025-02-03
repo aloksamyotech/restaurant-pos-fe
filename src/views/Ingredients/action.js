@@ -43,28 +43,27 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
   const onSubmit = async (data) => {
     const formData = { ...data, id: ingredient?.id };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await updateApi(urls?.ingredient?.update?.replace(':id', ingredient?.id), formData);
 
-        if (response.success) {
-          fetchData();
-          setSnackbarMessage('Ingredient edited successfully!');
-          setSnackbarOpen(true);
-          onClose();
-        } else {
-          setSnackbarMessage('Error editing Ingredient!');
-          setSnackbarOpen(true);
-        }
-      } catch (error) {
-        console.error(error);
+    try {
+      const response = await updateApi(urls?.ingredient?.update?.replace(':id', ingredient?.id), formData);
+
+      if (response.success) {
+        fetchData();
+        setSnackbarMessage('Ingredient edited successfully!');
+        setSnackbarOpen(true);
+        onClose();
+      } else {
         setSnackbarMessage('Error editing Ingredient!');
         setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
       }
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error editing Ingredient!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (

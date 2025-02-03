@@ -30,23 +30,22 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
   const onSubmit = async (data) => {
     const formData = { ...data };
     setLoading(true);
-    setTimeout(async () => {
-      try {
-        const response = await postApi(urls?.ingredient?.create, formData);
-        fetchData();
-        reset();
-        onClose();
-        setSnackbarMessage('Ingredient added successfully!');
-        setSnackbarOpen(true);
-      } catch (error) {
-        console.error(error);
-        setSnackbarMessage('Error adding Ingredient!');
-        setSnackbarOpen(true);
-      } finally {
-        setLoading(false);
-        setSnackbarOpen(true);
-      }
-    }, 1000);
+
+    try {
+      const response = await postApi(urls?.ingredient?.create, formData);
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Ingredient added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Ingredient!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (

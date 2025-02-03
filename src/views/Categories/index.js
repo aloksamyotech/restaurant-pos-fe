@@ -25,10 +25,7 @@ const Categories = () => {
     </Link>,
     <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/categories')} sx={{ cursor: 'pointer' }}>
       Food Category
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Categories
-    </Typography>
+    </Link>
   ];
   const [dialogOpen, setDialogOpen] = useState(false);
 
