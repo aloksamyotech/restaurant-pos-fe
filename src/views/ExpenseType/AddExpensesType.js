@@ -1,21 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  Grid,
-  MenuItem,
-  InputAdornment,
-  Typography,
-  IconButton
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
 
 const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -25,22 +14,35 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
     formState: { errors }
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data) => {
     const formData = { ...data };
+    setLoading(true);
 
-    const response = await postApi(urls?.expenseType?.create, formData);
+    try {
+      const response = await postApi(urls?.expenseType?.create, formData);
 
-    fetchData();
-    reset();
-    onClose();
-    setSnackbarMessage('Expense Type added successfully!');
-    setSnackbarOpen(true);
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Expense Type added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Expense Type!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add Expenses Type</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton

@@ -19,7 +19,7 @@ const Items = Loadable(lazy(() => import('views/Items')));
 const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Expenses = Loadable(lazy(() => import('views/Expenses')));
-const Users = Loadable(lazy(() => import('views/Users')));
+const Employees = Loadable(lazy(() => import('views/Employees')));
 
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
@@ -150,8 +150,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'users',
-          element: <Users />
+          path: 'employees',
+          element: <Employees />
         }
       ]
     },

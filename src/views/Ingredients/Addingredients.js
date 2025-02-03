@@ -16,7 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
-
+import Loader from 'common/loader';
 const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
     control,
@@ -25,21 +25,34 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
     formState: { errors }
   } = useForm();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data) => {
     const formData = { ...data };
+    setLoading(true);
 
-    const response = await postApi(urls?.ingredient?.create, formData);
-    fetchData();
-    reset();
-    onClose();
-    setSnackbarMessage('Ingredient added successfully!');
-    setSnackbarOpen(true);
+    try {
+      const response = await postApi(urls?.ingredient?.create, formData);
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Ingredient added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Ingredient!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add New Ingredient</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton

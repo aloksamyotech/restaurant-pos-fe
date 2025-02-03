@@ -15,23 +15,18 @@ import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import CategoryDialog from './Category';
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/categories')} sx={{ cursor: 'pointer' }}>
       Food Category
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Categories
-    </Typography>
+    </Link>
   ];
-  function handleClick(event) {
-    event?.preventDefault();
-  }
-
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDialogOpen = () => {

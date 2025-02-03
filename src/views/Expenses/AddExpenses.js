@@ -17,6 +17,7 @@ import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
 
 const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -25,17 +26,28 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
     reset,
     formState: { errors }
   } = useForm();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
     const formData = { ...data, expenseNameId: data.expenseNameId };
+    setLoading(true);
 
-    const response = await postApi(urls?.expense?.create, formData);
+    try {
+      const response = await postApi(urls?.expense?.create, formData);
 
-    fetchData();
-    reset();
-    onClose();
-    setSnackbarMessage('Expense added successfully!');
-    setSnackbarOpen(true);
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Expense added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Expense!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
   const [expenseTypes, setExpenseTypes] = useState([]);
 
@@ -56,6 +68,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add New Expense</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton

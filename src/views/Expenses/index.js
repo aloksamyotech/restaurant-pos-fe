@@ -13,22 +13,18 @@ import EditDialog from './action';
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
       Expenses
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Expenses
-    </Typography>
+    </Link>
   ];
-  function handleClick(event) {
-    event?.preventDefault();
-  }
 
   const [dialogOpen, setDialogOpen] = useState(false);
 

@@ -173,9 +173,9 @@ export const People = {
   children: [
     {
       id: '10',
-      title: 'Users',
+      title: 'Employees',
       type: 'item',
-      url: '/dashboard/users',
+      url: '/dashboard/employees',
       icon: icons.IconUsers,
       breadcrumbs: false
     },

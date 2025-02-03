@@ -16,6 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
 
 const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const {
@@ -24,6 +25,34 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
     formState: { errors },
     reset
   } = useForm();
+
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data) => {
+    const formData = { ...data, id: modifier?.id };
+    setLoading(true);
+
+    try {
+      const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
+
+      if (response.success) {
+        fetchData();
+        setSnackbarMessage('Modifier edited successfully!');
+        setSnackbarOpen(true);
+        onClose();
+      } else {
+        setSnackbarMessage('Error editing Modifier!');
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error editing Modifier!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
+  };
 
   useEffect(() => {
     if (modifier) {
@@ -36,27 +65,11 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
     }
   }, [modifier, reset]);
 
-  const onSubmit = async (data) => {
-    const formData = { ...data, id: modifier?.id };
-
-    const response = await updateApi(urls?.modifier?.update?.replace(':id', modifier?.id), formData);
-
-    if (response.success) {
-      fetchData();
-      setSnackbarMessage(' Edited successfully!');
-      setSnackbarOpen(true);
-    } else {
-      setSnackbarMessage('Failed to Edit !');
-      setSnackbarOpen(true);
-    }
-
-    onClose();
-  };
-
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
             <IconButton
@@ -171,7 +184,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary" onClick={onClose}>
+            <Button type="submit" variant="contained" color="primary">
               Edit Item
             </Button>
             <Button onClick={onClose} color="secondary">

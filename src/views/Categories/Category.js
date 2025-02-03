@@ -52,39 +52,38 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     formData.append('categoryImage', dishImage);
 
     setIsLoading(true);
-    setTimeout(async () => {
-      try {
-        let response;
-        if (isEdit) {
-          response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
 
-          reset();
-        } else {
-          response = await sentApi(urls?.foodCategory?.create, formData);
-          reset();
-        }
+    try {
+      let response;
+      if (isEdit) {
+        response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
 
-        if (response.success) {
-          fetchData();
-          reset();
-          setImage(null);
-          setDishImage(null);
-          onClose();
-          setSnackbarMessage(isEdit ? 'Category updated successfully!' : 'Category added successfully!');
-          setSnackbarOpen(true);
-        } else {
-          setSnackbarMessage(isEdit ? 'Failed to update category!' : 'Failed to add category!');
-          setSnackbarOpen(true);
-        }
-      } catch (error) {
-        console.error(error);
-        setSnackbarMessage(isEdit ? 'Error updating category!' : 'Error adding category!');
+        reset();
+      } else {
+        response = await sentApi(urls?.foodCategory?.create, formData);
+        reset();
+      }
+
+      if (response.success) {
+        fetchData();
+        reset();
+        setImage(null);
+        setDishImage(null);
+        onClose();
+        setSnackbarMessage(isEdit ? 'Category updated successfully!' : 'Category added successfully!');
         setSnackbarOpen(true);
-      } finally {
-        setIsLoading(false);
+      } else {
+        setSnackbarMessage(isEdit ? 'Failed to update category!' : 'Failed to add category!');
         setSnackbarOpen(true);
       }
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage(isEdit ? 'Error updating category!' : 'Error adding category!');
+      setSnackbarOpen(true);
+    } finally {
+      setIsLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (
