@@ -25,6 +25,7 @@ import {
   IconUsers,
   IconClipboardList
 } from '@tabler/icons';
+import { getPermissionFromToken } from 'core/apis/common';
 
 // constant
 const icons = {
@@ -54,6 +55,7 @@ const icons = {
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
+const Permission = getPermissionFromToken();
 
 export const POS = {
   title: 'Restaurant POS',

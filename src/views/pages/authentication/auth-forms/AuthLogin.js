@@ -95,19 +95,19 @@ const FirebaseLogin = ({ ...others }) => {
         })}
         onSubmit={async (values) => {
           try {
-            const response = await postApi(urls?.login, values);
+            const response = await postApi(urls?.employee?.login, values);
 
             if (response.success === true) {
               toast.success('Login Successfull');
               localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.accessToken);
 
-              const Role = response.data.loginUser.role;
+              const Role = response.data.loginEmployee.role;
 
               if (Role === enums?.superAdmin) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === enums?.Admin) {
+              } else if (Role === enums?.Manager) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === enums?.Staff) {
+              } else if (Role === enums?.OrderTaker) {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums?.Company) {
                 window.location.replace('/dashboard/default');

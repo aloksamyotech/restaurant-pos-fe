@@ -18,24 +18,44 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
+import Loader from 'common/loader';
+import { urls } from 'core/constant/urls';
+import { postApi } from 'core/apis/apiClient.js';
 
-const AddUser = ({ open, onClose }) => {
+const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors }
   } = useForm();
-
-  const onSubmit = (data) => {
+  const [loading, setLoading] = useState(false);
+  const onSubmit = async (data) => {
     const formData = { ...data };
+    setLoading(true);
 
-    onClose();
+    try {
+      const response = await postApi(urls?.employee?.create, formData);
+      fetchData();
+      reset();
+      onClose();
+      setSnackbarMessage('Employee added successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage('Error adding Employee!');
+      setSnackbarOpen(true);
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>Add New Employee</DialogTitle>
       <DialogContent>
+        {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid mt={'0.5px'} container spacing={2}>
             <IconButton
@@ -128,7 +148,7 @@ const AddUser = ({ open, onClose }) => {
                     helperText={errors.role ? errors.role.message : ''}
                   >
                     <MenuItem value="Manager">Manager</MenuItem>
-                    <MenuItem value="Order Taker">Order Taker</MenuItem>
+                    <MenuItem value="OrderTaker">Order Taker</MenuItem>
                   </TextField>
                 )}
               />
@@ -159,9 +179,9 @@ const AddUser = ({ open, onClose }) => {
                   <FormControl component="fieldset" error={!!errors?.gender}>
                     <FormLabel component="legend">Gender</FormLabel>
                     <RadioGroup {...field} row>
-                      <FormControlLabel value="male" control={<Radio />} label="Male" />
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                      <FormControlLabel value="other" control={<Radio />} label="Other" />
+                      <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                      <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="Other" control={<Radio />} label="Other" />
                     </RadioGroup>
                     <FormHelperText>{errors?.gender?.message}</FormHelperText>
                   </FormControl>

@@ -4,6 +4,6 @@ export const enums = Object.freeze({
   Monthly: 'Monthly',
   Company: 'Company',
   superAdmin: 'superAdmin',
-  Staff: 'Staff',
-  Admin: 'Admin'
+  Manager: 'Manager',
+  OrderTaker: 'OrderTaker'
 });

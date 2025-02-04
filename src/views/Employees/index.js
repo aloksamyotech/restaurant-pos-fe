@@ -1,67 +1,96 @@
 import React, { useState } from 'react';
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Container,
+  Typography,
+  Card,
+  Box,
+  TextField,
+  Checkbox,
+  IconButton,
+  Grid,
+  Breadcrumbs,
+  Link,
+  Snackbar
+} from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
 import AddUser from './Employees';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
-const columns = [
-  { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'center', align: 'center' },
-
-  {
-    field: 'name',
-    headerName: 'Name ',
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center',
-    editable: true
-  },
-
-  {
-    field: 'email',
-    headerName: 'Email',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-  {
-    field: 'role',
-    headerName: 'Role',
-    type: 'string',
-    sortable: false,
-    flex: 1,
-    headerAlign: 'center',
-    align: 'center'
-  },
-
-  {
-    field: 'action',
-    headerName: 'Action',
-    headerAlign: 'center',
-    align: 'center',
-
-    flex: 1,
-    renderCell: (params) => <VisibilityIcon color="primary" />
-  }
-];
-
-const rows = [
-  { id: 1, name: 'Shubham', email: 'shubh@gmail.com', role: 'Admin', action: '' },
-  { id: 2, name: 'Rahul', email: 'rahul@gmail.com', role: 'Chef', action: '' },
-  { id: 3, name: 'Rohit', email: 'rohit@gmail.com', role: 'Biller', action: '' },
-  { id: 4, name: 'Neeraj', email: 'neeraj@gmail.com', role: 'Order Taker', action: '' },
-  { id: 5, name: 'Jairaj', email: 'jairaj@gmail.com', role: '', action: '' }
-];
+import { urls } from 'core/constant/urls';
+import { getApi } from 'core/apis/apiClient.js';
+import { useEffect } from 'react';
 
 const Categories = () => {
+  const columns = [
+    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
+
+    {
+      field: 'firstName',
+      headerName: 'Name ',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true
+    },
+
+    {
+      field: 'email',
+      headerName: 'Email',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'role',
+      headerName: 'Role',
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerAlign: 'center',
+      align: 'center',
+
+      flex: 1,
+      renderCell: (params) => <VisibilityIcon color="primary" />
+    }
+  ];
+
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
+  const [rows, setRows] = useState([]);
+  const fetchData = async () => {
+    const response = await getApi(urls?.employee.get);
+    const formattedData = response.data.map((item, index) => ({
+      id: item?._id,
+      serial: index + 1,
+      firstName: item?.firstName,
+      email: item?.email,
+      role: item?.role
+    }));
+
+    setRows(formattedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   function handleClick(event) {
     event?.preventDefault();
   }
@@ -79,6 +108,13 @@ const Categories = () => {
 
   return (
     <Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      />
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -96,7 +132,13 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Employee
           </Button>
-          <AddUser open={dialogOpen} onClose={handleDialogClose} />
+          <AddUser
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            fetchData={fetchData}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
