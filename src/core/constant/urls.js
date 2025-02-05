@@ -3,10 +3,12 @@ const imageBase = 'http://localhost:7200';
 // let base = 'http://165.22.218.55:7200/api/v1'
 export const urls = Object.freeze({
   base,
-  user: {
-    register: base + '/register',
-    login: base + '/login',
-    update: base + '/update'
+  employee: {
+    create: base + '/employee/addEmployee',
+    login: base + '/employee/login',
+    update: base + '/employee/updateEmployee/:id',
+    delete: base + '/employee/deleteEmployee/:id',
+    get: base + '/employee/getEmployees'
   },
   foodCategory: {
     create: base + '/category/addCategory',
@@ -68,7 +70,5 @@ export const urls = Object.freeze({
     get: base + '/invoice/getInvoices',
     getbyid: base + '/invoice/fetchInvoice/:id',
     getbyorderid: base + '/invoice/fetchInvoiceByOrderId/:id'
-  },
-
-  login: base + '/user/login'
+  }
 });

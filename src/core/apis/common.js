@@ -1,5 +1,6 @@
 import { urls } from 'core/constant/urls';
 import { getApi } from './apiClient';
+import { jwtDecode } from 'jwt-decode';
 export const fetchProfileData = async (id) => {
   try {
     const apiUrl = urls.user.register;
@@ -7,5 +8,19 @@ export const fetchProfileData = async (id) => {
     return response;
   } catch (error) {
     console.log(error);
+  }
+};
+export const getPermissionFromToken = () => {
+  const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+  if (!token) {
+    return null;
+  }
+  try {
+    const decodedToken = jwtDecode(token);
+
+    return decodedToken?.permissions;
+  } catch (error) {
+    console.error('Invalid token', error);
+    return null;
   }
 };
