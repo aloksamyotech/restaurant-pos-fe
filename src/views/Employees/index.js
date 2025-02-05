@@ -23,8 +23,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
+
+  const handleView = (row) => {
+    navigate(`/dashboard/employees/employeeview/${row.id}`);
+  };
   const columns = [
     { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
 
@@ -63,7 +69,7 @@ const Categories = () => {
       align: 'center',
 
       flex: 1,
-      renderCell: (params) => <VisibilityIcon color="primary" />
+      renderCell: (params) => <VisibilityIcon onClick={() => handleView(params.row)} style={{ cursor: 'pointer' }} />
     }
   ];
 
@@ -91,19 +97,13 @@ const Categories = () => {
     fetchData();
   }, []);
 
-  function handleClick(event) {
-    event?.preventDefault();
-  }
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
-      User
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      User
-    </Typography>
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
+      Employees
+    </Link>
   ];
 
   return (
