@@ -20,7 +20,7 @@ const Ingredients = Loadable(lazy(() => import('views/Ingredients')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Expenses = Loadable(lazy(() => import('views/Expenses')));
 const Employees = Loadable(lazy(() => import('views/Employees')));
-
+const EmployeeView = Loadable(lazy(() => import('views/Employees/viewPage')));
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
@@ -88,6 +88,15 @@ const MainRoutes = {
         {
           path: 'order/orderview/:id',
           element: <OrderView />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'employees/employeeview/:id',
+          element: <EmployeeView />
         }
       ]
     },

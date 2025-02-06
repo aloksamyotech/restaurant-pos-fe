@@ -56,8 +56,17 @@ const icons = {
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 const Permission = getPermissionFromToken();
+console.log(Permission);
 
-export const POS = {
+const filterMenuItems = (menu) => {
+  const filteredChildren = menu.children
+    .map((item) => {
+      return Permission.includes(item.title) ? item : null;
+    })
+    .filter(Boolean);
+  return filteredChildren.length > 0 ? { ...menu, children: filteredChildren } : null;
+};
+export const POS = filterMenuItems({
   title: 'Restaurant POS',
   type: 'group',
   children: [
@@ -70,9 +79,9 @@ export const POS = {
       breadcrumbs: false
     }
   ]
-};
+});
 
-export const Portal = {
+export const Portal = filterMenuItems({
   title: 'Portal',
   type: 'group',
   children: [
@@ -94,8 +103,8 @@ export const Portal = {
       breadcrumbs: false
     }
   ]
-};
-export const Food = {
+});
+export const Food = filterMenuItems({
   title: 'FOOD',
   type: 'group',
   children: [
@@ -132,8 +141,8 @@ export const Food = {
       breadcrumbs: false
     }
   ]
-};
-export const Expenses = {
+});
+export const Expenses = filterMenuItems({
   title: 'Expenses',
   type: 'group',
   children: [
@@ -154,8 +163,8 @@ export const Expenses = {
       breadcrumbs: false
     }
   ]
-};
-export const Report = {
+});
+export const Report = filterMenuItems({
   title: 'Report',
   type: 'group',
   children: [
@@ -168,8 +177,8 @@ export const Report = {
       breadcrumbs: false
     }
   ]
-};
-export const People = {
+});
+export const People = filterMenuItems({
   title: 'People',
   type: 'group',
   children: [
@@ -191,4 +200,4 @@ export const People = {
       breadcrumbs: false
     }
   ]
-};
+});

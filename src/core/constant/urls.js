@@ -7,8 +7,10 @@ export const urls = Object.freeze({
     create: base + '/employee/addEmployee',
     login: base + '/employee/login',
     update: base + '/employee/updateEmployee/:id',
+    updatePermissions: base + '/employee/updateEmployeePermissions/:id',
     delete: base + '/employee/deleteEmployee/:id',
-    get: base + '/employee/getEmployees'
+    get: base + '/employee/getEmployees',
+    getbyid: base + '/employee/fetchEmployee/:id'
   },
   foodCategory: {
     create: base + '/category/addCategory',
