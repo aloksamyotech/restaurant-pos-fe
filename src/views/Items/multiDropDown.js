@@ -26,16 +26,16 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function MultipleSelect({ onSelectionChange }) {
+export default function MultipleSelect({ value = [], onSelectionChange }) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [personName, setPersonName] = React.useState(value);
+
+  React.useEffect(() => {
+    setPersonName(value);
+  }, [value]);
 
   const handleChange = (event) => {
-    const {
-      target: { value }
-    } = event;
-
-    const selectedValues = typeof value === 'string' ? value.split(',') : value;
+    const selectedValues = typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
     setPersonName(selectedValues);
 
     if (onSelectionChange) {
@@ -47,7 +47,7 @@ export default function MultipleSelect({ onSelectionChange }) {
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [ingredientResponse] = await Promise.all([getApi(urls?.ingredient.get)]);
+        const ingredientResponse = await getApi(urls?.ingredient.get);
         setingredients(ingredientResponse.data);
       } catch (error) {
         console.error('Failed to load dropdown data', error);

@@ -57,6 +57,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
   const onSubmit = async (data) => {
     const formData = { ...data, id: tag?.id };
+
     setLoading(true);
 
     try {
@@ -160,8 +161,8 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                     label="Category"
                     variant="outlined"
                     fullWidth
-                    error={!!errors.expenseNameId}
-                    helperText={errors.expenseNameId ? errors.expenseNameId.message : ''}
+                    error={!!errors.expenseCategoryId}
+                    helperText={errors.expenseCategoryId ? errors.expenseCategoryId.message : ''}
                   >
                     {expenseTypes.map((type) => (
                       <MenuItem key={type._id} value={type._id}>

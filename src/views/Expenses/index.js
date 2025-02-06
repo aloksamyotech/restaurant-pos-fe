@@ -103,7 +103,14 @@ const Categories = () => {
               }
             }}
           />
-          <EditDialog open={editDialogOpen} onClose={handleEditDialogClose} fetchData={fetchData} tag={selectedTag} />
+          <EditDialog
+            open={editDialogOpen}
+            onClose={handleEditDialogClose}
+            fetchData={fetchData}
+            tag={selectedTag}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
 
           <DeleteIcon
             sx={{

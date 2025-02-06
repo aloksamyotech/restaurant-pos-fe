@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-import AddItemDialog from './AddItems';
+
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/apis/apiClient.js';
@@ -11,39 +11,45 @@ import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import EditDialog from './action';
-import { Snackbar } from '@mui/material';
 
+import { Snackbar } from '@mui/material';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
+import ItemDialog from './addEditItem';
+import { useNavigate } from 'react-router';
 
 const Categories = () => {
+  const navigate = useNavigate();
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
       Food Items
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      Items
-    </Typography>
+    </Link>
   ];
   function handleClick(event) {
     event?.preventDefault();
   }
   const [dialogOpen, setDialogOpen] = useState(false);
-  const handleDialogOpen = () => setDialogOpen(true);
-  const handleDialogClose = () => setDialogOpen(false);
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-
+  const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
-  const handleEditDialogOpen = (tag) => {
-    setSelectedTag(tag);
-    setEditDialogOpen(true);
+
+  const handleDialogOpen = () => {
+    setSelectedTag(null);
+    setIsEditMode(false);
+    setDialogOpen(true);
   };
-  const handleEditDialogClose = () => {
-    setEditDialogOpen(false);
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleEditDialogOpen = (tag) => {
+    g;
+    setSelectedTag(tag);
+    setIsEditMode(true);
+    setDialogOpen(true);
   };
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
@@ -144,14 +150,6 @@ const Categories = () => {
               }
             }}
           />
-          <EditDialog
-            open={editDialogOpen}
-            onClose={handleEditDialogClose}
-            fetchData={fetchData}
-            tag={selectedTag}
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen}
-          />
 
           <DeleteIcon
             sx={{
@@ -231,12 +229,15 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Item
           </Button>
-          <AddItemDialog
+
+          <ItemDialog
             open={dialogOpen}
             onClose={handleDialogClose}
             fetchData={fetchData}
+            itemData={selectedTag}
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
+            isEdit={isEditMode}
           />
 
           <Stack direction="row" alignItems="center" spacing={1}>

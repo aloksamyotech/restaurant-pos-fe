@@ -8,7 +8,7 @@ import { Box } from '@mui/system';
 const userPermissions = [
   'Dashboard',
   'POS',
-  'Orders',
+  'Order',
   'Categories',
   'Items',
   'Modifiers',
