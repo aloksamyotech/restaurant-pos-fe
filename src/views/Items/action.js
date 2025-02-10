@@ -9,7 +9,6 @@ import {
   Grid,
   MenuItem,
   InputAdornment,
-  Typography,
   IconButton
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
@@ -204,10 +203,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
             </Grid>
 
             <Grid item xs={6}>
-              <MultipleSelect
-                // value={selectedIngredients}
-                onSelectionChange={handleIngredientSelectionChange}
-              />
+              <MultipleSelect onSelectionChange={handleIngredientSelectionChange} />
             </Grid>
 
             <Grid item xs={6}>

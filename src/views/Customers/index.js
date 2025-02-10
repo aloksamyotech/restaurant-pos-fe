@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-
+import SearchBar from 'common/searchBar';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -14,19 +14,13 @@ import { useNavigate } from 'react-router';
 const Categories = () => {
   const navigate = useNavigate();
 
-  function handleClick(event) {
-    event?.preventDefault();
-  }
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/" onClick={handleClick}>
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/" onClick={handleClick}>
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
       Customers
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      customer
-    </Typography>
+    </Link>
   ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/customer/customerview/${row.id}`, { state: row });
@@ -44,15 +38,6 @@ const Categories = () => {
     },
 
     {
-      field: 'email',
-      headerName: 'Email',
-      type: 'string',
-      sortable: false,
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center'
-    },
-    {
       field: 'phone',
       headerName: 'Phone',
       type: 'string',
@@ -61,15 +46,7 @@ const Categories = () => {
       headerAlign: 'center',
       align: 'center'
     },
-    {
-      field: 'address',
-      headerName: 'Address',
-      type: 'string',
-      sortable: false,
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center'
-    },
+
     {
       field: 'action',
       headerName: 'Action',
@@ -93,13 +70,15 @@ const Categories = () => {
   ];
 
   const [rows, setRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const fetchData = async () => {
     const response = await getApi(urls?.customer?.get);
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       name: item?.categoryName,
-      phone: item?.phone
+      phone: item?.phone || '--',
+      customer: item?.customer || '--'
     }));
 
     setRows(formattedData);
@@ -108,6 +87,7 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const filteredRows = rows.filter((row) => row?.phone.toString().toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <Container>
@@ -124,8 +104,7 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
-
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
             <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
@@ -141,7 +120,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} columns={columns} />
+          <DataGrid rows={filteredRows} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

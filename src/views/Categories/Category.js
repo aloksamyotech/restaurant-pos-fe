@@ -16,7 +16,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
-
+  
   useEffect(() => {
     if (isEdit && category) {
       reset({
@@ -24,6 +24,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
         desc: category?.desc || ''
       });
       setImage(category?.categoryImage || null);
+      setDishImage(category?.categoryImage || null);
     } else {
       reset({
         categoryName: '',
@@ -43,14 +44,15 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
   };
 
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
-
-    formData.append('categoryImage', dishImage);
-
+    if (dishImage) {
+      formData.append('categoryImage', dishImage);
+    }
     setIsLoading(true);
 
     try {

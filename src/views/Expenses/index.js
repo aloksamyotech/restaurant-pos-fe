@@ -14,6 +14,7 @@ import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from './Delete.js';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router';
+import SearchBar from 'common/searchBar';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Categories = () => {
   ];
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
@@ -159,6 +161,7 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const filteredRows = rows.filter((row) => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <Container>
@@ -182,7 +185,8 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
+
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Expense
           </Button>
@@ -210,7 +214,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} columns={columns} />
+          <DataGrid rows={filteredRows} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>
