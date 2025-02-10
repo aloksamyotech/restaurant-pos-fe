@@ -11,14 +11,18 @@ import { urls } from 'core/constant/urls';
 import { toast } from 'react-toastify';
 import Iconify from 'ui-component/iconify';
 import HomeIcon from '@mui/icons-material/Home';
-
+import DeleteConfirmationDialog from 'common/Delete';
 import PermissionCheckBox from './Permissions';
+import EditIcon from '@mui/icons-material/Edit';
+import EditEmployee from './Employees';
 
 const ViewPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [rowData, setRowData] = useState({});
   const [tabValue, setTabValue] = useState(0);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const fetchUserData = async () => {
     try {
@@ -38,13 +42,16 @@ const ViewPage = () => {
 
   const openDeleteDialog = () => setDeleteDialogOpen(true);
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
+  const openEditDialog = () => setEditDialogOpen(true);
+  const closeEditDialog = () => setEditDialogOpen(false);
 
   const handleDelete = async () => {
     try {
-      const response = await deleteApi(urls?.user?.deleteuser.replace(':id', id));
-      if (response?.status === 200) {
-        toast.success('User deleted successfully');
-        navigate('/dashboard/user');
+      const response = await deleteApi(urls?.employee?.delete.replace(':id', id));
+      if (response.success) {
+        toast.success('Employee deleted successfully');
+
+        navigate('/dashboard/employees');
       }
     } catch (error) {
       toast.error('Failed to delete user');
@@ -67,6 +74,7 @@ const ViewPage = () => {
 
   return (
     <Container>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <Stack spacing={3}>
         <Card sx={{ p: 2, mb: 3 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -136,13 +144,31 @@ const ViewPage = () => {
                           <Typography>{rowData?.phoneNumber || 'N/A'}</Typography>
                         </Grid>
                       </Grid>
-                      <Box display="flex" justifyContent="flex-end" mt={3}>
-                        <Tooltip title="Delete">
-                          <Button variant="contained" color="error" onClick={openDeleteDialog}>
-                            <DeleteOutlineIcon />
-                          </Button>
-                        </Tooltip>
-                      </Box>
+                      <Stack direction="row" spacing={3} sx={{ justifyContent: 'flex-end', mt: 1 }}>
+                        <Box display="flex">
+                          <Tooltip title="Delete">
+                            <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
+                              <DeleteOutlineIcon />
+                            </Button>
+                          </Tooltip>
+                        </Box>
+                        <Box display="flex">
+                          <Tooltip title="Edit">
+                            <Button variant="contained" color="primary" onClick={openEditDialog}>
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
+                          <EditEmployee
+                            open={editDialogOpen}
+                            onClose={closeEditDialog}
+                            fetchData={fetchUserData}
+                            setSnackbarMessage={toast.success}
+                            setSnackbarOpen={() => {}}
+                            employeeData={rowData}
+                            editMode={true}
+                          />
+                        </Box>
+                      </Stack>
                     </Box>
                   </Card>
                 </Grid>
@@ -150,7 +176,7 @@ const ViewPage = () => {
             )}
             {tabValue === 1 && (
               <Box padding={2}>
-                <PermissionCheckBox rowData={rowData} />
+                <PermissionCheckBox rowData={rowData} fetchData={fetchUserData} />
               </Box>
             )}
           </Box>

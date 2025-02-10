@@ -149,7 +149,10 @@ const Invoice = (props) => {
         <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              Payment Status :{rowData?.paymentStatus}
+              Payment Status : 
+              <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
+                { rowData?.paymentStatus}
+              </Button>
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
               Payment Type:{rowData?.paymentMode}

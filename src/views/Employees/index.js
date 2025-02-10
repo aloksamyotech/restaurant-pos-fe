@@ -1,19 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Stack,
-  Button,
-  Container,
-  Typography,
-  Card,
-  Box,
-  TextField,
-  Checkbox,
-  IconButton,
-  Grid,
-  Breadcrumbs,
-  Link,
-  Snackbar
-} from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link, Snackbar } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
 import AddUser from './Employees';
@@ -24,6 +10,7 @@ import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import SearchBar from 'common/searchBar';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -69,25 +56,39 @@ const Categories = () => {
       align: 'center',
 
       flex: 1,
-      renderCell: (params) => <VisibilityIcon onClick={() => handleView(params.row)} style={{ cursor: 'pointer' }} />
+      renderCell: (params) => (
+        <VisibilityIcon
+          onClick={() => handleView(params.row)}
+          color="primary"
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              boxShadow: 3
+            }
+          }}
+        />
+      )
     }
   ];
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
-    const response = await getApi(urls?.employee.get);
+    const response = await getApi(urls?.employee?.get);
+
     const formattedData = response.data.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       firstName: item?.firstName,
       email: item?.email,
-      role: item?.role
+      role: item?.role,
+      permissions: item?.permissions
     }));
 
     setRows(formattedData);
@@ -96,6 +97,8 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredRows = rows?.filter((row) => row?.firstName?.toLowerCase().includes(searchTerm?.toLowerCase()));
 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
@@ -128,7 +131,7 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             Add Employee
           </Button>
@@ -155,7 +158,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} columns={columns} />
+          <DataGrid rows={filteredRows} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Container, Typography, Card, Box, Grid, Breadcrumbs, Link, Tab, Tabs, Divider, CardContent } from '@mui/material';
+import { Stack, Container, Typography, Card, Box, Grid, Breadcrumbs, Link, Tab, Tabs, Divider, CardContent, Button } from '@mui/material';
 
 import Iconify from '../../ui-component/iconify';
 import { getApi } from 'core/apis/apiClient.js';
@@ -179,7 +179,10 @@ const OrderView = () => {
                   >
                     <CardContent>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Payment Status:</strong> {rowData?.paymentStatus}
+                        <strong>Payment Status:</strong>{' '}
+                        <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
+                          {rowData?.paymentStatus}
+                        </Button>
                       </Typography>
 
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

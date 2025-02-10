@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router';
+import SearchBar from 'common/searchBar';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -65,7 +66,12 @@ const Categories = () => {
       headerName: 'Payment Status',
       flex: 1,
       headerAlign: 'center',
-      align: 'center'
+      align: 'center',
+      renderCell: (params) => (
+        <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
+          {params?.row?.paymentStatus}
+        </Button>
+      )
     },
 
     {
@@ -88,7 +94,9 @@ const Categories = () => {
       )
     }
   ];
+  const [searchTerm, setSearchTerm] = useState('');
   const [rows, setRows] = useState([]);
+
   const fetchData = async () => {
     const response = await getApi(urls?.order?.get);
 
@@ -101,9 +109,7 @@ const Categories = () => {
 
       totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
 
-      paymentStatus: 'Paid',
-      chef: item?.chef || 'N/A',
-      type: item?.type || 'N/A'
+      paymentStatus: 'Paid'
     }));
 
     setRows(formattedData);
@@ -112,6 +118,8 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredRows = rows?.filter((row) => row?.phone?.toString().toLowerCase().includes(searchTerm?.toLowerCase()));
 
   return (
     <Container sx={{}}>
@@ -128,7 +136,7 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} />
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
 
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography>Sort by:</Typography>
@@ -145,7 +153,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 400 }}>
-          <DataGrid rows={rows} columns={columns} getRowId={(row) => row.id} />
+          <DataGrid rows={filteredRows} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

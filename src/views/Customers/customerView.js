@@ -1,18 +1,4 @@
-import {
-  Stack,
-  Button,
-  Container,
-  Typography,
-  Card,
-  Box,
-  TextField,
-  Checkbox,
-  IconButton,
-  Grid,
-  Breadcrumbs,
-  Link,
-  CardContent
-} from '@mui/material';
+import { Stack, Typography, Card, Box, Breadcrumbs, Link } from '@mui/material';
 
 import Iconify from '../../ui-component/iconify';
 import HomeIcon from '@mui/icons-material/Home';
@@ -28,14 +14,14 @@ import { useNavigate } from 'react-router';
 const CustomerView = () => {
   const navigate = useNavigate();
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="primary" href="/">
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
-    <Link underline="hover" key="2" color="primary" href="/material-ui/getting-started/installation/">
-      Customer Details
+    <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/customers')} sx={{ cursor: 'pointer' }}>
+      Customers
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Details
+      Customer Details
     </Typography>
   ];
   const handleViewClick = (row) => {

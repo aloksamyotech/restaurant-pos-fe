@@ -19,7 +19,7 @@ const userPermissions = [
   'Employees',
   'Customers'
 ];
-const PermissionCheckBox = ({ rowData }) => {
+const PermissionCheckBox = ({ rowData, fetchData }) => {
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -36,6 +36,8 @@ const PermissionCheckBox = ({ rowData }) => {
       const response = await updateApi(urls?.employee?.updatePermissions.replace(':id', rowData?._id), {
         permissions: selectedPermissions
       });
+
+      fetchData();
       if (response.success) {
         toast.success('Permissions updated successfully!');
       } else {

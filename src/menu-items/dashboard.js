@@ -56,12 +56,11 @@ const icons = {
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 const Permission = getPermissionFromToken();
-console.log(Permission);
 
 const filterMenuItems = (menu) => {
   const filteredChildren = menu.children
     .map((item) => {
-      return Permission.includes(item.title) ? item : null;
+      return Permission?.includes(item.title) ? item : null;
     })
     .filter(Boolean);
   return filteredChildren.length > 0 ? { ...menu, children: filteredChildren } : null;
