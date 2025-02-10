@@ -98,7 +98,7 @@ const Categories = () => {
     fetchData();
   }, []);
 
-  const filteredRows = rows.filter((row) => row.firstName.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredRows = rows?.filter((row) => row?.firstName?.toLowerCase().includes(searchTerm?.toLowerCase()));
 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>

@@ -140,7 +140,7 @@ const Categories = () => {
   const fetchData = async () => {
     const response = await getApi(urls?.foodCategory?.get);
 
-    console.log('response===', response);
+    
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
@@ -157,7 +157,7 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const filteredRows = rows.filter((row) => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredRows = rows?.filter((row) => row?.name?.toLowerCase().includes(searchTerm?.toLowerCase()));
 
   return (
     <Container>

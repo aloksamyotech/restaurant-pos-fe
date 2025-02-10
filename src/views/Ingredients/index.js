@@ -179,7 +179,7 @@ const Categories = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const filteredRows = rows.filter((row) => row.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredRows = rows?.filter((row) => row?.name?.toLowerCase().includes(searchTerm?.toLowerCase()));
 
   return (
     <Container>
