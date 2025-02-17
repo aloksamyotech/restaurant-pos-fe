@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router';
+import { t } from 'i18next';
 
 const CustomerView = () => {
   const navigate = useNavigate();
@@ -18,10 +19,10 @@ const CustomerView = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/customers')} sx={{ cursor: 'pointer' }}>
-      Customers
+      {t('Customers')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Customer Details
+      {t('Customer Details')}
     </Typography>
   ];
   const handleViewClick = (row) => {
@@ -30,7 +31,7 @@ const CustomerView = () => {
   const columns = [
     {
       field: 'serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -38,7 +39,7 @@ const CustomerView = () => {
 
     {
       field: 'items',
-      headerName: 'Item Details',
+      headerName: t('Item Details'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -46,7 +47,7 @@ const CustomerView = () => {
 
     {
       field: 'totalPrice',
-      headerName: 'Total ',
+      headerName: t('Total'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -54,7 +55,7 @@ const CustomerView = () => {
 
     {
       field: 'paymentStatus',
-      headerName: 'Payment Status',
+      headerName: t('Payment Status'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -62,7 +63,7 @@ const CustomerView = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -90,15 +91,15 @@ const CustomerView = () => {
     const formattedData = response.data.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      phone: item?.phone || 'N/A',
+      phone: item?.phone || t('N/A'),
 
-      items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
+      items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || t('N/A'),
 
       totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
 
-      paymentStatus: 'Paid',
-      chef: item?.chef || 'N/A',
-      type: item?.type || 'N/A'
+      paymentStatus: t('Paid'),
+      chef: item?.chef || t('N/A'),
+      type: item?.type || t('N/A')
     }));
 
     setOrders(formattedData);
@@ -113,7 +114,7 @@ const CustomerView = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Customer Details
+            <Iconify icon="" /> {t('Customer Details')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -124,18 +125,18 @@ const CustomerView = () => {
         <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" color="" sx={{ m: 3 }}>
-              Name :{}
+              {t('Name')} :{}
             </Typography>
             <Typography variant="h5" textAlign="" color="">
-              Email :{}
+              {t('Email')} :{}
             </Typography>
           </Stack>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              Address :{}
+              {t('Address')} :{}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
-              Phone :{rows.phone}
+              {t('Phone')} :{rows.phone}
             </Typography>
           </Stack>
         </Stack>

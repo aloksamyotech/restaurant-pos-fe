@@ -14,36 +14,56 @@ import {
   FormControlLabel,
   FormHelperText,
   Radio,
-  IconButton
+  IconButton,
+  InputAdornment
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { urls } from 'core/constant/urls';
-import { postApi } from 'core/apis/apiClient.js';
+import { postApi, updateApi } from 'core/apis/apiClient.js';
+import { useEffect } from 'react';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { t } from 'i18next';
 
-const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
+const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen, employeeData = {}, editMode = false }) => {
   const {
     control,
     handleSubmit,
     reset,
+    register,
     formState: { errors }
   } = useForm();
   const [loading, setLoading] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
+
+  // const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  useEffect(() => {
+    if (editMode && employeeData) {
+      reset(employeeData);
+    }
+  }, [editMode, employeeData, reset]);
+
   const onSubmit = async (data) => {
     const formData = { ...data };
     setLoading(true);
 
     try {
-      const response = await postApi(urls?.employee?.create, formData);
+      let response;
+      if (editMode) {
+        response = await updateApi(urls?.employee?.update.replace(':id', employeeData?._id), formData);
+      } else {
+        response = await postApi(urls?.employee?.create, formData);
+      }
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage('Employee added successfully!');
+      setSnackbarMessage(editMode ? t('Employee updated successfully!') : t('Employee added successfully!'));
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error adding Employee!');
+      setSnackbarMessage(editMode ? t('Employee updated successfully!') : t('Employee added successfully!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -53,7 +73,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Employee</DialogTitle>
+      <DialogTitle padding={0}>{editMode ? t('Edit Employee') : t('Add New Employee')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,11 +96,11 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="firstName"
                 control={control}
-                rules={{ required: 'First Name is required' }}
+                rules={{ required: t('First Name is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="First Name"
+                    label={t('First Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.firstName}
@@ -93,19 +113,19 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="lastName"
                 control={control}
-                rules={{ required: 'Last Name is required' }}
-                render={({ field }) => <TextField {...field} label="Last Name" variant="outlined" fullWidth />}
+                rules={{ required: t('Last Name is required') }}
+                render={({ field }) => <TextField {...field} label={t('Last Name')} variant="outlined" fullWidth />}
               />
             </Grid>
             <Grid item xs={6}>
               <Controller
                 name="phoneNumber"
                 control={control}
-                rules={{ required: 'Phone Number is required' }}
+                rules={{ required: t('Phone Number is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Phone Number"
+                    label={t('Phone Number')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.phoneNumber}
@@ -118,11 +138,11 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: 'Email is required' }}
+                rules={{ required: t('Email is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Email"
+                    label={t('Email')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.email}
@@ -136,19 +156,19 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="role"
                 control={control}
-                rules={{ required: 'Role is required' }}
+                rules={{ required: t('Role is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Role"
+                    label={t('Role')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.role}
                     helperText={errors.role ? errors.role.message : ''}
                   >
-                    <MenuItem value="Manager">Manager</MenuItem>
-                    <MenuItem value="OrderTaker">Order Taker</MenuItem>
+                    <MenuItem value="Manager">{t('Manager')}</MenuItem>
+                    <MenuItem value="OrderTaker">{t('Order Taker')}</MenuItem>
                   </TextField>
                 )}
               />
@@ -157,11 +177,12 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="password"
                 control={control}
-                rules={{ required: 'Password Name is required' }}
+                rules={{ required: t('Password is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Password"
+                    label={t('Password')}
+                    // type={showPassword ? "text" : "password"}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.password}
@@ -174,14 +195,14 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="gender"
                 control={control}
-                rules={{ required: 'Gender is required' }}
+                rules={{ required: t('Gender is required') }}
                 render={({ field }) => (
                   <FormControl component="fieldset" error={!!errors?.gender}>
-                    <FormLabel component="legend">Gender</FormLabel>
+                    <FormLabel component="legend">{t('Gender')}</FormLabel>
                     <RadioGroup {...field} row>
-                      <FormControlLabel value="Male" control={<Radio />} label="Male" />
-                      <FormControlLabel value="Female" control={<Radio />} label="Female" />
-                      <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                      <FormControlLabel value="Male" control={<Radio />} label={t('Male')} />
+                      <FormControlLabel value="Female" control={<Radio />} label={t('Female')} />
+                      <FormControlLabel value="Other" control={<Radio />} label={t('Other')} />
                     </RadioGroup>
                     <FormHelperText>{errors?.gender?.message}</FormHelperText>
                   </FormControl>
@@ -195,12 +216,12 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Address is required'
+                  required: t('Address is required')
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Address"
+                    label={t('Address')}
                     variant="outlined"
                     fullWidth
                     multiline
@@ -214,11 +235,11 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
-              Add Employee
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
+              {editMode ? t('Update Employee') : t('Add Employee')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

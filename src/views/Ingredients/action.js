@@ -17,6 +17,7 @@ import { urls } from 'core/constant/urls';
 import { updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { t } from 'i18next';
 const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const {
     control,
@@ -49,16 +50,16 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
 
       if (response.success) {
         fetchData();
-        setSnackbarMessage('Ingredient edited successfully!');
+        setSnackbarMessage(t('Ingredient edited successfully!'));
         setSnackbarOpen(true);
         onClose();
       } else {
-        setSnackbarMessage('Error editing Ingredient!');
+        setSnackbarMessage(t('Error editing Ingredient!'));
         setSnackbarOpen(true);
       }
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error editing Ingredient!');
+      setSnackbarMessage(t('Error editing Ingredient!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -68,7 +69,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
+      <DialogTitle padding={0}>{t('Edit New Modifier')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -93,11 +94,11 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Modifier Name is required' }}
+                rules={{ required: t('Modifier Name is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Modifier Name"
+                    label={t('Modifier Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.name}
@@ -115,7 +116,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -131,16 +132,16 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label={t('Cost')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.cost}
@@ -160,16 +161,16 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.price}
@@ -189,16 +190,16 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Quantity is required',
+                  required: t('Quantity is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid quantity format'
+                    message: t('Invalid quantity format')
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Qty"
+                    label={t('Qty')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.quantity}
@@ -214,13 +215,13 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Unit is required'
+                  required: t('Unit is required')
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Unit"
+                    label={t('Unit')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.unit}
@@ -228,7 +229,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                   >
                     {['kg', 'ltr', 'pieces'].map((unit) => (
                       <MenuItem key={unit} value={unit}>
-                        {unit}
+                        {t(unit)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -239,10 +240,10 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Edit Item
+              {t('Edit Item')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

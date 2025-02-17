@@ -15,6 +15,7 @@ import DeleteConfirmationDialog from 'common/Delete';
 import PermissionCheckBox from './Permissions';
 import EditIcon from '@mui/icons-material/Edit';
 import EditEmployee from './Employees';
+import { t } from 'i18next';
 
 const ViewPage = () => {
   const { id } = useParams();
@@ -27,10 +28,9 @@ const ViewPage = () => {
   const fetchUserData = async () => {
     try {
       const response = await getApi(urls?.employee?.getbyid.replace(':id', id));
-
       setRowData(response?.data || {});
     } catch (error) {
-      console.error('Failed to fetch employee data:', error);
+      console.error(t('Failed to fetch employee data:'), error);
     }
   };
 
@@ -49,12 +49,11 @@ const ViewPage = () => {
     try {
       const response = await deleteApi(urls?.employee?.delete.replace(':id', id));
       if (response.success) {
-        toast.success('Employee deleted successfully');
-
+        toast.success(t('Employee deleted successfully'));
         navigate('/dashboard/employees');
       }
     } catch (error) {
-      toast.error('Failed to delete user');
+      toast.error(t('Failed to delete user'));
     } finally {
       setDeleteDialogOpen(false);
     }
@@ -65,10 +64,10 @@ const ViewPage = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/employees')} sx={{ cursor: 'pointer' }}>
-      Employees
+      {t('Employees')}
     </Link>,
-    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      Employee Details
+    <Link underline="hover" key="3" color="primary" sx={{ cursor: 'pointer' }}>
+      {t('Employee Details')}
     </Link>
   ];
 
@@ -79,7 +78,7 @@ const ViewPage = () => {
         <Card sx={{ p: 2, mb: 3 }}>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Typography variant="h3" component="h2">
-              <Iconify icon="" /> Employee Profile
+              <Iconify icon="" /> {t('Employee Profile')}
             </Typography>
             <Breadcrumbs separator="›" aria-label="breadcrumb">
               {breadcrumbs}
@@ -89,8 +88,8 @@ const ViewPage = () => {
         <Card>
           <Box padding={2}>
             <Tabs value={tabValue} onChange={handleTabChange} variant="scrollable" indicatorColor="primary" textColor="primary">
-              <Tab label="Profile" icon={<AccountCircleIcon />} iconPosition="start" />
-              <Tab label="Permission" icon={<SettingsIcon />} iconPosition="start" />
+              <Tab label={t('Profile')} icon={<AccountCircleIcon />} iconPosition="start" />
+              <Tab label={t('Permission')} icon={<SettingsIcon />} iconPosition="start" />
             </Tabs>
             <Divider />
             {tabValue === 0 && (
@@ -99,61 +98,60 @@ const ViewPage = () => {
                   <Card>
                     <Box padding={2}>
                       <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
-                        Personal Details
+                        {t('Personal Details')}
                       </Typography>
                       <Grid container spacing={2}>
                         <Grid item xs={4}>
                           <Typography>
-                            <strong>Full Name:</strong>
+                            <strong>{t('Full Name')}:</strong>
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
                           <Typography>{[rowData?.firstName, rowData?.lastName].filter(Boolean).join(' ')}</Typography>
                         </Grid>
-
                         <Grid item xs={4}>
                           <Typography>
-                            <strong>Role:</strong>
+                            <strong>{t('Role')}:</strong>
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Typography>{rowData?.role || 'N/A'}</Typography>
+                          <Typography>{rowData?.role || t('N/A')}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                           <Typography>
-                            <strong>Address:</strong>
+                            <strong>{t('Address')}:</strong>
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Typography>{rowData?.address || 'N/A'}</Typography>
+                          <Typography>{rowData?.address || t('N/A')}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                           <Typography>
-                            <strong>Email:</strong>
+                            <strong>{t('Email')}:</strong>
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Typography>{rowData?.email || 'N/A'}</Typography>
+                          <Typography>{rowData?.email || t('N/A')}</Typography>
                         </Grid>
                         <Grid item xs={4}>
                           <Typography>
-                            <strong>Mobile:</strong>
+                            <strong>{t('Mobile')}:</strong>
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Typography>{rowData?.phoneNumber || 'N/A'}</Typography>
+                          <Typography>{rowData?.phoneNumber || t('N/A')}</Typography>
                         </Grid>
                       </Grid>
                       <Stack direction="row" spacing={3} sx={{ justifyContent: 'flex-end', mt: 1 }}>
                         <Box display="flex">
-                          <Tooltip title="Delete">
+                          <Tooltip title={t('Delete')}>
                             <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                               <DeleteOutlineIcon />
                             </Button>
                           </Tooltip>
                         </Box>
                         <Box display="flex">
-                          <Tooltip title="Edit">
+                          <Tooltip title={t('Edit')}>
                             <Button variant="contained" color="primary" onClick={openEditDialog}>
                               <EditIcon />
                             </Button>

@@ -26,6 +26,7 @@ import {
   IconClipboardList
 } from '@tabler/icons';
 import { getPermissionFromToken } from 'core/apis/common';
+import i18n from 'i18n';
 
 // constant
 const icons = {
@@ -66,7 +67,7 @@ const filterMenuItems = (menu) => {
   return filteredChildren.length > 0 ? { ...menu, children: filteredChildren } : null;
 };
 export const POS = filterMenuItems({
-  title: 'Restaurant POS',
+  title: i18n.t('Restaurant POS'),
   type: 'group',
   children: [
     {
@@ -81,7 +82,7 @@ export const POS = filterMenuItems({
 });
 
 export const Portal = filterMenuItems({
-  title: 'Portal',
+  title: i18n.t('Portal'),
   type: 'group',
   children: [
     {
@@ -104,7 +105,7 @@ export const Portal = filterMenuItems({
   ]
 });
 export const Food = filterMenuItems({
-  title: 'FOOD',
+  title: i18n.t('FOOD'),
   type: 'group',
   children: [
     {
@@ -142,7 +143,7 @@ export const Food = filterMenuItems({
   ]
 });
 export const Expenses = filterMenuItems({
-  title: 'Expenses',
+  title: i18n.t('Expenses'),
   type: 'group',
   children: [
     {
@@ -164,7 +165,7 @@ export const Expenses = filterMenuItems({
   ]
 });
 export const Report = filterMenuItems({
-  title: 'Report',
+  title: i18n.t('Report'),
   type: 'group',
   children: [
     {
@@ -178,7 +179,7 @@ export const Report = filterMenuItems({
   ]
 });
 export const People = filterMenuItems({
-  title: 'People',
+  title: i18n.t('People'),
   type: 'group',
   children: [
     {

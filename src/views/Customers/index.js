@@ -10,6 +10,7 @@ import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { t } from 'i18next';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -19,18 +20,18 @@ const Categories = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      Customers
+      {t('Customers')}
     </Link>
   ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/customer/customerview/${row.id}`, { state: row });
   };
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
+    { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
 
     {
       field: 'customer',
-      headerName: 'Customer ',
+      headerName: t('Customer'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -39,7 +40,7 @@ const Categories = () => {
 
     {
       field: 'phone',
-      headerName: 'Phone',
+      headerName: t('Phone'),
       type: 'string',
       sortable: false,
       flex: 1,
@@ -49,7 +50,7 @@ const Categories = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       headerAlign: 'center',
       align: 'center',
 
@@ -94,7 +95,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Customers
+            <Iconify icon="" /> {t('Customers')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -106,10 +107,10 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Sort by:</Typography>
+            <Typography>{t('Sort by')}:</Typography>
             <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">Created</option>
-              <option value="Name">Name</option>
+              <option value="Created">{t('Created')}</option>
+              <option value="Name">{t('Name')}</option>
             </TextField>
             <IconButton>
               <SortIcon />

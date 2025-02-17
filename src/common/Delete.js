@@ -1,20 +1,21 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
-const DeleteConfirmationDialog = ({ open, onClose, onDelete, title, description }) => {
+import { t } from 'i18next';
+const DeleteConfirmationDialog = ({ open, onClose, onDelete }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title || 'Are you sure you want to delete?'}</DialogTitle>
+      <DialogTitle>{t('Are you sure you want to delete?')}</DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary">
-          {description || 'This action cannot be undone.'}
+          {t('This action cannot be undone.')}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t('Cancel')}
         </Button>
         <Button onClick={onDelete} color="error">
-          Delete
+          {t('Delete')}
         </Button>
       </DialogActions>
     </Dialog>

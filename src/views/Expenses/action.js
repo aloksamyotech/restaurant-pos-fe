@@ -18,7 +18,10 @@ import { updateApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { useTranslation } from 'react-i18next';
+
 const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -65,16 +68,16 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
       if (response.success) {
         fetchData();
-        setSnackbarMessage('Expense edited successfully!');
+        setSnackbarMessage(t('Expense edited successfully!'));
         setSnackbarOpen(true);
         onClose();
       } else {
-        setSnackbarMessage('Error editing Expense!');
+        setSnackbarMessage(t('Error editing Expense!'));
         setSnackbarOpen(true);
       }
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error editing Expense!');
+      setSnackbarMessage(t('Error editing Expense!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -84,7 +87,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
+      <DialogTitle padding={0}>{t('Edit New Modifier')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -110,13 +113,13 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Expense Name is required',
-                  maxLength: { value: 50, message: 'Expense must be at most 50 characters' }
+                  required: t('Expense Name is required'),
+                  maxLength: { value: 50, message: t('Expense must be at most 50 characters') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense Name"
+                    label={t('Expense Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseName}
@@ -134,13 +137,13 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -153,12 +156,12 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
               <Controller
                 name="expenseCategoryId"
                 control={control}
-                rules={{ required: 'Category is required' }}
+                rules={{ required: t('Category is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Category"
+                    label={t('Category')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseCategoryId}
@@ -180,18 +183,18 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'amount is required',
+                  required: t('amount is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid amount format'
+                    message: t('Invalid amount format')
                   },
-                  validate: (value) => value >= 0 || 'amount must be positive',
-                  maxLength: { value: 10, message: 'amount must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('amount must be positive'),
+                  maxLength: { value: 10, message: t('amount must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Amount"
+                    label={t('Amount')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.amount}
@@ -208,10 +211,10 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

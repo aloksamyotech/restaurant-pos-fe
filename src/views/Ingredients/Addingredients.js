@@ -17,6 +17,7 @@ import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { t } from 'i18next';
 const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
     control,
@@ -36,11 +37,11 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage('Ingredient added successfully!');
+      setSnackbarMessage(t('Ingredient added successfully!'));
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error adding Ingredient!');
+      setSnackbarMessage(t('Error adding Ingredient!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -50,7 +51,7 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Ingredient</DialogTitle>
+      <DialogTitle padding={0}>{t('Add New Ingredient')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,13 +77,13 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Ingredient Name is required',
-                  maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
+                  required: t('Ingredient Name is required'),
+                  maxLength: { value: 50, message: t('Modifier Name must be at most 50 characters') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Ingredient Name"
+                    label={t('Ingredient Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.name}
@@ -100,13 +101,13 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -122,18 +123,18 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label={t('Cost')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.cost}
@@ -153,18 +154,18 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.price}
@@ -183,18 +184,18 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Quantity is required',
+                  required: t('Quantity is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid quantity format'
+                    message: t('Invalid quantity format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Qty"
+                    label={t('Qty')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.quantity}
@@ -210,13 +211,13 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Unit is required'
+                  required: t('Unit is required')
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Unit"
+                    label={t('Unit')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.unit}
@@ -224,7 +225,7 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                   >
                     {['kg', 'ltr', 'pieces'].map((unit) => (
                       <MenuItem key={unit} value={unit}>
-                        {unit}
+                        {t(unit)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -235,10 +236,10 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

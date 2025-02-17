@@ -1,10 +1,10 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-
+import { t } from 'i18next';
 const SearchBar = ({ searchTerm, onSearch }) => {
   return (
     <TextField
-      label="Search"
+      label={t('Search')}
       variant="outlined"
       size="small"
       sx={{ flex: 1 }}

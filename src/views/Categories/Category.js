@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, Typography, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { sentApi, updateApi } from 'core/apis/apiClient.js';
+import { sentApi, updateApiPatch } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { useTranslation } from 'react-i18next';
 
 const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage, setSnackbarOpen, isEdit }) => {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -16,7 +18,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
-  
+
   useEffect(() => {
     if (isEdit && category) {
       reset({
@@ -42,9 +44,11 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
       setDishImage(file);
     }
   };
-
+  const handleRemoveImage = () => {
+    setImage(null);
+    setDishImage(null);
+  };
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -58,8 +62,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     try {
       let response;
       if (isEdit) {
-        response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
-
+        response = await updateApiPatch(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
         reset();
       } else {
         response = await sentApi(urls?.foodCategory?.create, formData);
@@ -72,15 +75,15 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
         setImage(null);
         setDishImage(null);
         onClose();
-        setSnackbarMessage(isEdit ? 'Category updated successfully!' : 'Category added successfully!');
+        setSnackbarMessage(isEdit ? t('Category updated successfully!') : t('Category added successfully!'));
         setSnackbarOpen(true);
       } else {
-        setSnackbarMessage(isEdit ? 'Failed to update category!' : 'Failed to add category!');
+        setSnackbarMessage(isEdit ? t('Failed to update category!') : t('Failed to add category!'));
         setSnackbarOpen(true);
       }
     } catch (error) {
       console.error(error);
-      setSnackbarMessage(isEdit ? 'Error updating category!' : 'Error adding category!');
+      setSnackbarMessage(isEdit ? t('Error updating category!') : t('Error adding category!'));
       setSnackbarOpen(true);
     } finally {
       setIsLoading(false);
@@ -90,7 +93,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>{isEdit ? 'Edit Category' : 'Add New Category'}</DialogTitle>
+      <DialogTitle padding={0}>{isEdit ? t('Edit Category') : t('Add New Category')}</DialogTitle>
       <DialogContent>
         {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -116,13 +119,13 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Category Name is required',
-                  maxLength: { value: 50, message: 'Category Name must be at most 50 characters' }
+                  required: t('Category Name is required'),
+                  maxLength: { value: 50, message: t('Category Name must be at most 50 characters') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Category Name"
+                    label={t('Category Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.categoryName}
@@ -140,13 +143,13 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.desc}
@@ -158,21 +161,29 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
 
             <Grid item xs={12}>
               <Typography variant="body1" sx={{ mb: 1 }}>
-                Upload Dish Image
+                {t('Upload Dish Image')}
               </Typography>
               <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} id="image-upload" />
               <label htmlFor="image-upload">
                 <Button variant="contained" color="primary" component="span">
-                  Choose Image
+                  {t('Choose Image')}
                 </Button>
               </label>
 
               {image && (
-                <img
-                  src={image}
-                  alt="Dish preview"
-                  style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
-                />
+                <div style={{ marginTop: '10px' }}>
+                  <Typography variant="body2">
+                    {dishImage?.name}
+                    <Button size="small" color="secondary" onClick={handleRemoveImage} sx={{ ml: 2 }}>
+                      {t('Remove')}
+                    </Button>
+                  </Typography>
+                  <img
+                    src={image}
+                    alt={t('Dish preview')}
+                    style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
+                  />
+                </div>
               )}
               {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}
             </Grid>
@@ -180,10 +191,10 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>
