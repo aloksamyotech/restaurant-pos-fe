@@ -9,6 +9,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import Invoice from 'views/POS/Components/invoice';
+import { t } from 'i18next'; // assuming t is imported from i18next
 
 const OrderView = () => {
   const navigate = useNavigate();
@@ -19,10 +20,10 @@ const OrderView = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/order')} sx={{ cursor: 'pointer' }}>
-      Orders
+      {t('Orders')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Orders
+      {t('Orders')}
     </Typography>
   ];
 
@@ -36,22 +37,22 @@ const OrderView = () => {
 
     const formattedData = {
       id: order?._id,
-      customer: order?.customer || 'N/A',
-      employee: order?.employee || 'N/A',
+      customer: order?.customer || t('N/A'),
+      employee: order?.employee || t('N/A'),
       totalPrice: order?.totalPrice?.toFixed(2) || '0.00',
       discount: order?.discount?.toFixed(2) || '0.00',
       tax: order?.tax?.toFixed(2) || '0.00',
-      paymentStatus: 'Paid',
-      chef: order?.chef || 'N/A',
-      type: order?.type || 'N/A',
-      status: order?.status || 'Pending',
-      expectedTime: order?.expectedTime ? `${order.expectedTime} min` : 'N/A'
+      paymentStatus: t('Paid'),
+      chef: order?.chef || t('N/A'),
+      type: order?.type || t('N/A'),
+      status: order?.status || t('Pending'),
+      expectedTime: order?.expectedTime ? `${order.expectedTime} ${t('min')}` : t('N/A')
     };
     const formattedItemRows =
       order?.items?.map((item, index) => ({
         id: index + 1,
         serial: index + 1,
-        items: item?.name || 'N/A',
+        items: item?.name || t('N/A'),
         price: item?.price?.toFixed(2) || '0.00',
         quantity: item?.quantity || '0'
       })) || [];
@@ -83,14 +84,14 @@ const OrderView = () => {
   const columns = [
     {
       field: 'serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'items',
-      headerName: 'Item Name',
+      headerName: t('Item Name'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -98,7 +99,7 @@ const OrderView = () => {
 
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: t('Price'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -106,7 +107,7 @@ const OrderView = () => {
 
     {
       field: 'quantity',
-      headerName: 'Quantity ',
+      headerName: t('Quantity'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -120,7 +121,7 @@ const OrderView = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Orders
+            <Iconify icon="" /> {t('Orders')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -130,8 +131,8 @@ const OrderView = () => {
 
       <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
         <Tabs variant="scrollable" value={tabValue} onChange={handleChange}>
-          <Tab value={0} label="Order" />
-          <Tab value={1} label="Invoice" />
+          <Tab value={0} label={t('Order')} />
+          <Tab value={1} label={t('Invoice')} />
         </Tabs>
         <Divider sx={{ borderColor: 'grey.300' }} />
         {tabValue === 0 && (
@@ -148,21 +149,21 @@ const OrderView = () => {
                     <CardContent>
                       <Box sx={{ textAlign: 'left', mb: 1 }}>
                         <Typography variant="body1" sx={{ mt: 2 }}>
-                          <strong>Customer:</strong>
+                          <strong>{t('Customer')}:</strong>
                           {}
                         </Typography>
                       </Box>
                       <Typography variant="body1">
-                        <strong>Employee:</strong> {}
+                        <strong>{t('Employee')}:</strong> {}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>totalPrice:</strong> {rowData?.totalPrice}
+                        <strong>{t('totalPrice')}:</strong> {rowData?.totalPrice}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Discount:</strong> {rowData?.discount}
+                        <strong>{t('Discount')}:</strong> {rowData?.discount}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Tax:</strong> {}
+                        <strong>{t('Tax')}:</strong> {}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -179,7 +180,7 @@ const OrderView = () => {
                   >
                     <CardContent>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Payment Status:</strong>{' '}
+                        <strong>{t('Payment Status')}:</strong>{' '}
                         <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
                           {rowData?.paymentStatus}
                         </Button>
@@ -187,20 +188,20 @@ const OrderView = () => {
 
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography mt={1} variant="body1">
-                          <strong>Status:</strong> {}
+                          <strong>{t('Status')}:</strong> {}
                         </Typography>
                       </Box>
 
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Expected Time:</strong>
+                        <strong>{t('Expected Time')}:</strong>
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Chef:</strong>
+                        <strong>{t('Chef')}:</strong>
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>Table Type:</strong>
+                        <strong>{t('Table Type')}:</strong>
                       </Typography>
                     </CardContent>
                   </Card>

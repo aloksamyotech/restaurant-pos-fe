@@ -10,7 +10,7 @@ import { getApi, deleteApi } from 'core/apis/apiClient.js';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchBar from 'common/searchBar';
-// import DeleteConfirmationDialog from './Delete.js';
+
 import DeleteConfirmationDialog from '../../common/commonDelete';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import CategoryDialog from './Category';
@@ -183,16 +183,7 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
             isEdit={isEditMode}
           />
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>{t('Sort by:')}</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">{t('Created')}</option>
-              <option value="Name">{t('Name')}</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 

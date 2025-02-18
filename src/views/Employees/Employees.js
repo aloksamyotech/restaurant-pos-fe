@@ -33,11 +33,13 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
     reset,
     register,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
   const [loading, setLoading] = useState(false);
-  // const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   useEffect(() => {
     if (editMode && employeeData) {
@@ -96,7 +98,11 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="firstName"
                 control={control}
-                rules={{ required: t('First Name is required') }}
+                rules={{
+                  required: t('First Name is required'),
+
+                  maxLength: { value: 20, message: t('First Name must be at most 20 characters') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -113,15 +119,27 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="lastName"
                 control={control}
-                rules={{ required: t('Last Name is required') }}
-                render={({ field }) => <TextField {...field} label={t('Last Name')} variant="outlined" fullWidth />}
+                rules={{
+                  required: t('Last Name is required'),
+                  maxLength: { value: 20, message: t('Last Name must be at most 20 characters') }
+                }}
+                render={({ field }) =>
+                  <TextField
+                    {...field} label={t('Last Name')} variant="outlined"
+                    fullWidth
+                    error={!!errors?.lastName}
+                    helperText={errors?.lastName ? errors?.lastName?.message : ''}
+                  />}
               />
             </Grid>
             <Grid item xs={6}>
               <Controller
                 name="phoneNumber"
                 control={control}
-                rules={{ required: t('Phone Number is required') }}
+                rules={{
+                  required: t('Phone Number is required'),
+                  pattern: { value: /^[0-9]{10}$/, message: t('Phone Number must be exactly 10 digits and contain only numbers') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -130,6 +148,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                     fullWidth
                     error={!!errors?.phoneNumber}
                     helperText={errors?.phoneNumber ? errors?.phoneNumber?.message : ''}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   />
                 )}
               />
@@ -138,7 +157,12 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: t('Email is required') }}
+                rules={{ required: t('Email is required'),
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: t('Please enter a valid email address')
+                  }
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -173,24 +197,44 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 )}
               />
             </Grid>
-            <Grid item xs={6}>
-              <Controller
-                name="password"
-                control={control}
-                rules={{ required: t('Password is required') }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t('Password')}
-                    // type={showPassword ? "text" : "password"}
-                    variant="outlined"
-                    fullWidth
-                    error={!!errors?.password}
-                    helperText={errors?.password ? errors?.password?.message : ''}
-                  />
-                )}
-              />
-            </Grid>
+            {!editMode && (
+              <Grid item xs={6}>
+                <Controller
+                  name="password"
+                  control={control}
+                  rules={{ required: t('Password is required'),
+                    minLength: {
+                      value: 6,
+                      message: t('Password must be at least 6 characters long')
+                    },
+                    maxLength: {
+                      value: 15,
+                      message: t('Password must not exceed 15 characters')
+                    }
+                   }}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={t('Password')}
+                      type={showPassword ? "text" : "password"}
+                      variant="outlined"
+                      fullWidth
+                      error={!!errors?.password}
+                      helperText={errors?.password ? errors?.password?.message : ''}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton onClick={togglePasswordVisibility} edge="end">
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  )}
+                />
+              </Grid>
+            )}
             <Grid item xs={6}>
               <Controller
                 name="gender"
@@ -216,7 +260,11 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: t('Address is required')
+                  required: t('Address is required'),
+                  maxLength: {
+                    value: 100,
+                    message: t('Address must not exceed 100 characters')
+                  }
                 }}
                 render={({ field }) => (
                   <TextField

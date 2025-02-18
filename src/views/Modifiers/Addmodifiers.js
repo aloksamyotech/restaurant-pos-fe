@@ -18,8 +18,10 @@ import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessage, setSnackbarOpen }) => {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -39,11 +41,11 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage('Modifier added successfully!');
+      setSnackbarMessage(t('Modifier added successfully!'));
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error adding Modifier!');
+      setSnackbarMessage(t('Error adding Modifier!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -53,7 +55,7 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Modifier</DialogTitle>
+      <DialogTitle padding={0}>{t('Add New Modifier')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
 
@@ -80,13 +82,13 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Modifier Name is required',
-                  maxLength: { value: 50, message: 'Modifier Name must be at most 50 characters' }
+                  required: t('Modifier Name is required'),
+                  maxLength: { value: 50, message: t('Modifier Name must be at most 50 characters') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Modifier Name"
+                    label={t('Modifier Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.name}
@@ -102,18 +104,18 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label={t('Cost')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.cost}
@@ -133,18 +135,18 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.price}
@@ -166,13 +168,13 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -185,10 +187,10 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

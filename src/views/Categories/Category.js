@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, Typography, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { sentApi, updateApiPatch } from 'core/apis/apiClient.js';
+import { sentApi, updateApiPatch,updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useTranslation } from 'react-i18next';
@@ -40,8 +40,9 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      
       setDishImage(file);
+      setImage(URL.createObjectURL(file));
     }
   };
   const handleRemoveImage = () => {
@@ -57,12 +58,13 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     if (dishImage) {
       formData.append('categoryImage', dishImage);
     }
+   
     setIsLoading(true);
 
     try {
       let response;
       if (isEdit) {
-        response = await updateApiPatch(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
+        response = await updateApi(urls?.foodCategory?.update?.replace(':id', category?.id), formData);
         reset();
       } else {
         response = await sentApi(urls?.foodCategory?.create, formData);

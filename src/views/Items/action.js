@@ -16,6 +16,7 @@ import { urls } from 'core/constant/urls';
 import { getApi, updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import MultipleSelect from './multiDropDown';
+import { useTranslation } from 'react-i18next';
 
 const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const {
@@ -26,6 +27,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
   } = useForm();
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const { t } = useTranslation();
   useEffect(() => {
     if (tag) {
       reset({
@@ -34,7 +36,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
         price: tag?.price,
         desc: tag?.desc,
         ingredient: tag?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
-        categoryId: tag?.categoryId.categoryName,
+        categoryId: tag?.categoryId?.categoryName,
         itemCategoryId: tag?.itemCategoryId,
         isAvailable: tag?.true
       });
@@ -49,7 +51,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
         setCategories(categoryResponse?.data);
       } catch (error) {
-        setSnackbarMessage('Failed to load dropdown data');
+        setSnackbarMessage(t('Failed to load dropdown data'));
         setSnackbarOpen(true);
       }
     };
@@ -67,10 +69,10 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
     if (response?.success) {
       fetchData();
-      setSnackbarMessage('Edited successfully!');
+      setSnackbarMessage(t('Edited successfully!'));
       setSnackbarOpen(true);
     } else {
-      setSnackbarMessage('Failed to edit !');
+      setSnackbarMessage(t('Failed to edit !'));
       setSnackbarOpen(true);
     }
 
@@ -79,7 +81,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Item</DialogTitle>
+      <DialogTitle>{t('Edit Item')}</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} marginTop={'1px'}>
@@ -103,11 +105,14 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Item Name is required', maxLength: { value: 50, message: 'Item Name must be at most 50 characters' } }}
+                rules={{
+                  required: t('Item Name is required'),
+                  maxLength: { value: 50, message: t('Item Name must be at most 50 characters') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Item Name"
+                    label={t('Item Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.name}
@@ -118,19 +123,19 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
             </Grid>
             <Grid mt={1} item xs={12}>
               <Controller
-                name="desc"
+                name={t('desc')}
                 control={control}
                 defaultValue=""
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -146,13 +151,13 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
@@ -173,22 +178,22 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
             <Grid item xs={6}>
               <Controller
-                name="price"
+                name={t('price')}
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   },
-                  validate: (value) => value >= 0 || 'Price must be positive',
-                  maxLength: { value: 10, message: 'Price must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Price must be positive'),
+                  maxLength: { value: 10, message: t('Price must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price"')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.price}
@@ -211,12 +216,12 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                 name="itemCategoryId"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Category is required' }}
+                rules={{ required: t('Category is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Category"
+                    label={t('Category')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.categoryId}
@@ -235,10 +240,10 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

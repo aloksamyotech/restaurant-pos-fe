@@ -9,6 +9,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
+import { t } from 'i18next';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -18,10 +19,10 @@ const Categories = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" onClick={() => navigate('/dashboard/order')} sx={{ cursor: 'pointer' }}>
-      Orders
+      {t('Orders')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Orders
+      {t('Orders')}
     </Typography>
   ];
 
@@ -31,52 +32,47 @@ const Categories = () => {
   const columns = [
     {
       field: 'serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'phone',
-      headerName: 'Phone No.',
+      headerName: t('Phone No.'),
       flex: 1,
-
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'items',
-      headerName: 'Item Details',
+      headerName: t('Item Details'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'totalPrice',
-      headerName: 'Total ',
+      headerName: t('Total'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'paymentStatus',
-      headerName: 'Payment Status',
+      headerName: t('Payment Status'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
         <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
-          {params?.row?.paymentStatus}
+          {t(params?.row?.paymentStatus)}
         </Button>
       )
     },
-
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -103,13 +99,10 @@ const Categories = () => {
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      phone: item?.phone || 'N/A',
-
-      items: item?.items?.map((i) => `${i?.name} (x${i?.quantity})`).join(', ') || 'N/A',
-
+      phone: item?.phone || t('N/A'),
+      items: item?.items?.map((i) => `${i?.name} (${t('x')}${i?.quantity})`).join(', ') || t('N/A'),
       totalPrice: item?.totalPrice?.toFixed(2) || '0.00',
-
-      paymentStatus: 'Paid'
+      paymentStatus: t('Paid')
     }));
 
     setRows(formattedData);
@@ -126,7 +119,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Orders
+            <Iconify icon="" /> {t('Orders')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -138,16 +131,7 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Sort by:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">Created</option>
-              <option value="Name">Name</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 

@@ -11,7 +11,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from './action';
 import { deleteApi } from 'core/apis/apiClient.js';
-import DeleteConfirmationDialog from './Delete.js';
+import DeleteConfirmationDialog from '../../common/commonDelete';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
@@ -200,16 +200,7 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
           />
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>{t('Sort by')}:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">{t('Created')}</option>
-              <option value="Name">{t('Name')}</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 

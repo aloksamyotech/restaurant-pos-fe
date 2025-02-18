@@ -144,16 +144,7 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
           />
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>{t('Sort by')}:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">{t('Created')}</option>
-              <option value="Name">{t('Name')}</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 

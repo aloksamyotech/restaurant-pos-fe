@@ -11,10 +11,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditDialog from './action';
 import { deleteApi } from 'core/apis/apiClient.js';
-import DeleteConfirmationDialog from './Delete.js';
+import DeleteConfirmationDialog from '../../common/commonDelete';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
+import { t } from 'i18next';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Categories = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      Food Ingredients
+      {t('Food Ingredients')}
     </Link>
   ];
 
@@ -47,11 +48,10 @@ const Categories = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
-
+    { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
     {
       field: 'name',
-      headerName: 'Ingredient',
+      headerName: t('Ingredient'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -59,7 +59,7 @@ const Categories = () => {
     },
     {
       field: 'desc',
-      headerName: 'Description',
+      headerName: t('Description'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -67,7 +67,7 @@ const Categories = () => {
     },
     {
       field: 'cost',
-      headerName: 'Cost',
+      headerName: t('Cost'),
       type: 'number',
       flex: 1,
       headerAlign: 'center',
@@ -76,8 +76,8 @@ const Categories = () => {
     },
     {
       field: 'price',
-      headerName: 'Price',
-      description: 'This column has a value getter and is not sortable.',
+      headerName: t('Price'),
+      description: t('This column has a value getter and is not sortable.'),
       sortable: false,
       flex: 1,
       headerAlign: 'center',
@@ -85,7 +85,7 @@ const Categories = () => {
     },
     {
       field: 'quantity',
-      headerName: 'Available Quantity',
+      headerName: t('Available Quantity'),
       type: 'string',
       sortable: false,
       flex: 1,
@@ -94,20 +94,18 @@ const Categories = () => {
     },
     {
       field: 'unit',
-      headerName: 'Unit',
-      description: 'This column has a value getter and is not sortable.',
+      headerName: t('Unit'),
+      description: t('This column has a value getter and is not sortable.'),
       sortable: false,
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
-
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       headerAlign: 'center',
       align: 'center',
-
       flex: 1,
       renderCell: (params) => (
         <Stack direction="row" spacing={4}>
@@ -129,7 +127,6 @@ const Categories = () => {
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
           />
-
           <DeleteIcon
             sx={{
               color: 'red',
@@ -140,7 +137,6 @@ const Categories = () => {
             }}
             onClick={() => setDeleteDialogOpen(params.row.id)}
           />
-
           <DeleteConfirmationDialog
             open={deleteDialogOpen === params.row.id}
             onClose={() => setDeleteDialogOpen(null)}
@@ -149,7 +145,7 @@ const Categories = () => {
               setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
               await fetchData();
               setSnackbarOpen(true);
-              setSnackbarMessage('Ingredient deleted successfully!');
+              setSnackbarMessage(t('Ingredient deleted successfully!'));
               setDeleteDialogOpen(null);
             }}
           />
@@ -193,7 +189,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Food Ingredients
+            <Iconify icon="" /> {t('Food Ingredients')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -204,9 +200,8 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
-
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add Ingredient
+            {t('Add Ingredient')}
           </Button>
           <AddIngredientDialog
             open={dialogOpen}
@@ -215,17 +210,7 @@ const Categories = () => {
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
           />
-
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Sort by:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">Created</option>
-              <option value="Name">Name</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 
