@@ -11,6 +11,7 @@ import { getApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
+import { t } from 'i18next';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -19,11 +20,11 @@ const Categories = () => {
     navigate(`/dashboard/employees/employeeview/${row.id}`);
   };
   const columns = [
-    { field: 'serial', headerName: 'S.No', flex: 1, headerAlign: 'center', align: 'center' },
+    { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
 
     {
       field: 'firstName',
-      headerName: 'Name ',
+      headerName: t('Name'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -32,7 +33,7 @@ const Categories = () => {
 
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: t('Email'),
       type: 'string',
       sortable: false,
       flex: 1,
@@ -41,7 +42,7 @@ const Categories = () => {
     },
     {
       field: 'role',
-      headerName: 'Role',
+      headerName: t('Role'),
       type: 'string',
       sortable: false,
       flex: 1,
@@ -51,7 +52,7 @@ const Categories = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       headerAlign: 'center',
       align: 'center',
 
@@ -105,7 +106,7 @@ const Categories = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      Employees
+      {t('Employees')}
     </Link>
   ];
 
@@ -121,7 +122,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Users
+            <Iconify icon="" /> {t('Users')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -133,7 +134,7 @@ const Categories = () => {
         <Stack direction="row" spacing={2} alignItems="center">
           <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add Employee
+            {t('Add Employee')}
           </Button>
           <AddUser
             open={dialogOpen}
@@ -143,16 +144,7 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
           />
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Sort by:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">Created</option>
-              <option value="Name">Name</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+         
         </Stack>
       </Card>
 

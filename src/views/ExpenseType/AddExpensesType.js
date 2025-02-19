@@ -5,8 +5,10 @@ import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { useTranslation } from 'react-i18next';
 
 const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -26,11 +28,11 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage('Expense Type added successfully!');
+      setSnackbarMessage(t('Expense Type added successfully!'));
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error adding Expense Type!');
+      setSnackbarMessage(t('Error adding Expense Type!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -40,7 +42,7 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add Expenses Type</DialogTitle>
+      <DialogTitle padding={0}>{t('Add Expenses Type')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,11 +67,14 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
                 name="expenseName"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense Name is required', maxLength: { value: 50, message: 'Expense must be at most 50 characters' } }}
+                rules={{
+                  required: t('Expense Name is required'),
+                  maxLength: { value: 50, message: t('Expense must be at most 50 characters') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense"
+                    label={t('Expense')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseName}
@@ -87,13 +92,13 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -106,10 +111,10 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

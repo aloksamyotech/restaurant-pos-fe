@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
-
+import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import { deleteApi } from 'core/apis/apiClient.js';
-import DeleteConfirmationDialog from './Delete.js';
+import DeleteConfirmationDialog from '../../common/commonDelete';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchBar from 'common/searchBar';
@@ -19,12 +19,13 @@ import { useNavigate } from 'react-router';
 
 const Categories = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      Food Items
+      {t('Food Items')}
     </Link>
   ];
 
@@ -56,14 +57,14 @@ const Categories = () => {
   const columns = [
     {
       field: 'serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'name',
-      headerName: 'Item Name',
+      headerName: t('Item Name'),
       flex: 1,
       editable: true,
       headerAlign: 'center',
@@ -71,17 +72,17 @@ const Categories = () => {
     },
     {
       field: 'desc',
-      headerName: 'Description',
+      headerName: t('Description'),
       flex: 1,
 
-      headerAlign: 'center',
+      headerAlign: t('center'),
       align: 'center',
       editable: true
     },
 
     {
       field: 'image',
-      headerName: 'Dish Image',
+      headerName: t('Dish Image'),
       width: 150,
       editable: true,
       renderCell: (params) =>
@@ -94,7 +95,7 @@ const Categories = () => {
 
     {
       field: 'cost',
-      headerName: 'Cost',
+      headerName: t('Cost'),
       type: 'number',
       flex: 1,
       editable: true,
@@ -103,7 +104,7 @@ const Categories = () => {
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: t('Price'),
       type: 'number',
       sortable: false,
       flex: 1,
@@ -112,7 +113,7 @@ const Categories = () => {
     },
     {
       field: 'categoryId',
-      headerName: 'Category',
+      headerName: t('Category'),
       type: 'string',
       flex: 1,
       editable: true,
@@ -121,7 +122,7 @@ const Categories = () => {
     },
     {
       field: 'ingredient',
-      headerName: 'Ingredients',
+      headerName: t('Ingredients'),
       type: [],
       flex: 1,
       editable: true,
@@ -130,7 +131,7 @@ const Categories = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       headerAlign: 'center',
       align: 'center',
 
@@ -166,7 +167,7 @@ const Categories = () => {
               await deleteApi(urls?.item?.delete?.replace(':id', params?.row?.id));
               setRows((prevRows) => prevRows.filter((row) => row?.id !== params?.row?.id));
               await fetchData();
-              setSnackbarMessage('Item deleted successfully!');
+              setSnackbarMessage(t('Item deleted successfully!'));
               setSnackbarOpen(true);
               setDeleteDialogOpen(null);
             }}
@@ -213,7 +214,7 @@ const Categories = () => {
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> Food Items
+            <Iconify icon="" /> {t('Food Items')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -223,10 +224,9 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          {/* <TextField label="Search" variant="outlined" size="small" sx={{ flex: 1 }} /> */}
           <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            Add Item
+            {t('Add Item')}
           </Button>
 
           <ItemDialog
@@ -239,16 +239,7 @@ const Categories = () => {
             isEdit={isEditMode}
           />
 
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography>Sort by:</Typography>
-            <TextField select size="small" defaultValue="Created" SelectProps={{ native: true }} sx={{ width: '120px' }}>
-              <option value="Created">Created</option>
-              <option value="Name">Name</option>
-            </TextField>
-            <IconButton>
-              <SortIcon />
-            </IconButton>
-          </Stack>
+          
         </Stack>
       </Card>
 

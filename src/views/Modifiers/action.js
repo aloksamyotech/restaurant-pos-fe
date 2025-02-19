@@ -17,8 +17,10 @@ import { urls } from 'core/constant/urls';
 import { updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { useTranslation } from 'react-i18next';
 
 const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -37,16 +39,16 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
 
       if (response.success) {
         fetchData();
-        setSnackbarMessage('Modifier edited successfully!');
+        setSnackbarMessage(t('Modifier edited successfully!'));
         setSnackbarOpen(true);
         onClose();
       } else {
-        setSnackbarMessage('Error editing Modifier!');
+        setSnackbarMessage(t('Error editing Modifier!'));
         setSnackbarOpen(true);
       }
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error editing Modifier!');
+      setSnackbarMessage(t('Error editing Modifier!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -67,7 +69,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Edit New Modifier</DialogTitle>
+      <DialogTitle padding={0}>{t('Edit New Modifier')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,11 +94,11 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Modifier Name is required' }}
+                rules={{ required: t('Modifier Name is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Modifier Name"
+                    label={t('Modifier Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.name}
@@ -112,16 +114,16 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label={t('Cost')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.cost}
@@ -141,16 +143,16 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.price}
@@ -172,7 +174,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -185,10 +187,10 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Edit Item
+              {t('Edit Item')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

@@ -17,6 +17,8 @@ import { getApi, sentApi, postApi, updateApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import CloseIcon from '@mui/icons-material/Close';
 import MultipleSelect from './multiDropDown';
+import { useTranslation } from 'react-i18next';
+import Loader from 'common/loader';
 
 const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSnackbarMessage, isEdit }) => {
   const {
@@ -25,6 +27,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     formState: { errors },
     reset
   } = useForm();
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
 
@@ -38,6 +41,11 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
       setImage(URL.createObjectURL(file));
     }
   };
+    const handleRemoveImage = () => {
+      setImage(null);
+      setDishImage(null);
+    };
+    const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (itemData) {
@@ -74,7 +82,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
         const categoryResponse = await getApi(urls?.foodCategory?.get);
         setCategories(categoryResponse?.data);
       } catch (error) {
-        setSnackbarMessage('Failed to load categories');
+        setSnackbarMessage(t('Failed to load categories'));
         setSnackbarOpen(true);
       }
     };
@@ -97,10 +105,8 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     if (dishImage) {
       formData.append('itemImage', dishImage);
     }
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
+    setIsLoading(true);
+    try {
     let response;
     if (isEdit) {
       formData.id = itemData?.id;
@@ -111,24 +117,32 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
 
     if (response?.success) {
       fetchData();
-      setSnackbarMessage(isEdit ? 'Item updated successfully!' : 'Item added successfully!');
+      setSnackbarMessage(t(isEdit ? 'Item updated successfully!' : 'Item added successfully!'));
       setSnackbarOpen(true);
       reset();
       setImage(null);
       setSelectedIngredients([]);
       onClose();
     } else {
-      setSnackbarMessage(isEdit ? 'Failed to update item!' : 'Failed to add item!');
+      setSnackbarMessage(t(isEdit ? 'Failed to update item!' : 'Failed to add item!'));
       setSnackbarOpen(true);
     }
 
-    onClose();
+  } catch (error) {
+    console.error(error);
+    setSnackbarMessage(isEdit ? t('Error updating category!') : t('Error adding category!'));
+    setSnackbarOpen(true);
+  } finally {
+    setIsLoading(false);
+    setSnackbarOpen(true);
+  }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{isEdit ? 'Edit Item' : 'Add Item'}</DialogTitle>
+      <DialogTitle>{t(isEdit ? 'Edit Item' : 'Add Item')}</DialogTitle>
       <DialogContent>
+                {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} marginTop={'1px'}>
             <IconButton
@@ -151,11 +165,14 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Item Name is required', maxLength: { value: 50, message: 'Item Name must be at most 50 characters' } }}
+                rules={{
+                  required: t('Item Name is required'),
+                  maxLength: { value: 50, message: t('Item Name must be at most 50 characters') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Item Name"
+                    label={t('Item Name')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.name}
@@ -173,13 +190,13 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -195,18 +212,18 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Cost is required',
+                  required: t('Cost is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid cost format'
+                    message: t('Invalid cost format')
                   },
-                  validate: (value) => value >= 0 || 'Cost must be positive',
-                  maxLength: { value: 10, message: 'Cost must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Cost must be positive'),
+                  maxLength: { value: 10, message: t('Cost must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Cost"
+                    label={t('Cost')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.cost}
@@ -226,18 +243,18 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'Price is required',
+                  required: t('Price is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid price format'
+                    message: t('Invalid price format')
                   },
-                  validate: (value) => value >= 0 || 'Price must be positive',
-                  maxLength: { value: 10, message: 'Price must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('Price must be positive'),
+                  maxLength: { value: 10, message: t('Price must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Price"
+                    label={t('Price')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.price}
@@ -260,12 +277,12 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                 name="itemCategoryId"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Category is required' }}
+                rules={{ required: t('Category is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Category"
+                    label={t('Category')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.categoryId}
@@ -273,7 +290,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                   >
                     {categories.map((type) => (
                       <MenuItem key={type._id} value={type._id}>
-                        {type.categoryName}
+                        {t(type.categoryName)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -282,21 +299,29 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" sx={{ mb: 1 }}>
-                Upload Dish Image
+                {t('Upload Dish Image')}
               </Typography>
               <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} id="image-upload" />
               <label htmlFor="image-upload">
                 <Button variant="contained" color="primary" component="span">
-                  Choose Image
+                  {t('Choose Image')}
                 </Button>
               </label>
 
               {image && (
+                 <div style={{ marginTop: '10px' }}>
+                <Typography variant="body2">
+                                    {dishImage?.name}
+                                    <Button size="small" color="secondary" onClick={handleRemoveImage} sx={{ ml: 2 }}>
+                                      {t('Remove')}
+                                    </Button>
+                                  </Typography>
                 <img
                   src={image}
-                  alt="Dish preview"
+                  alt={t('Dish preview')}
                   style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
                 />
+                </div>
               )}
               {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}
             </Grid>
@@ -304,10 +329,10 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              {isEdit ? 'Update' : 'Add'}
+              {t(isEdit ? 'Update' : 'Add')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

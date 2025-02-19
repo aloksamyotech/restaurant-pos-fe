@@ -19,61 +19,62 @@ import { getApi } from 'core/apis/apiClient.js';
 
 import { Stack } from '@mui/system';
 import { enums } from 'core/constant/constant';
+import { t } from 'i18next';
 
 const OverallReport = () => {
   const columns = [
     {
       field: 'serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'phone',
-      headerName: 'Phone No.',
+      headerName: t('Phone No.'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'cost',
-      headerName: 'Cost',
+      headerName: t('Cost'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'price',
-      headerName: 'Price ',
+      headerName: t('Price'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'discount',
-      headerName: 'Discount',
+      headerName: t('Discount'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'profit',
-      headerName: 'Profit',
+      headerName: t('Profit'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'payable',
-      headerName: 'Payable',
+      headerName: t('Payable'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
     },
     {
       field: 'createdAt',
-      headerName: 'Created At',
+      headerName: t('Created At'),
       width: 200,
       headerAlign: 'center',
       align: 'center'
@@ -130,8 +131,8 @@ const OverallReport = () => {
     const formattedData = filteredData.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      phone: item?.phone || 'N/A',
-      price: item?.totalPrice || 'N/A',
+      phone: item?.phone || t('N/A'),
+      price: item?.totalPrice || t('N/A'),
       discount: item?.discount,
       cost: item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0),
       profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0) + item?.discount),
@@ -145,7 +146,7 @@ const OverallReport = () => {
             minute: '2-digit',
             second: '2-digit'
           })
-        : 'N/A'
+        : t('N/A')
     }));
 
     setRows(formattedData);
@@ -156,12 +157,12 @@ const OverallReport = () => {
   }, []);
 
   const summaryData = [
-    { label: 'Total sale amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.price, 0) },
-    { label: 'Total cost amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.cost, 0) },
-    { label: 'Total discount amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.discount, 0) },
-    { label: 'Total profit amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.profit, 0) },
-    { label: 'Total payable amount', value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) },
-    { label: 'Tax', value: 'Rs.' + 0 }
+    { label: t('Total sale amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.price, 0) },
+    { label: t('Total cost amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.cost, 0) },
+    { label: t('Total discount amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.discount, 0) },
+    { label: t('Total profit amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.profit, 0) },
+    { label: t('Total payable amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) },
+    { label: t('Tax'), value: 'Rs.' + 0 }
   ];
 
   return (
@@ -174,7 +175,7 @@ const OverallReport = () => {
         }}
       >
         <Typography variant="h1" color="Highlight">
-          Overall Report
+          {t('Overall Report')}
         </Typography>
       </Stack>
 
@@ -183,11 +184,11 @@ const OverallReport = () => {
           <Grid container spacing={2} sx={{ mb: 2 }}>
             <Grid item xs={6}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel>By Duration</InputLabel>
-                <Select label="By Duration" value={duration} onChange={handleDurationChange}>
-                  <MenuItem value="Daily">Daily</MenuItem>
-                  <MenuItem value="Weekly">Weekly</MenuItem>
-                  <MenuItem value="Monthly">Monthly</MenuItem>
+                <InputLabel>{t('By Duration')}</InputLabel>
+                <Select label={t('By Duration')} value={duration} onChange={handleDurationChange}>
+                  <MenuItem value="Daily">{t('Daily')}</MenuItem>
+                  <MenuItem value="Weekly">{t('Weekly')}</MenuItem>
+                  <MenuItem value="Monthly">{t('Monthly')}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -195,10 +196,16 @@ const OverallReport = () => {
 
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <TextField fullWidth label="Starting date" type="date" value={startDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
+              <TextField
+                fullWidth
+                label={t('Starting date')}
+                type="date"
+                value={startDate.split('T')[0]}
+                InputLabelProps={{ shrink: true }}
+              />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth label="Ending date" type="date" value={endDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
+              <TextField fullWidth label={t('Ending date')} type="date" value={endDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
             </Grid>
           </Grid>
         </Box>
@@ -210,7 +217,7 @@ const OverallReport = () => {
             <Grid item xs={4} key={index}>
               <Card sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="subtitle1" color="text.secondary">
-                  {item.label}
+                  {t(item.label)}
                 </Typography>
                 <Typography variant="h6" fontWeight="bold">
                   {item.value}

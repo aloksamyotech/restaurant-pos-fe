@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box, Snackbar, Alert } from '@mui/material';
 import { Remove, Add, Delete } from '@mui/icons-material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
+import { t } from 'i18next';
 import { urls } from 'core/constant/urls';
+import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 
 const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
@@ -42,7 +43,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
         <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
-          Add Items in the Cart
+          {t('Add Items in the Cart')}
         </Alert>
       </Snackbar>
       <Paper
@@ -100,7 +101,8 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                     }}
                   >
                     <Avatar
-                      src={`${urls?.item?.image}${cartItem?.image}`}
+                       src={cartItem?.image ? `${urls?.item?.image}${cartItem?.image}` : Dummy_Image }
+                       
                       alt={cartItem?.name}
                       sx={{
                         width: 80,
@@ -129,10 +131,10 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="h6">{cartItem?.name}</Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Price: Rs. {cartItem?.price}
+                      {t('Price')}: Rs. {cartItem?.price}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Subtotal: Rs. {cartItem?.price * cartItem?.quantity}
+                      {t('Subtotal')}: Rs. {cartItem?.price * cartItem?.quantity}
                     </Typography>
                   </Box>
 
@@ -156,7 +158,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
           }}
         >
           <Typography variant="h6" color="primary">
-            Total: Rs. {totalPrice.toFixed(2)}
+            {t('Total')}: Rs. {totalPrice.toFixed(2)}
           </Typography>
           <Button
             variant="contained"
@@ -168,11 +170,11 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
               handleDialogOpen();
             }}
           >
-            Submit
+            {t('Submit')}
           </Button>
 
           <Button variant="contained" color="secondary" onClick={handleClearCart}>
-            Clear Cart
+            {t('Clear Cart')}
           </Button>
         </Box>
       </Paper>

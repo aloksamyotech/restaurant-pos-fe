@@ -26,6 +26,8 @@ import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
+import Dummy_Image from '../../../assets/images/Dummy_Image.png';
+import { t } from 'i18next';
 
 const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
   const {
@@ -137,7 +139,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
             fontWeight: 'bold'
           }}
         >
-          Cart Summary
+          {t('Cart Summary')}
         </DialogTitle>
 
         <DialogContent sx={{ padding: '16px', backgroundColor: '#f9f9f9' }}>
@@ -170,7 +172,11 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                     >
                       <Grid container alignItems="center" spacing={2}>
                         <Grid item xs={2}>
-                          <Avatar src={`${urls?.item?.image}${item?.image}`} alt={item?.name} sx={{ width: 56, height: 56 }} />
+                          <Avatar 
+                          
+                          src={item?.image ? `${urls?.item?.image}${item?.image}` : Dummy_Image}
+
+                          alt={item?.name} sx={{ width: 56, height: 56 }} />
                         </Grid>
                         <Grid item xs={7}>
                           <ListItemText
@@ -183,10 +189,10 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                         </Grid>
                         <Grid item xs={3} sx={{ textAlign: 'right' }}>
                           <Typography variant="body2" color="textSecondary">
-                            Price: Rs. {item?.price.toFixed(2)}
+                            {t('Price')}: Rs. {item?.price.toFixed(2)}
                           </Typography>
                           <Typography variant="body2" color="textSecondary">
-                            Subtotal: Rs. {(item?.price * item?.quantity).toFixed(2)}
+                            {t('Subtotal')}: Rs. {(item?.price * item?.quantity).toFixed(2)}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -196,23 +202,23 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <FormControl fullWidth>
-                      <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
+                      <InputLabel id="payment-mode-label">{t('Payment Mode')}</InputLabel>
                       <Select
                         labelId="payment-mode-label"
                         id="payment-mode"
                         value={paymentMode}
                         onChange={handlePaymentModeChange}
-                        label="Payment Mode"
+                        label={t('Payment Mode')}
                       >
-                        <MenuItem value="Cash">Cash</MenuItem>
-                        <MenuItem value="UPI">UPI</MenuItem>
-                        <MenuItem value="Card">Card</MenuItem>
+                        <MenuItem value="Cash">{t('Cash')}</MenuItem>
+                        <MenuItem value="UPI">{t('UPI')}</MenuItem>
+                        <MenuItem value="Card">{t('Card')}</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
-                      label="Discount"
+                      label={t('Discount')}
                       type="number"
                       value={discount}
                       onChange={handleDiscountChange}
@@ -223,12 +229,12 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                   <Grid item xs={6}>
                     <TextField
                       fullWidth
-                      label="Mobile Number"
+                      label={t('Mobile Number')}
                       variant="outlined"
                       value={phone}
                       onChange={handleMobileChange}
                       error={phone.length > 0 && phone.length !== 10}
-                      helperText={phone.length > 0 && phone.length !== 10 ? 'Mobile number must be exactly 10 digits.' : ''}
+                      helperText={phone.length > 0 && phone.length !== 10 ? t('Mobile number must be exactly 10 digits.') : ''}
                     />
                   </Grid>
                 </Grid>
@@ -244,7 +250,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                   }}
                 >
                   <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', mb: 1 }}>
-                    Total Price
+                    {t('Total Price')}
                   </Typography>
                   <Typography variant="h5" color="secondary">
                     Rs. {adjustedPrice.toFixed(2)}
@@ -253,7 +259,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               </>
             ) : (
               <Typography variant="body1" color="textSecondary" sx={{ textAlign: 'center' }}>
-                Your cart is empty.
+                {t('Your cart is empty')}
               </Typography>
             )}
 
@@ -265,10 +271,10 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
               }}
             >
               <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                {loading ? 'Placing Order...' : 'Place the order'}
+                {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
-                Close
+                {t('Close')}
               </Button>
             </DialogActions>
           </form>
@@ -277,7 +283,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
       <Snackbar
         open={snackbarOpen}
         onClose={() => setSnackbarOpen(false)}
-        message="Do you want to print the invoice?"
+        message={t('Do you want to print the invoice?')}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         action={
           <>
@@ -290,7 +296,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                 navigate(navigateTo);
               }}
             >
-              Yes
+              {t('Yes')}
             </Button>
             <Button
               color="secondary"
@@ -303,7 +309,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                 navigate('/dashboard/pos');
               }}
             >
-              No
+              {t('No')}
             </Button>
           </>
         }
@@ -312,7 +318,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
         open={orderPlaced}
         autoHideDuration={3000}
         onClose={() => setOrderPlaced(false)}
-        message="Your order placed successfully !"
+        message={t('Your order placed successfully !')}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       />
     </>

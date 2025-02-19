@@ -18,6 +18,7 @@ import { postApi } from 'core/apis/apiClient.js';
 import { getApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
+import { t } from 'i18next';
 
 const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen }) => {
   const {
@@ -38,11 +39,11 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage('Expense added successfully!');
+      setSnackbarMessage(t('Expense added successfully!'));
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
-      setSnackbarMessage('Error adding Expense!');
+      setSnackbarMessage(t('Error adding Expense!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -57,7 +58,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
         const response = await getApi(urls?.expenseType?.get);
         setExpenseTypes(response?.data);
       } catch (error) {
-        console.error('Failed to fetch expense types:', error);
+        console.error(t('Failed to fetch expense types:'), error);
       }
     };
 
@@ -66,7 +67,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>Add New Expense</DialogTitle>
+      <DialogTitle padding={0}>{t('Add New Expense')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -91,11 +92,14 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                 name="name"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Expense is required', maxLength: { value: 50, message: 'Expense must be at most 50 characters' } }}
+                rules={{
+                  required: t('Expense is required'),
+                  maxLength: { value: 50, message: t('Expense must be at most 50 characters') }
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Expense"
+                    label={t('Expense')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.name}
@@ -113,13 +117,13 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                 rules={{
                   validate: (value) => {
                     const wordCount = value.trim().split(/\s+/).length;
-                    return wordCount <= 200 || 'Description must be at most 200 words';
+                    return wordCount <= 200 || t('Description must be at most 200 words');
                   }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Description"
+                    label={t('Description')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.desc}
@@ -134,12 +138,12 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                 name="expenseNameId"
                 control={control}
                 defaultValue=""
-                rules={{ required: 'Category is required' }}
+                rules={{ required: t('Category is required') }}
                 render={({ field }) => (
                   <TextField
                     {...field}
                     select
-                    label="Expense Type"
+                    label={t('Expense Type')}
                     variant="outlined"
                     fullWidth
                     error={!!errors.expenseNameId}
@@ -147,7 +151,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                   >
                     {expenseTypes.map((type) => (
                       <MenuItem key={type._id} value={type._id}>
-                        {type.expenseName}
+                        {t(type.expenseName)}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -161,18 +165,18 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                 control={control}
                 defaultValue=""
                 rules={{
-                  required: 'amount is required',
+                  required: t('amount is required'),
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,
-                    message: 'Invalid amount format'
+                    message: t('Invalid amount format')
                   },
-                  validate: (value) => value >= 0 || 'amount must be positive',
-                  maxLength: { value: 10, message: 'amount must be at most 10 digits' }
+                  validate: (value) => value >= 0 || t('amount must be positive'),
+                  maxLength: { value: 10, message: t('amount must be at most 10 digits') }
                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Amount"
+                    label={t('Amount')}
                     variant="outlined"
                     fullWidth
                     error={!!errors?.amount}
@@ -189,10 +193,10 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
 
           <DialogActions>
             <Button type="submit" variant="contained" color="primary">
-              Submit
+              {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogActions>
         </form>

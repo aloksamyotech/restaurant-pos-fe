@@ -61,6 +61,22 @@ export const updateApi = async (url, data, headers = {}) => {
     throw new Error(error.response ? error.response.data : error.message);
   }
 };
+export const updateApiPatch = async (url, data, headers = {}) => {
+  try {
+    const isFormData = data instanceof FormData;
+
+    const response = await axios.patch(url, data, {
+      headers: {
+        ...headers,
+        ...(isFormData ? {} : { 'Content-Type': 'application/json' })
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('API Error:', error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || 'Something went wrong');
+  }
+};
 
 export const deleteApi = async (url, headers = {}) => {
   try {

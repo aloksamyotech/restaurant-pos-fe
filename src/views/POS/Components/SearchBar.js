@@ -1,5 +1,6 @@
 import React from 'react';
 import { TextField, Box } from '@mui/material';
+import { t } from 'i18next';
 
 const SearchBar = ({ setSearchQuery }) => {
   const handleSearchChange = (event) => {
@@ -8,7 +9,7 @@ const SearchBar = ({ setSearchQuery }) => {
 
   return (
     <Box>
-      <TextField label="Search Dish" variant="outlined" onChange={handleSearchChange} fullWidth />
+      <TextField label={t('Search Dish')} variant="outlined" onChange={handleSearchChange} fullWidth />
     </Box>
   );
 };
