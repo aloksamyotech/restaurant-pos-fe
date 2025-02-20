@@ -10,6 +10,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import ReorderSharpIcon from '@mui/icons-material/ReorderSharp';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 import {
   IconHome,
@@ -52,7 +53,8 @@ const icons = {
   Payments,
   RestaurantIcon,
   PointOfSaleIcon,
-  ReorderSharpIcon
+  ReorderSharpIcon,
+  AttachMoneyIcon
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
@@ -174,6 +176,14 @@ export const Report = filterMenuItems({
       type: 'item',
       url: '/dashboard/overallReport',
       icon: icons.SummarizeIcon,
+      breadcrumbs: false
+    },
+    {
+      id: '15',
+      title: 'Expense Report',
+      type: 'item',
+      url: '/dashboard/expenseReport',
+      icon: icons.AttachMoneyIcon,
       breadcrumbs: false
     }
   ]
