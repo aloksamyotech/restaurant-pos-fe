@@ -13,7 +13,7 @@ const POS = Loadable(lazy(() => import('views/POS')));
 const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
 const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
 const Categories = Loadable(lazy(() => import('views/Categories')));
-
+const ExpenseReport = Loadable(lazy(() => import('views/ExpenseReport')));
 const Order = Loadable(lazy(() => import('views/Order')));
 const OrderView = Loadable(lazy(() => import('views/Order/orderView')));
 const Items = Loadable(lazy(() => import('views/Items')));
@@ -203,7 +203,17 @@ const MainRoutes = {
           element: <ProtectedRoute element={<CustomersView />} requiredPermission="Customers" />
         }
       ]
-    }
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'expenseReport',
+
+          element: <ProtectedRoute element={<ExpenseReport />} requiredPermission="Expense Report" />
+        }
+      ]
+    },
   ]
 };
 

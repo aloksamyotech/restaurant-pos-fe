@@ -18,7 +18,8 @@ const userPermissions = [
   t('Expenses'),
   t('Overall Report'),
   t('Employees'),
-  t('Customers')
+  t('Customers'),
+  t('Expense Report'),
 ];
 
 const PermissionCheckBox = ({ rowData, fetchData }) => {

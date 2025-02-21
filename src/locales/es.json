@@ -257,5 +257,11 @@
   "Please enter a valid email address": "Por favor ingrese una dirección de correo electrónico válida",
   "Phone Number must be exactly 10 digits and contain only numbers": "El número de teléfono debe tener exactamente 10 dígitos y contener solo números",
   "Last Name must be at most 20 characters": "El apellido no debe tener más de 20 caracteres",
-  "First Name must be at most 20 characters": "El nombre no debe tener más de 20 caracteres"
+  "First Name must be at most 20 characters": "El nombre no debe tener más de 20 caracteres",
+  "Expense Report": "Informe de Gastos",
+  "Start Date": "Fecha de Inicio",
+  "End Date": "Fecha de Fin",
+  "Filter": "Filtrar",
+  "Download CSV": "Descargar CSV",
+  "Created Date": "Fecha de Creación"
 }
