@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link, Snackbar } from '@mui/material';
-import SortIcon from '@mui/icons-material/Sort';
+
 import Iconify from '../../ui-component/iconify';
 import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
@@ -47,6 +47,8 @@ const Categories = () => {
   const handleDialogClose = () => setDialogOpen(false);
 
   const handleEditDialogOpen = (category) => {
+   
+    
     setSelectedCategory(category);
     setIsEditMode(true);
     setDialogOpen(true);
@@ -54,6 +56,8 @@ const Categories = () => {
 
   const fetchData = async () => {
     const response = await getApi(urls?.foodCategory?.get);
+   
+    
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
@@ -188,7 +192,7 @@ const Categories = () => {
       </Card>
 
       <Card>
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 550, width: '100%' }}>
           <DataGrid rows={filteredRows} rowHeight={100} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>

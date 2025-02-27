@@ -7,6 +7,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useTranslation } from 'react-i18next';
 
+
+
 const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage, setSnackbarOpen, isEdit }) => {
   const { t } = useTranslation();
   const {
@@ -14,7 +16,9 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
@@ -26,14 +30,15 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
         desc: category?.desc || ''
       });
       setImage(category?.categoryImage || null);
-      setDishImage(category?.categoryImage || null);
+      setDishImage(category?.categoryImage)
+
     } else {
       reset({
         categoryName: '',
         desc: ''
       });
       setImage(null);
-      setDishImage(null);
+      
     }
   }, [category, isEdit, reset]);
 
@@ -49,15 +54,25 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     setImage(null);
     setDishImage(null);
   };
-  const [isLoading, setIsLoading] = useState(false);
+ const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
+    
+    
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
-    if (dishImage) {
-      formData.append('categoryImage', dishImage);
-    }
+
+  if (dishImage instanceof File) {
+   
+    formData.append('categoryImage', dishImage);
+} else if(dishImage === null){
+    
+    formData.append('categoryImage', ''); 
+}
+  
+   
+    
    
     setIsLoading(true);
 
