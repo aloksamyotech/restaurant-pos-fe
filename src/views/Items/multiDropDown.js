@@ -47,8 +47,8 @@ export default function MultipleSelect({ value = [], onSelectionChange }) {
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const ingredientResponse = await getApi(urls?.ingredient.get);
-        setingredients(ingredientResponse.data);
+        const ingredientResponse = await getApi(urls?.ingredient?.get);
+        setingredients(ingredientResponse?.data);
       } catch (error) {
         console.error('Failed to load dropdown data', error);
       }

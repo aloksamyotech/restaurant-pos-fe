@@ -24,7 +24,9 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

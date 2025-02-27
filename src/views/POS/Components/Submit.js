@@ -35,7 +35,9 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     reset,
     register,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 

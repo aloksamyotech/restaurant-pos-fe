@@ -26,7 +26,9 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {

@@ -24,7 +24,9 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const { t } = useTranslation();

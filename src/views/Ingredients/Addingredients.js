@@ -24,7 +24,9 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    mode: "all"
+  });
 
   const [loading, setLoading] = useState(false);
 
