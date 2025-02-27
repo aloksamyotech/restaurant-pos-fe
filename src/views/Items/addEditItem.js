@@ -19,6 +19,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import MultipleSelect from './multiDropDown';
 import { useTranslation } from 'react-i18next';
 import Loader from 'common/loader';
+import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
+
 
 const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSnackbarMessage, isEdit }) => {
   const {
@@ -26,10 +28,10 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm();
+  } = useForm({mode :"all"});
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [ selectedIngredients, setSelectedIngredients] = useState([]);
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
@@ -48,6 +50,8 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+   
+    
     if (itemData) {
       reset({
         name: itemData?.name || '',
@@ -58,7 +62,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
         itemCategoryId: itemData?.itemCategoryId || '',
         isAvailable: itemData?.isAvailable || false
       });
-      setSelectedIngredients(itemData?.ingredientId?.map((ingredient) => ingredient?._id) || []);
+      setSelectedIngredients(itemData?.ingredientId || []);
 
       setImage(itemData.image || null);
     } else {
@@ -75,7 +79,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
       setImage(null);
     }
   }, [itemData, reset]);
-
+ 
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -93,7 +97,9 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     setSelectedIngredients(newSelected);
   };
 
+
   const onSubmit = async (data) => {
+   
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('cost', data.cost);
@@ -102,9 +108,15 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
 
     formData.append('categoryId', data.itemCategoryId);
     formData.append('ingredients', JSON.stringify(selectedIngredients));
-    if (dishImage) {
+    
+    if (dishImage instanceof File) {
+    
       formData.append('itemImage', dishImage);
-    }
+  } else if(dishImage === null){
+      
+      formData.append('itemImage', ''); 
+  }
+  
     setIsLoading(true);
     try {
     let response;
@@ -271,6 +283,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
             <Grid item xs={6}>
               <MultipleSelect value={selectedIngredients} onSelectionChange={handleIngredientSelectionChange} />
             </Grid>
+            
 
             <Grid item xs={6}>
               <Controller

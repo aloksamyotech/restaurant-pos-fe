@@ -79,7 +79,7 @@ const Categories = () => {
     },
     {
       field: 'expenseNameId',
-      headerName: t('expenseType'),
+      headerName: t('Expense Type'),
       type: 'string',
       sortable: false,
       flex: 1,

@@ -263,5 +263,8 @@
   "End Date": "End Date",
   "Filter": "Filter",
   "Download CSV": "Download CSV",
-  "Created Date": "Created Date"
+  "Created Date": "Created Date",
+  "Buying Price": "Buying Price",
+  "Selling Price": "Selling Price",
+  "Preparing Cost": "Preparing Cost"
 }
