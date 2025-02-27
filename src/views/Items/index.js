@@ -95,7 +95,7 @@ const Categories = () => {
 
     {
       field: 'cost',
-      headerName: t('Cost'),
+      headerName: t('Preparing Cost'),
       type: 'number',
       flex: 1,
       editable: true,
@@ -104,7 +104,7 @@ const Categories = () => {
     },
     {
       field: 'price',
-      headerName: t('Price'),
+      headerName: t('Selling Price'),
       type: 'number',
       sortable: false,
       flex: 1,

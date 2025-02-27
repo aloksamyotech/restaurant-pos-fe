@@ -263,5 +263,8 @@
   "End Date": "Fecha de Fin",
   "Filter": "Filtrar",
   "Download CSV": "Descargar CSV",
-  "Created Date": "Fecha de Creación"
+  "Created Date": "Fecha de Creación",
+  "Buying Price": "Precio de compra",
+  "Selling Price": "Precio de venta",
+  "Preparing Cost": "Costo de preparación"
 }

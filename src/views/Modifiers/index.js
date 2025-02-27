@@ -62,7 +62,7 @@ const Categories = () => {
     },
     {
       field: 'cost',
-      headerName: t('Cost'),
+      headerName: t('Buying Price'),
       type: 'number',
       flex: 1,
       headerAlign: 'center',
@@ -71,7 +71,7 @@ const Categories = () => {
     },
     {
       field: 'price',
-      headerName: t('Price'),
+      headerName: t('Selling Price'),
       description: t('This column has a value getter and is not sortable.'),
       sortable: false,
       flex: 1,
