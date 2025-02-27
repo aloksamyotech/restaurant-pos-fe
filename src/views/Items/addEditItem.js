@@ -49,11 +49,6 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     };
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(()=>{
-      
-      
-    },[selectedIngredients])
-
   useEffect(() => {
    
     
