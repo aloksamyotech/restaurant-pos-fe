@@ -213,7 +213,7 @@ const MainRoutes = {
           element: <ProtectedRoute element={<ExpenseReport />} requiredPermission="Expense Report" />
         }
       ]
-    },
+    }
   ]
 };
 

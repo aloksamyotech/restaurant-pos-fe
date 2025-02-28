@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Button,
-  Grid,
-  MenuItem,
-  InputAdornment,
-  Typography,
-  IconButton
-} from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, InputAdornment, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
@@ -28,7 +16,7 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
     reset,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
 
   const [loading, setLoading] = useState(false);

@@ -36,7 +36,7 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
     register,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
@@ -174,11 +174,11 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                     >
                       <Grid container alignItems="center" spacing={2}>
                         <Grid item xs={2}>
-                          <Avatar 
-                          
-                          src={item?.image ? `${urls?.item?.image}${item?.image}` : Dummy_Image}
-
-                          alt={item?.name} sx={{ width: 56, height: 56 }} />
+                          <Avatar
+                            src={item?.image ? `${urls?.item?.image}${item?.image}` : Dummy_Image}
+                            alt={item?.name}
+                            sx={{ width: 56, height: 56 }}
+                          />
                         </Grid>
                         <Grid item xs={7}>
                           <ListItemText

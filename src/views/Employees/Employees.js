@@ -34,7 +34,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
     register,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -123,13 +123,16 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                   required: t('Last Name is required'),
                   maxLength: { value: 20, message: t('Last Name must be at most 20 characters') }
                 }}
-                render={({ field }) =>
+                render={({ field }) => (
                   <TextField
-                    {...field} label={t('Last Name')} variant="outlined"
+                    {...field}
+                    label={t('Last Name')}
+                    variant="outlined"
                     fullWidth
                     error={!!errors?.lastName}
                     helperText={errors?.lastName ? errors?.lastName?.message : ''}
-                  />}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={6}>
@@ -157,12 +160,13 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
               <Controller
                 name="email"
                 control={control}
-                rules={{ required: t('Email is required'),
+                rules={{
+                  required: t('Email is required'),
                   pattern: {
                     value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     message: t('Please enter a valid email address')
                   }
-                 }}
+                }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -202,7 +206,8 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 <Controller
                   name="password"
                   control={control}
-                  rules={{ required: t('Password is required'),
+                  rules={{
+                    required: t('Password is required'),
                     minLength: {
                       value: 6,
                       message: t('Password must be at least 6 characters long')
@@ -211,12 +216,12 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                       value: 15,
                       message: t('Password must not exceed 15 characters')
                     }
-                   }}
+                  }}
                   render={({ field }) => (
                     <TextField
                       {...field}
                       label={t('Password')}
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       variant="outlined"
                       fullWidth
                       error={!!errors?.password}

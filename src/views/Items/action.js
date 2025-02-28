@@ -25,7 +25,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
     formState: { errors },
     reset
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);

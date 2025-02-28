@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
+import {
+  Container,
+  Card,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField
+} from '@mui/material';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import { t } from 'i18next';
@@ -23,7 +36,7 @@ const ExpenseReport = () => {
       desc: item?.desc,
       amount: item?.amount,
       expenseType: item?.expenseNameId?.expenseName,
-      createdAt: new Date(item?.createdAt).toLocaleDateString(),
+      createdAt: new Date(item?.createdAt).toLocaleDateString()
     }));
     setExpenses(formattedData);
     setFilteredExpenses(formattedData);
@@ -33,22 +46,17 @@ const ExpenseReport = () => {
     if (!startDate || !endDate) return;
     const start = new Date(startDate);
     start.setHours(0, 0, 0, 0);
-    
-    
+
     const end = new Date(endDate);
-  
+
     end.setHours(23, 59, 59, 999);
-    
+
     const filtered = expenses.filter((expense) => {
       const expenseDate = new Date(expense.createdAt);
-      
-      
-      
-      
+
       return expenseDate >= start && expenseDate <= end;
     });
-   
-   
+
     setFilteredExpenses(filtered);
   };
 
@@ -71,11 +79,11 @@ const ExpenseReport = () => {
           label={t('Start Date')}
           InputLabelProps={{ shrink: true }}
           value={startDate}
-          onChange={(e) =>  setStartDate(e?.target?.value)}
+          onChange={(e) => setStartDate(e?.target?.value)}
           sx={{ mr: 2 }}
         />
-         
-     <TextField
+
+        <TextField
           type="date"
           label={t('End Date')}
           InputLabelProps={{ shrink: true }}

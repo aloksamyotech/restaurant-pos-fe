@@ -250,7 +250,7 @@
   "FOOD": "COMIDA",
   "Portal": "Portal",
   "Restaurant POS": "Punto de Venta de Restaurante",
-  "Are you sure you want to delete this item?" : "¿Estás seguro de que quieres eliminar este artículo?",
+  "Are you sure you want to delete this item?": "¿Estás seguro de que quieres eliminar este artículo?",
   "Password must not exceed 15 characters": "La contraseña no debe exceder los 15 caracteres",
   "Address must not exceed 100 characters": "La dirección no debe exceder los 100 caracteres",
   "Password must be at least 6 characters long": "La contraseña debe tener al menos 6 caracteres",

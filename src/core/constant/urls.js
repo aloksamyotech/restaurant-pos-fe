@@ -17,6 +17,7 @@ export const urls = Object.freeze({
     get: base + '/category/getCategory',
     update: base + '/category/updateCategory/:id',
     delete: base + '/category/deleteCategory/:id',
+    bulkUpload: base + '/category/bulkUploadCategory',
     image: imageBase
   },
   item: {
