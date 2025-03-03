@@ -33,6 +33,12 @@ export const urls = Object.freeze({
     update: base + '/modifier/updateModifier/:id',
     delete: base + '/modifier/deleteModifier/:id'
   },
+  table: {
+    create: base + '/table/addTable',
+    get: base + '/table/getTable',
+    update: base + '/table/updateTable/:id',
+    delete: base + '/table/deleteTable/:id'
+  },
   ingredient: {
     create: base + '/ingredient/addIngredient',
     get: base + '/ingredient/getIngredients',

@@ -8,7 +8,7 @@ import { Navigate } from 'react-router';
 // dashboard routing
 
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
-
+const Table = Loadable(lazy(() => import('views/Table')));
 const POS = Loadable(lazy(() => import('views/POS')));
 const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
 const Modifiers = Loadable(lazy(() => import('views/Modifiers')));
@@ -25,6 +25,7 @@ const EmployeeView = Loadable(lazy(() => import('views/Employees/viewPage')));
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
+const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 const userPermissions = getPermissionFromToken();
@@ -213,7 +214,27 @@ const MainRoutes = {
           element: <ProtectedRoute element={<ExpenseReport />} requiredPermission="Expense Report" />
         }
       ]
-    }
+    },
+     {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'kitchen',
+         
+          element: <ProtectedRoute element={<Kitchen />} requiredPermission="Kitchen" />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'table',
+         
+          element: <ProtectedRoute element={<Table />} requiredPermission="Table" />
+        }
+      ]
+    },
   ]
 };
 

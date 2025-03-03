@@ -289,8 +289,8 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                     label={t('Category')}
                     variant="outlined"
                     fullWidth
-                    error={!!errors.categoryId}
-                    helperText={errors.categoryId ? errors.categoryId.message : ''}
+                    error={!!errors.itemCategoryId}
+                    helperText={errors.itemCategoryId ? errors.itemCategoryId.message : ''}
                   >
                     {categories.map((type) => (
                       <MenuItem key={type._id} value={type._id}>

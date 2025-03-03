@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-
+import { CurrencyProvider } from "../src/common/CurrencyContext";
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
@@ -31,6 +31,7 @@ const App = () => {
   }, [token, navigate, location.pathname]);
 
   return (
+    <CurrencyProvider>
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>
         <CssBaseline />
@@ -41,6 +42,7 @@ const App = () => {
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>
+    </CurrencyProvider>
   );
 };
 
