@@ -137,7 +137,7 @@ const Categories = () => {
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.table?.get);
-    console.log(response, "response==");
+   
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
@@ -146,7 +146,7 @@ const Categories = () => {
       space: item?.space,
       
     }));
-    console.log(formattedData, "formattedData==");
+   
 
     setRows(formattedData);
   };
