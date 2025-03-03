@@ -19,7 +19,8 @@ import {
   Select,
   MenuItem,
   IconButton,
-  Snackbar
+  Snackbar,
+  Autocomplete
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
@@ -27,9 +28,10 @@ import { postApi } from 'core/apis/apiClient.js';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
+import serviceTables from 'common/Servicetable';
 import { t } from 'i18next';
 
-const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
+const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
   const {
     handleSubmit,
     reset,
@@ -91,7 +93,8 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
         totalPrice,
         discount,
         paymentMode,
-        phone
+        phone,
+        orderType
       };
       const orderResponse = await postApi(urls?.order?.create, payload);
       const orderId = orderResponse?.data?._id;
@@ -239,6 +242,16 @@ const CartDialog = ({ open, onClose, cartItems, resetCart }) => {
                       helperText={phone.length > 0 && phone.length !== 10 ? t('Mobile number must be exactly 10 digits.') : ''}
                     />
                   </Grid>
+                  {orderType !== 20 && (
+                  <Grid item xs={6}>
+                    <Autocomplete
+                      disablePortal
+                      options={serviceTables}
+                      
+                      renderInput={(params) => <TextField {...params} label="Service Table" />}
+                    />
+                  </Grid>
+                  )}
                 </Grid>
 
                 <Divider sx={{ my: 2 }} />

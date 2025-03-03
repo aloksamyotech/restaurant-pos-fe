@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Divider, Paper, Button, Card } from '@mui/material';
+import { Box, Typography, Divider, Paper, Button, Card, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
@@ -103,77 +103,45 @@ const Invoice = (props) => {
         <Typography variant="h3" textAlign="center" color="primary" gutterBottom>
           {t('Invoice')}
         </Typography>
-        <Typography variant="h3" textAlign="left" color="primary" gutterBottom>
+        <Grid container justifyContent="space-between" alignItems="center">
+     
+      <Grid item>
+        <Typography variant="h4" textAlign="left" color="primary" gutterBottom>
           {t('Apna Restaurant')}
-        </Typography>
-        <Typography variant="h4" textAlign="Right" color="primary" gutterBottom>
-          {t('Date')}: {new Date().toLocaleDateString()}
-        </Typography>
-        <Typography variant="h4" textAlign="left" color="" gutterBottom>
-          {t('Order Details')}
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h5" textAlign="left" color="">
-            {t('Order ID')}: {invoiceId ? `ORD-${invoiceId.slice(-6).toUpperCase()}` : t('N/A')}
           </Typography>
-        </Box>
+          <Typography variant="h6" textAlign="left" gutterBottom>
+          {t('71 Gama Street, California ')}
+          </Typography>
+          <Typography variant="h6" textAlign="left" gutterBottom>
+          {t('CA 90001, USA ')}
+          </Typography>
+          </Grid>
+      
         <Box sx={{ display: 'flex', justifyContent: 'right' }}></Box>
+        <Grid item>
 
-        <Typography variant="h4" textAlign="left" color="" gutterBottom sx={{ mt: 3 }}>
+        <Typography variant="h4" textAlign="left" color="primary" gutterBottom sx={{ mt: 3 }}>
           {t('Customer Details')}
         </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <Stack direction="row" spacing={50} sx={{}}>
-          <Stack direction="column" spacing={1} sx={{}}>
+        
+        <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
               {t('Name')} :{rowData?.customer}
             </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Email')} :{rowData?.email}
-            </Typography>
-          </Stack>
-          <Stack direction="column" spacing={1} sx={{}}>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Address')} :{rowData?.address}
-            </Typography>
+           
+          
             <Typography variant="h5" textAlign="left" color="">
               {t('Phone')} :{rowData?.phone}
             </Typography>
+            <Typography variant="h5" textAlign="left" color="">
+              {t('Address')} :{rowData?.address}
+            </Typography>
           </Stack>
-        </Stack>
+        
+        </Grid>
+        </Grid>
 
-        <Typography variant="h4" textAlign="left" color="" sx={{ mt: 3 }}>
-          {t('Payment Information')}
-        </Typography>
-        <Divider sx={{ mb: 3 }} />
-        <Stack direction="row" spacing={50} sx={{}}>
-          <Stack direction="column" spacing={1} sx={{}}>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Payment Status')} :
-              <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
-                {t(rowData?.paymentStatus)}
-              </Button>
-            </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Payment Type')}: {rowData?.paymentMode}
-            </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Payment Date')}: {new Date().toLocaleDateString()}
-            </Typography>
-          </Stack>
-          <Stack direction="column" spacing={1} sx={{}}>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Total Price')}: {rowData?.totalPrice}
-            </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Discount')} :{rowData?.discount}
-            </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Tax')}:
-            </Typography>
-          </Stack>
-        </Stack>
+      
         <Typography variant="h4" textAlign="left" color="" sx={{ mt: 3 }}>
           {t('Item Details')}
         </Typography>

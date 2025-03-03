@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import SearchBar from './Components/SearchBar';
 import DishesGrid from './Components/DishesGrid';
-import { Container, Grid, Card } from '@mui/material';
+import { Container, Grid, Card, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import useDishes from './Components/Dishes';
 import Cart from './Components/cart';
 import Dropdown from './Components/dropDown';
 import CartDialog from './Components/Submit';
+import { Box } from '@mui/system';
+import { t } from 'i18next';
 
 const POS = () => {
   const [cartStore, setCart] = useState([]);
@@ -33,16 +35,43 @@ const POS = () => {
   const resetCart = () => {
     setCart([]);
   };
+  const [orderType, setOrderType] = React.useState('');
+
+  const handleChange = (event) => {
+    setOrderType(event?.target?.value);
+  };
 
   return (
     <>
       <Container>
         <Card sx={{ p: 1, m: 1 }}>
           <Grid container spacing={1}>
-            <Grid item xs={9}>
+            <Grid item xs={8}>
               <SearchBar setSearchQuery={setSearchQuery} />
             </Grid>
-            <Grid item xs={3}>
+
+            <Grid item xs={2}>
+              
+
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Order Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={orderType}
+                    label="Order Type"
+                    onChange={handleChange}
+
+                  >
+                    <MenuItem value={10}>{t('Dining')} </MenuItem>
+                    <MenuItem value={20}>{t('Pickup')}</MenuItem>
+
+                  </Select>
+                </FormControl>
+
+             
+            </Grid>
+            <Grid item xs={2}>
               <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />
             </Grid>
           </Grid>
@@ -67,7 +96,7 @@ const POS = () => {
           </Grid>
         </Grid>
       </Container>
-      <CartDialog open={dialogOpen} onClose={handleDialogClose} cartItems={cartStore} resetCart={resetCart} />
+      <CartDialog open={dialogOpen} onClose={handleDialogClose} cartItems={cartStore} resetCart={resetCart} orderType={orderType} />
     </>
   );
 };
