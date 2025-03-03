@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, Typography, IconButton } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { sentApi, updateApiPatch,updateApi } from 'core/apis/apiClient.js';
+import { sentApi, updateApiPatch, updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useTranslation } from 'react-i18next';
-
-
 
 const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage, setSnackbarOpen, isEdit }) => {
   const { t } = useTranslation();
@@ -17,7 +15,7 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     reset,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
 
   const [image, setImage] = useState(null);
@@ -30,22 +28,19 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
         desc: category?.desc || ''
       });
       setImage(category?.categoryImage || null);
-      setDishImage(category?.categoryImage)
-
+      setDishImage(category?.categoryImage);
     } else {
       reset({
         categoryName: '',
         desc: ''
       });
       setImage(null);
-      
     }
   }, [category, isEdit, reset]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      
       setDishImage(file);
       setImage(URL.createObjectURL(file));
     }
@@ -54,26 +49,19 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
     setImage(null);
     setDishImage(null);
   };
- const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data) => {
-    
-    
     const formData = new FormData();
     formData.append('categoryName', data?.categoryName);
     formData.append('desc', data?.desc);
 
-  if (dishImage instanceof File) {
-   
-    formData.append('categoryImage', dishImage);
-} else if(dishImage === null){
-    
-    formData.append('categoryImage', ''); 
-}
-  
-   
-    
-   
+    if (dishImage instanceof File) {
+      formData.append('categoryImage', dishImage);
+    } else if (dishImage === null) {
+      formData.append('categoryImage', '');
+    }
+
     setIsLoading(true);
 
     try {

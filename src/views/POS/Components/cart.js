@@ -101,8 +101,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                     }}
                   >
                     <Avatar
-                       src={cartItem?.image ? `${urls?.item?.image}${cartItem?.image}` : Dummy_Image }
-                       
+                      src={cartItem?.image ? `${urls?.item?.image}${cartItem?.image}` : Dummy_Image}
                       alt={cartItem?.name}
                       sx={{
                         width: 80,

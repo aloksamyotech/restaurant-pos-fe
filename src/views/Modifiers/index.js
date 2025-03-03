@@ -201,8 +201,6 @@ const Categories = () => {
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
           />
-
-          
         </Stack>
       </Card>
 

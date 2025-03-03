@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
-import Papa from "papaparse";
+import React, { useState } from 'react';
+import { Button, Typography } from '@mui/material';
+import Papa from 'papaparse';
 
 const BulkUpload = ({ onBulkUpload }) => {
   const [csvData, setCsvData] = useState([]);
@@ -13,7 +13,7 @@ const BulkUpload = ({ onBulkUpload }) => {
           setCsvData(result.data);
         },
         header: true, // Converts CSV headers into JSON keys
-        skipEmptyLines: true,
+        skipEmptyLines: true
       });
     }
   };
@@ -30,9 +30,7 @@ const BulkUpload = ({ onBulkUpload }) => {
       <Button variant="contained" color="primary" onClick={handleUpload}>
         Upload Data
       </Button>
-      <Typography variant="body2">
-        {csvData.length > 0 && `Loaded ${csvData.length} entries`}
-      </Typography>
+      <Typography variant="body2">{csvData.length > 0 && `Loaded ${csvData.length} entries`}</Typography>
     </div>
   );
 };

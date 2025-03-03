@@ -2,7 +2,6 @@ import React from 'react';
 import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 import { t } from 'i18next';
 
-
 const DeleteConfirmationDialog = ({ open, onClose, onConfirm }) => {
   return (
     <Dialog open={open} onClose={onClose}>

@@ -21,17 +21,16 @@ import { useTranslation } from 'react-i18next';
 import Loader from 'common/loader';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 
-
 const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSnackbarMessage, isEdit }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm({mode :"all"});
+  } = useForm({ mode: 'all' });
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
-  const [ selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
@@ -43,15 +42,13 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
       setImage(URL.createObjectURL(file));
     }
   };
-    const handleRemoveImage = () => {
-      setImage(null);
-      setDishImage(null);
-    };
-    const [isLoading, setIsLoading] = useState(false);
+  const handleRemoveImage = () => {
+    setImage(null);
+    setDishImage(null);
+  };
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-   
-    
     if (itemData) {
       reset({
         name: itemData?.name || '',
@@ -79,7 +76,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
       setImage(null);
     }
   }, [itemData, reset]);
- 
+
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -97,9 +94,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
     setSelectedIngredients(newSelected);
   };
 
-
   const onSubmit = async (data) => {
-   
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('cost', data.cost);
@@ -108,53 +103,50 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
 
     formData.append('categoryId', data.itemCategoryId);
     formData.append('ingredients', JSON.stringify(selectedIngredients));
-    
+
     if (dishImage instanceof File) {
-    
       formData.append('itemImage', dishImage);
-  } else if(dishImage === null){
-      
-      formData.append('itemImage', ''); 
-  }
-  
+    } else if (dishImage === null) {
+      formData.append('itemImage', '');
+    }
+
     setIsLoading(true);
     try {
-    let response;
-    if (isEdit) {
-      formData.id = itemData?.id;
-      response = await updateApi(urls?.item?.update?.replace(':id', itemData?.id), formData, {});
-    } else {
-      response = await sentApi(urls?.item?.create, formData, {});
-    }
+      let response;
+      if (isEdit) {
+        formData.id = itemData?.id;
+        response = await updateApi(urls?.item?.update?.replace(':id', itemData?.id), formData, {});
+      } else {
+        response = await sentApi(urls?.item?.create, formData, {});
+      }
 
-    if (response?.success) {
-      fetchData();
-      setSnackbarMessage(t(isEdit ? 'Item updated successfully!' : 'Item added successfully!'));
+      if (response?.success) {
+        fetchData();
+        setSnackbarMessage(t(isEdit ? 'Item updated successfully!' : 'Item added successfully!'));
+        setSnackbarOpen(true);
+        reset();
+        setImage(null);
+        setSelectedIngredients([]);
+        onClose();
+      } else {
+        setSnackbarMessage(t(isEdit ? 'Failed to update item!' : 'Failed to add item!'));
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage(isEdit ? t('Error updating category!') : t('Error adding category!'));
       setSnackbarOpen(true);
-      reset();
-      setImage(null);
-      setSelectedIngredients([]);
-      onClose();
-    } else {
-      setSnackbarMessage(t(isEdit ? 'Failed to update item!' : 'Failed to add item!'));
+    } finally {
+      setIsLoading(false);
       setSnackbarOpen(true);
     }
-
-  } catch (error) {
-    console.error(error);
-    setSnackbarMessage(isEdit ? t('Error updating category!') : t('Error adding category!'));
-    setSnackbarOpen(true);
-  } finally {
-    setIsLoading(false);
-    setSnackbarOpen(true);
-  }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{t(isEdit ? 'Edit Item' : 'Add Item')}</DialogTitle>
       <DialogContent>
-                {isLoading && <Loader isVisible={isLoading}></Loader>}
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} marginTop={'1px'}>
             <IconButton
@@ -283,7 +275,6 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
             <Grid item xs={6}>
               <MultipleSelect value={selectedIngredients} onSelectionChange={handleIngredientSelectionChange} />
             </Grid>
-            
 
             <Grid item xs={6}>
               <Controller
@@ -322,18 +313,18 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
               </label>
 
               {image && (
-                 <div style={{ marginTop: '10px' }}>
-                <Typography variant="body2">
-                                    {dishImage?.name}
-                                    <Button size="small" color="secondary" onClick={handleRemoveImage} sx={{ ml: 2 }}>
-                                      {t('Remove')}
-                                    </Button>
-                                  </Typography>
-                <img
-                  src={image}
-                  alt={t('Dish preview')}
-                  style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
-                />
+                <div style={{ marginTop: '10px' }}>
+                  <Typography variant="body2">
+                    {dishImage?.name}
+                    <Button size="small" color="secondary" onClick={handleRemoveImage} sx={{ ml: 2 }}>
+                      {t('Remove')}
+                    </Button>
+                  </Typography>
+                  <img
+                    src={image}
+                    alt={t('Dish preview')}
+                    style={{ marginTop: '10px', width: '100%', maxHeight: '300px', objectFit: 'contain' }}
+                  />
                 </div>
               )}
               {errors?.dishImage && <Typography color="error">{errors?.dishImage?.message}</Typography>}

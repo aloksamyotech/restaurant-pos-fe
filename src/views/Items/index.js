@@ -238,8 +238,6 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
             isEdit={isEditMode}
           />
-
-          
         </Stack>
       </Card>
 

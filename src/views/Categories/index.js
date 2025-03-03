@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link, Snackbar } from '@mui/material';
-
 import Iconify from '../../ui-component/iconify';
 import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
@@ -10,11 +9,11 @@ import { getApi, deleteApi } from 'core/apis/apiClient.js';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchBar from 'common/searchBar';
-
 import DeleteConfirmationDialog from '../../common/commonDelete';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import CategoryDialog from './Category';
 import { useNavigate } from 'react-router';
+import BulkUploadCategory from './bulkUploadButton';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -47,17 +46,19 @@ const Categories = () => {
   const handleDialogClose = () => setDialogOpen(false);
 
   const handleEditDialogOpen = (category) => {
-   
-    
     setSelectedCategory(category);
     setIsEditMode(true);
     setDialogOpen(true);
   };
+  const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
+  const handleBulkDialogOpen = () => {
+    setBulkDialogOpen(true);
+  };
+  const handleBulkDialogClose = () => setBulkDialogOpen(false);
 
   const fetchData = async () => {
     const response = await getApi(urls?.foodCategory?.get);
-   
-    
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
@@ -178,6 +179,7 @@ const Categories = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Category')}
           </Button>
+
           <CategoryDialog
             open={dialogOpen}
             onClose={handleDialogClose}
@@ -187,7 +189,17 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
             isEdit={isEditMode}
           />
-         
+          <Button variant="contained" color="primary" onClick={handleBulkDialogOpen}>
+            {t('Bulk Upload')}
+          </Button>
+
+          <BulkUploadCategory
+            open={bulkDialogOpen}
+            fetchData={fetchData}
+            onClose={handleBulkDialogClose}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
         </Stack>
       </Card>
 

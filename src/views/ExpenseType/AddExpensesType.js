@@ -15,7 +15,7 @@ const AddExpensesTypeDialog = ({ open, onClose, fetchData, setSnackbarMessage, s
     reset,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
 
   const [loading, setLoading] = useState(false);

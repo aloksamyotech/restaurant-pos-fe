@@ -27,7 +27,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
     reset,
     formState: { errors }
   } = useForm({
-    mode: "all"
+    mode: 'all'
   });
   const [loading, setLoading] = useState(false);
 
