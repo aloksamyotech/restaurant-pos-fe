@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from './Components/SearchBar';
 import DishesGrid from './Components/DishesGrid';
-import { Container, Grid, Card, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Container, Grid, Card, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
 import useDishes from './Components/Dishes';
 import Cart from './Components/cart';
 import Dropdown from './Components/dropDown';
@@ -51,25 +51,26 @@ const POS = () => {
             </Grid>
 
             <Grid item xs={2}>
-              
 
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Order Type</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={orderType}
-                    label="Order Type"
-                    onChange={handleChange}
 
-                  >
-                    <MenuItem value={10}>{t('Dining')} </MenuItem>
-                    <MenuItem value={20}>{t('Pickup')}</MenuItem>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Order Type</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={orderType}
+                  label="Order Type"
+                  onChange={handleChange}
+                  
+                >
+                  <MenuItem value={"Dining"}>{t('Dining')} </MenuItem>
+                  <MenuItem value={"Pickup"}>{t('Pickup')}</MenuItem>
 
-                  </Select>
-                </FormControl>
+                </Select>
+                
+              </FormControl>
 
-             
+
             </Grid>
             <Grid item xs={2}>
               <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />

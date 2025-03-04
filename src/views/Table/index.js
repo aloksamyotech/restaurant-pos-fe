@@ -112,10 +112,10 @@ const Categories = () => {
             open={deleteDialogOpen === params.row.id}
             onClose={() => setDeleteDialogOpen(null)}
             onConfirm={async () => {
-              await deleteApi(urls?.modifier?.delete?.replace(':id', params?.row?.id));
+              await deleteApi(urls?.table?.delete?.replace(':id', params?.row?.id));
               setRows((prevRows) => prevRows.filter((row) => row.id !== params?.row?.id));
               await fetchData();
-              setSnackbarMessage(t('Modifier deleted successfully!'));
+              setSnackbarMessage(t('Table deleted successfully!'));
               setSnackbarOpen(true);
               setDeleteDialogOpen(null);
             }}
@@ -192,6 +192,7 @@ const Categories = () => {
             setRows={setRows}
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
+          
           />
         </Stack>
       </Card>
