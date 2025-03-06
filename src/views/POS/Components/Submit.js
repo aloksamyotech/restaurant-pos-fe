@@ -24,15 +24,14 @@ import {
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { postApi,getApi } from 'core/apis/apiClient.js';
+import { postApi, getApi } from 'core/apis/apiClient.js';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
-import serviceTables from 'common/Servicetable';
 import { t } from 'i18next';
 import { useEffect } from 'react';
 
-const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
+const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const {
     handleSubmit,
     reset,
@@ -70,23 +69,21 @@ const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
 
   const adjustedPrice = totalPrice - discount;
 
-   const [rows, setRows] = useState([]);
-   const [selectedTableNumber, setSelectedTableNumber] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [selectedTableNumber, setSelectedTableNumber] = useState(null);
 
-    const fetchData = async () => {
-      const response = await getApi(urls?.table?.get);
-    
-      
-      const formattedData = response?.data?.map((item, index) => ({
-        tableNumber: item?.tableNumber,
-        
-      }));
-  
-      setRows(formattedData);
-    };
-     useEffect(() => {
-        fetchData();
-      }, []);
+  const fetchData = async () => {
+    const response = await getApi(urls?.table?.get);
+
+    const formattedData = response?.data?.map((item, index) => ({
+      tableNumber: item?.tableNumber
+    }));
+
+    setRows(formattedData);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const onSubmit = async () => {
     setLoading(true);
@@ -107,7 +104,6 @@ const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
         return;
       }
 
-      
       const payload = {
         customerId,
         items,
@@ -116,8 +112,7 @@ const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
         paymentMode,
         phone,
         type: orderType,
-        table: selectedTableNumber  
-
+        table: selectedTableNumber
       };
       const orderResponse = await postApi(urls?.order?.create, payload);
       const orderId = orderResponse?.data?._id;
@@ -148,29 +143,23 @@ const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
       const invoiceResponse = await postApi(urls?.invoice?.create, invoicePayload);
       const invoiceId = invoiceResponse?.data?._id;
 
-     
-
       if (!invoiceId) {
         return;
       }
       const kitchenPayload = {
-        order : orderId,
-        table: selectedTableNumber,
-        
-       };
+        order: orderId,
+        table: selectedTableNumber
+      };
       const kitchenResponse = await postApi(urls?.kitchen?.create, kitchenPayload);
-      
+
       const kitchenId = kitchenResponse?.data?._id;
-    
-      
 
       setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
-     reset();
+      reset();
     } catch (error) {
       console.error(error);
     }
-    
   };
 
   return (
@@ -282,15 +271,15 @@ const CartDialog = ({ open, onClose, cartItems,orderType, resetCart }) => {
                       helperText={phone.length > 0 && phone.length !== 10 ? t('Mobile number must be exactly 10 digits.') : ''}
                     />
                   </Grid>
-                  {orderType !== 20 && (
-                  <Grid item xs={6}>
-                    <Autocomplete
-                      disablePortal
-                      options={rows?.map((item) => item?.tableNumber) || []}
-                      onChange={(event, newValue) => setSelectedTableNumber(newValue)}
-                      renderInput={(params) => <TextField {...params} label="Service Table" />}
-                    />
-                  </Grid>
+                  {orderType !== 'Pickup' && (
+                    <Grid item xs={6}>
+                      <Autocomplete
+                        disablePortal
+                        options={rows?.map((item) => item?.tableNumber) || []}
+                        onChange={(event, newValue) => setSelectedTableNumber(newValue)}
+                        renderInput={(params) => <TextField {...params} label="Service Table" />}
+                      />
+                    </Grid>
                   )}
                 </Grid>
 

@@ -9,7 +9,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import Invoice from 'views/POS/Components/invoice';
-import { t } from 'i18next'; 
+import { t } from 'i18next';
 
 const OrderView = () => {
   const navigate = useNavigate();

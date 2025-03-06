@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
-import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
 import SearchBar from 'common/searchBar';
 import HomeIcon from '@mui/icons-material/Home';
@@ -13,8 +12,6 @@ import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 
 const Kitchen = () => {
-
-
   const navigate = useNavigate();
 
   const breadcrumbs = [
@@ -22,7 +19,7 @@ const Kitchen = () => {
       <HomeIcon />
     </Link>,
     <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
-      {t('Customers')}
+      {t('Kitchen')}
     </Link>
   ];
   const handleViewClick = (row) => {
@@ -34,6 +31,14 @@ const Kitchen = () => {
     {
       field: 'orderId',
       headerName: t('Order Id'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true
+    },
+    {
+      field: 'orderType',
+      headerName: t('Order Type'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -85,14 +90,14 @@ const Kitchen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const fetchData = async () => {
     const response = await getApi(urls?.kitchen?.get);
-   
-    
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      orderId: item?.order,
+      orderId: `ORD-${item?.order?._id?.substring(0, 6)}`,
       table: item?.table || '--',
-      status: item?.status || '--'
+      status: item?.status || '--',
+      orderType: item?.order?.type || '--'
     }));
 
     setRows(formattedData);
@@ -103,7 +108,6 @@ const Kitchen = () => {
   }, []);
   const filteredRows = rows?.filter((row) => row?.table?.toString().toLowerCase().includes(searchTerm?.toLowerCase()));
   return (
-   
     <Container>
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">

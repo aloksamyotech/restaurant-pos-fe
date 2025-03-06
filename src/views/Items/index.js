@@ -180,7 +180,7 @@ const Categories = () => {
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.item?.get);
-const formattedData = response?.data?.map((item, index) => ({
+    const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       name: item?.name,

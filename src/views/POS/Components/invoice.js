@@ -104,44 +104,39 @@ const Invoice = (props) => {
           {t('Invoice')}
         </Typography>
         <Grid container justifyContent="space-between" alignItems="center">
-     
-      <Grid item>
-        <Typography variant="h4" textAlign="left" color="primary" gutterBottom>
-          {t('Apna Restaurant')}
-          </Typography>
-          <Typography variant="h6" textAlign="left" gutterBottom>
-          {t('71 Gama Street, California ')}
-          </Typography>
-          <Typography variant="h6" textAlign="left" gutterBottom>
-          {t('CA 90001, USA ')}
-          </Typography>
+          <Grid item>
+            <Typography variant="h4" textAlign="left" color="primary" gutterBottom>
+              {t('Apna Restaurant')}
+            </Typography>
+            <Typography variant="h6" textAlign="left" gutterBottom>
+              {t('71 Gama Street, California ')}
+            </Typography>
+            <Typography variant="h6" textAlign="left" gutterBottom>
+              {t('CA 90001, USA ')}
+            </Typography>
           </Grid>
-      
-        <Box sx={{ display: 'flex', justifyContent: 'right' }}></Box>
-        <Grid item>
 
-        <Typography variant="h4" textAlign="left" color="primary" gutterBottom sx={{ mt: 3 }}>
-          {t('Customer Details')}
-        </Typography>
-        
-        <Stack direction="column" spacing={1} sx={{}}>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Name')} :{rowData?.customer}
+          <Box sx={{ display: 'flex', justifyContent: 'right' }}></Box>
+          <Grid item>
+            <Typography variant="h4" textAlign="left" color="primary" gutterBottom sx={{ mt: 3 }}>
+              {t('Customer Details')}
             </Typography>
-           
-          
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Phone')} :{rowData?.phone}
-            </Typography>
-            <Typography variant="h5" textAlign="left" color="">
-              {t('Address')} :{rowData?.address}
-            </Typography>
-          </Stack>
-        
-        </Grid>
+
+            <Stack direction="column" spacing={1} sx={{}}>
+              <Typography variant="h5" textAlign="left" color="">
+                {t('Name')} :{rowData?.customer}
+              </Typography>
+
+              <Typography variant="h5" textAlign="left" color="">
+                {t('Phone')} :{rowData?.phone}
+              </Typography>
+              <Typography variant="h5" textAlign="left" color="">
+                {t('Address')} :{rowData?.address}
+              </Typography>
+            </Stack>
+          </Grid>
         </Grid>
 
-      
         <Typography variant="h4" textAlign="left" color="" sx={{ mt: 3 }}>
           {t('Item Details')}
         </Typography>

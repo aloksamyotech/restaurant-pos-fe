@@ -226,12 +226,12 @@ const MainRoutes = {
         }
       ]
     },
-     {
+    {
       path: 'dashboard',
       children: [
         {
           path: 'kitchen',
-         
+
           element: <ProtectedRoute element={<Kitchen />} requiredPermission="Kitchen" />
         }
       ]
@@ -241,11 +241,11 @@ const MainRoutes = {
       children: [
         {
           path: 'table',
-         
+
           element: <ProtectedRoute element={<Table />} requiredPermission="Table" />
         }
       ]
-    },
+    }
   ]
 };
 

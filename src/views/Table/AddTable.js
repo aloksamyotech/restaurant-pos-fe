@@ -1,5 +1,16 @@
 import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Grid, InputAdornment, IconButton, MenuItem } from '@mui/material';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Button,
+  Grid,
+  InputAdornment,
+  IconButton,
+  MenuItem
+} from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
 import { postApi } from 'core/apis/apiClient.js';
@@ -70,7 +81,6 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
               <Controller
                 name="tableNumber"
                 control={control}
-
                 rules={{
                   required: t('Table Name is required'),
                   maxLength: { value: 25, message: t('Table Name must be at most 25 characters') }
@@ -101,13 +111,10 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                     error={!!errors.space}
                     helperText={errors.space ? errors.space.message : ''}
                     type="number"
-
                   />
                 )}
               />
             </Grid>
-
-
 
             <Grid mt={1} item xs={12}>
               <Controller
@@ -129,7 +136,6 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                 )}
               />
             </Grid>
-
           </Grid>
 
           <DialogActions>

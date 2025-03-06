@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from './Components/SearchBar';
 import DishesGrid from './Components/DishesGrid';
-import { Container, Grid, Card, FormControl, InputLabel, Select, MenuItem, Typography } from '@mui/material';
+import { Container, Grid, Card, FormControl, InputLabel, Select, MenuItem, Typography, FormHelperText } from '@mui/material';
 import useDishes from './Components/Dishes';
 import Cart from './Components/cart';
 import Dropdown from './Components/dropDown';
@@ -15,6 +15,7 @@ const POS = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const dishes = useDishes();
   const [searchQuery, setSearchQuery] = useState('');
+  const [orderTypeError, setOrderTypeError] = useState(false);
 
   const filteredDishes = dishes.filter((dish) => dish?.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -29,7 +30,13 @@ const POS = () => {
       }
     });
   };
-  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogOpen = () => {
+    if (!orderType) {
+      setOrderTypeError(true);
+      return;
+    }
+    setDialogOpen(true);
+  };
   const handleDialogClose = () => setDialogOpen(false);
 
   const resetCart = () => {
@@ -39,6 +46,7 @@ const POS = () => {
 
   const handleChange = (event) => {
     setOrderType(event?.target?.value);
+    setOrderTypeError(false);
   };
 
   return (
@@ -51,9 +59,7 @@ const POS = () => {
             </Grid>
 
             <Grid item xs={2}>
-
-
-              <FormControl fullWidth>
+              <FormControl fullWidth error={orderTypeError}>
                 <InputLabel id="demo-simple-select-label">Order Type</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -61,16 +67,12 @@ const POS = () => {
                   value={orderType}
                   label="Order Type"
                   onChange={handleChange}
-                  
                 >
-                  <MenuItem value={"Dining"}>{t('Dining')} </MenuItem>
-                  <MenuItem value={"Pickup"}>{t('Pickup')}</MenuItem>
-
+                  <MenuItem value={'Dining'}>{t('Dining')} </MenuItem>
+                  <MenuItem value={'Pickup'}>{t('Pickup')}</MenuItem>
                 </Select>
-                
+                {orderTypeError && <FormHelperText>Order Type is required</FormHelperText>}
               </FormControl>
-
-
             </Grid>
             <Grid item xs={2}>
               <Dropdown dishesPerRow={dishesPerRow} setDishesPerRow={setDishesPerRow} />

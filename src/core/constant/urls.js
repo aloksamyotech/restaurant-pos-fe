@@ -83,6 +83,7 @@ export const urls = Object.freeze({
   kitchen: {
     create: base + '/kitchen/addKitchenOrder',
     get: base + '/kitchen/findAllKitchenOrder',
-    getSingleOrder: base + '/kitchen/findAllKitchenOrderById/:id'
+    getSingleOrder: base + '/kitchen/findAllKitchenOrderById/:id',
+    updateKitchenOrder: base + '/kitchen/updateKitchenOrder/:id'
   }
 });

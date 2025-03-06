@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import AddModifierDialog from './AddTable';
-import EditModifierDialog from './action';
+
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
@@ -68,7 +68,6 @@ const Categories = () => {
       editable: true,
       align: 'center'
     },
-   
 
     {
       field: 'action',
@@ -88,14 +87,6 @@ const Categories = () => {
                 boxShadow: 3
               }
             }}
-          />
-          <EditModifierDialog
-            open={editDialogOpen}
-            onClose={handleEditDialogClose}
-            fetchData={fetchData}
-            modifier={selectedModifier}
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen}
           />
 
           <DeleteIcon
@@ -137,16 +128,14 @@ const Categories = () => {
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.table?.get);
-   
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       tableNumber: item?.tableNumber,
       status: item?.status,
-      space: item?.space,
-      
+      space: item?.space
     }));
-   
 
     setRows(formattedData);
   };
@@ -192,7 +181,6 @@ const Categories = () => {
             setRows={setRows}
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
-          
           />
         </Stack>
       </Card>
