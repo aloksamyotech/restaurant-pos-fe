@@ -79,5 +79,11 @@ export const urls = Object.freeze({
     get: base + '/invoice/getInvoices',
     getbyid: base + '/invoice/fetchInvoice/:id',
     getbyorderid: base + '/invoice/fetchInvoiceByOrderId/:id'
+  },
+  kitchen: {
+    create: base + '/kitchen/addKitchenOrder',
+    get: base + '/kitchen/findAllKitchenOrder',
+    getSingleOrder: base + '/kitchen/findAllKitchenOrderById/:id',
+    updateKitchenOrder: base + '/kitchen/updateKitchenOrder/:id'
   }
 });

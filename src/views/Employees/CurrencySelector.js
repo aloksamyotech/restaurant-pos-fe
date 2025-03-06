@@ -1,4 +1,4 @@
-import { useCurrency } from "../../common/CurrencyContext";
+import { useCurrency } from '../../common/CurrencyContext';
 
 const CurrencySelector = () => {
   const { setCurrency } = useCurrency();

@@ -80,14 +80,14 @@ export const POS = filterMenuItems({
       icon: icons.IconHome,
       breadcrumbs: false
     },
-     {
-        id: '03',
-        title: 'Kitchen',
-        type: 'item',
-        url: '/dashboard/kitchen',
-        icon: icons.RestaurantIcon,
-        breadcrumbs: false
-      },
+    {
+      id: '03',
+      title: 'Kitchen',
+      type: 'item',
+      url: '/dashboard/kitchen',
+      icon: icons.RestaurantIcon,
+      breadcrumbs: false
+    }
   ]
 });
 
@@ -119,7 +119,7 @@ export const Portal = filterMenuItems({
       url: '/dashboard/table',
       icon: icons.FastfoodIcon,
       breadcrumbs: false
-    },
+    }
   ]
 });
 export const Food = filterMenuItems({

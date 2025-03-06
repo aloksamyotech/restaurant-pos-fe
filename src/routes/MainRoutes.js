@@ -24,6 +24,7 @@ const Employees = Loadable(lazy(() => import('views/Employees')));
 const EmployeeView = Loadable(lazy(() => import('views/Employees/viewPage')));
 const Customers = Loadable(lazy(() => import('views/Customers')));
 const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')));
+const SingleKitchenOrder = Loadable(lazy(() => import('views/Kitchen/kitchenOrder')));
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
 const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
 
@@ -209,18 +210,28 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'kitchen/singleKitchenOrder/:id',
+
+          element: <ProtectedRoute element={<SingleKitchenOrder />} requiredPermission="Kitchen" />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'expenseReport',
 
           element: <ProtectedRoute element={<ExpenseReport />} requiredPermission="Expense Report" />
         }
       ]
     },
-     {
+    {
       path: 'dashboard',
       children: [
         {
           path: 'kitchen',
-         
+
           element: <ProtectedRoute element={<Kitchen />} requiredPermission="Kitchen" />
         }
       ]
@@ -230,11 +241,11 @@ const MainRoutes = {
       children: [
         {
           path: 'table',
-         
+
           element: <ProtectedRoute element={<Table />} requiredPermission="Table" />
         }
       ]
-    },
+    }
   ]
 };
 

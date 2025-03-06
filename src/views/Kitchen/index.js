@@ -1,62 +1,137 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import {
-  Avatar,
-  Button,
-  CardContent,
-  FormControl,
-  FormLabel,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography
-} from '@mui/material';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import { padding } from '@mui/system';
+import React, { useState } from 'react';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import Iconify from '../../ui-component/iconify';
+import SearchBar from 'common/searchBar';
+import HomeIcon from '@mui/icons-material/Home';
+import { DataGrid } from '@mui/x-data-grid';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { urls } from 'core/constant/urls';
+import { getApi } from 'core/apis/apiClient.js';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { t } from 'i18next';
 
-const kitchen = () => {
-  const orders = [
-    { orderId: '1', name: 'Sandwich', quantity: 2 },
-    { orderId: '2', name: 'Kajucurry', quantity: 1 },
-    { orderId: '3', name: 'Rasmalia', quantity: 3 }
+const Kitchen = () => {
+  const navigate = useNavigate();
+
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
+      <HomeIcon />
+    </Link>,
+    <Link underline="hover" key="2" color="primary" sx={{ cursor: 'pointer' }}>
+      {t('Kitchen')}
+    </Link>
   ];
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/kitchen/singleKitchenOrder/${row.id}`, { state: row });
+  };
+  const columns = [
+    { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
+
+    {
+      field: 'orderId',
+      headerName: t('Order Id'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true
+    },
+    {
+      field: 'orderType',
+      headerName: t('Order Type'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: true
+    },
+
+    {
+      field: 'table',
+      headerName: t('Table No'),
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+    {
+      field: 'status',
+      headerName: t('Status'),
+      type: 'string',
+      sortable: false,
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
+
+    {
+      field: 'action',
+      headerName: t('Action'),
+      headerAlign: 'center',
+      align: 'center',
+
+      flex: 1,
+      renderCell: (params) => (
+        <VisibilityIcon
+          color="primary"
+          onClick={() => handleViewClick(params.row)}
+          sx={{
+            cursor: 'pointer',
+            '&:hover': {
+              boxShadow: 3
+            }
+          }}
+        />
+      )
+    }
+  ];
+
+  const [rows, setRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const fetchData = async () => {
+    const response = await getApi(urls?.kitchen?.get);
+
+    const formattedData = response?.data?.map((item, index) => ({
+      id: item?._id,
+      serial: index + 1,
+      orderId: `ORD-${item?.order?._id?.substring(0, 6)}`,
+      table: item?.table || '--',
+      status: item?.status || '--',
+      orderType: item?.order?.type || '--'
+    }));
+
+    setRows(formattedData);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  const filteredRows = rows?.filter((row) => row?.table?.toString().toLowerCase().includes(searchTerm?.toLowerCase()));
   return (
-    <>
-      <Card sx={{ Color: '#f1f8e9', p: 2 }}>
-        <FormControl sx={{ width: '200px' }}>
-          <InputLabel id="order-label">Display Order</InputLabel>
-
-          <Select label="Display All Order" color="info">
-            <MenuItem value="All">Display All Order </MenuItem>
-            <MenuItem value="Dining">By Order Type:Dining </MenuItem>
-            <MenuItem value="Table">By Order Type:Table</MenuItem>
-            <MenuItem value="Delivery">By Order Type:Delivery</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField label="Search " variant="outlined" sx={{ width: '200px', ml: '15px' }} />
-
-        <Button variant="outlined" sx={{ width: '100px', ml: '15px', padding: '12px', borderRadius: '15px' }}>
-          Reload
-        </Button>
+    <Container>
+      <Card sx={{ p: 2, mb: 3 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="h3" component="h2">
+            <Iconify icon="" /> {t('Kitchen')}
+          </Typography>
+          <Breadcrumbs separator="›" aria-label="breadcrumb">
+            {breadcrumbs}
+          </Breadcrumbs>
+        </Stack>
       </Card>
 
-      <Grid container spacing={2} justifyContent="flex-start" sx={{ p: 2 }}>
-        {orders.map((order) => (
-          <Grid item key={order.orderId}>
-            <Card sx={{ margin: 1, padding: 2, maxWidth: 400, bgcolor: '#cfd8dc' }}>
-              <CardContent sx={{ m: 2 }}>
-                <FastfoodIcon sx={{ marginRight: 2, color: '#ff5722' }} />
-                <Typography variant="h6">Order ID: {order?.orderId}</Typography>
-                <Typography variant="body1">Dish Name: {order?.name}</Typography>
-                <Typography variant="body2">Quantity: {order?.quantity}</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </>
+      <Card sx={{ p: 2, mb: 3 }}>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
+        </Stack>
+      </Card>
+
+      <Card>
+        <Box sx={{ height: 400, width: '100%' }}>
+          <DataGrid rows={filteredRows} columns={columns} getRowId={(row) => row.id} />
+        </Box>
+      </Card>
+    </Container>
   );
 };
-export default kitchen;
+export default Kitchen;

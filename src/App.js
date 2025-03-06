@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { CurrencyProvider } from "../src/common/CurrencyContext";
+import { CurrencyProvider } from '../src/common/CurrencyContext';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, StyledEngineProvider } from '@mui/material';
 import { ToastContainer } from 'react-toastify';
@@ -32,16 +32,16 @@ const App = () => {
 
   return (
     <CurrencyProvider>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={themes(customization)}>
-        <CssBaseline />
-        <ToastContainer />
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={themes(customization)}>
+          <CssBaseline />
+          <ToastContainer />
 
-        <NavigationScroll>
-          <Routes />
-        </NavigationScroll>
-      </ThemeProvider>
-    </StyledEngineProvider>
+          <NavigationScroll>
+            <Routes />
+          </NavigationScroll>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </CurrencyProvider>
   );
 };

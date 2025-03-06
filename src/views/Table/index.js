@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import AddModifierDialog from './AddTable';
-import EditModifierDialog from './action';
+
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
@@ -68,7 +68,6 @@ const Categories = () => {
       editable: true,
       align: 'center'
     },
-   
 
     {
       field: 'action',
@@ -89,14 +88,6 @@ const Categories = () => {
               }
             }}
           />
-          <EditModifierDialog
-            open={editDialogOpen}
-            onClose={handleEditDialogClose}
-            fetchData={fetchData}
-            modifier={selectedModifier}
-            setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen}
-          />
 
           <DeleteIcon
             sx={{
@@ -112,10 +103,10 @@ const Categories = () => {
             open={deleteDialogOpen === params.row.id}
             onClose={() => setDeleteDialogOpen(null)}
             onConfirm={async () => {
-              await deleteApi(urls?.modifier?.delete?.replace(':id', params?.row?.id));
+              await deleteApi(urls?.table?.delete?.replace(':id', params?.row?.id));
               setRows((prevRows) => prevRows.filter((row) => row.id !== params?.row?.id));
               await fetchData();
-              setSnackbarMessage(t('Modifier deleted successfully!'));
+              setSnackbarMessage(t('Table deleted successfully!'));
               setSnackbarOpen(true);
               setDeleteDialogOpen(null);
             }}
@@ -137,16 +128,14 @@ const Categories = () => {
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.table?.get);
-   
+
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
       tableNumber: item?.tableNumber,
       status: item?.status,
-      space: item?.space,
-      
+      space: item?.space
     }));
-   
 
     setRows(formattedData);
   };

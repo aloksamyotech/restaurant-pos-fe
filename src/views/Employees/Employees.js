@@ -197,6 +197,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                   >
                     <MenuItem value="Manager">{t('Manager')}</MenuItem>
                     <MenuItem value="OrderTaker">{t('Order Taker')}</MenuItem>
+                    <MenuItem value="Chef">{t('Chef')}</MenuItem>
                   </TextField>
                 )}
               />
