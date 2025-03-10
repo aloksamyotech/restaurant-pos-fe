@@ -13,13 +13,14 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { postApi } from 'core/apis/apiClient.js';
+import { postApi,updateApi } from 'core/apis/apiClient.js';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 
-const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessage, setSnackbarOpen }) => {
+const AddModifierDialog = ({ open, onClose, fetchData, table, setSnackbarMessage, setSnackbarOpen,isEdit }) => {
   const { t } = useTranslation();
   const {
     control,
@@ -30,23 +31,54 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
     mode: 'all'
   });
 
+
   const [loading, setLoading] = useState(false);
+   useEffect(() => {
+      if (isEdit && table) {
+        reset({
+          tableNumber: table?.tableNumber || '',
+          space: table?.space || '',
+          status: table?.status || ''
+        });
+       } else {
+        reset({
+          tableNumber: table?.tableNumber || '',
+          space: table?.space || '',
+          status: table?.status || ''
+        });
+       
+      }
+    }, [table, isEdit, reset]);
+
 
   const onSubmit = async (data) => {
     const formData = { ...data };
     setLoading(true);
 
-    try {
-      const response = await postApi(urls?.table?.create, formData);
 
-      fetchData();
+    try {
+      let response;
+      if (isEdit) {
+      response = await updateApi(urls?.table?.update?.replace(':id', table?.id), formData);
       reset();
-      onClose();
-      setSnackbarMessage(t('Modifier added successfully!'));
-      setSnackbarOpen(true);
-    } catch (error) {
+      } else {
+        response = await postApi(urls?.table?.create, formData);
+        reset();
+      }
+      if(response.success){
+        fetchData();
+       reset();
+       onClose();
+       setSnackbarMessage(isEdit ? t('Table updated successfully!') : t('Table added successfully!'));
+       setSnackbarOpen(true);
+      }
+      else {
+        setSnackbarMessage(isEdit ? t('Failed to update Table!') : t('Failed to add Table!'));
+        setSnackbarOpen(true);
+      }
+     } catch (error) {
       console.error(error);
-      setSnackbarMessage(t('Error adding Modifier!'));
+      setSnackbarMessage(isEdit ? t('Error updating Table!') : t('Error adding Table!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
@@ -56,7 +88,7 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle padding={0}>{t('Add New Table')}</DialogTitle>
+      <DialogTitle padding={0}>{isEdit ? t('Edit Table') : t('Add New Table')}</DialogTitle>
       <DialogContent>
         {loading && <Loader isVisible={loading}></Loader>}
 
@@ -102,6 +134,9 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
               <Controller
                 name="space"
                 control={control}
+                rules={{
+                  required: t('Space is required')
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -120,6 +155,9 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
               <Controller
                 name="status"
                 control={control}
+                rules={{
+                  required: t('Status is required')
+                 }}
                 render={({ field }) => (
                   <TextField
                     {...field}

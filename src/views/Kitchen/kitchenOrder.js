@@ -15,7 +15,10 @@ import {
   DialogContent,
   Select,
   MenuItem,
-  DialogActions
+  DialogActions,
+  IconButton,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import { getApi, updateApiPatch } from 'core/apis/apiClient.js';
@@ -24,6 +27,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router';
 import { t } from 'i18next';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 const SingleKitchenOrder = () => {
   const navigate = useNavigate();
@@ -36,6 +41,7 @@ const SingleKitchenOrder = () => {
   const [selectedChef, setSelectedChef] = useState('');
   const [rows, setRows] = useState([]);
   const [orderidForupdate, setorderidForupdate] = useState();
+  const [isChefAssigned, setIsChefAssigned] = useState(false);
 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
@@ -51,10 +57,17 @@ const SingleKitchenOrder = () => {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
 
+
+
+      if (!response?.data?.chef) {
+        setIsChefAssigned(false);
+      } else {
+        setIsChefAssigned(true);
+      }
       const latestItemCompeted = response?.data?.itemCompeted || [];
       setCheckboxItem(latestItemCompeted);
 
-      const orderId = response?.data?.order;
+      const orderId = response?.data?.order?._id;
 
       if (orderId) {
         const orderResponse = await getApi(urls?.order?.getbyid?.replace(':id', orderId));
@@ -80,6 +93,7 @@ const SingleKitchenOrder = () => {
     fetchData();
   }, []);
 
+
   const handleCheckboxChange = async (orderId, ItemId, currentStatus) => {
     try {
       let updatedItemCompeted = [...latestItemCompeted];
@@ -96,7 +110,12 @@ const SingleKitchenOrder = () => {
 
       await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
         completedPercentage: newCompletedPercentage,
-        itemCompeted: updatedItemCompeted
+        itemCompeted: updatedItemCompeted,
+        status: newCompletedPercentage === 0
+          ? 'Pending'
+          : newCompletedPercentage === 100
+            ? 'Completed'
+            : 'In Progress'
       });
 
       fetchData();
@@ -127,11 +146,14 @@ const SingleKitchenOrder = () => {
     if (!selectedChef) return;
 
     try {
-      await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
-        chef: selectedChef
+      const response = await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
+        chef: selectedChef,
+        status: 'In Progress'
       });
-      fetchData();
+
+
       setOpen(false);
+      fetchData();
     } catch (error) {
       console.error('Error assigning chef:', error);
     }
@@ -170,6 +192,7 @@ const SingleKitchenOrder = () => {
           type="checkbox"
           checked={checkbox(params?.row?.itemId)}
           onChange={() => handleCheckboxChange(id, params?.row?.itemId, params?.row?.completedPercentage)}
+          style={{ width: '15px', height: '15px' }}
         />
       )
     }
@@ -177,10 +200,10 @@ const SingleKitchenOrder = () => {
 
   return (
     <Container>
-      <Card sx={{ p: 2, mb: 3 }}>
+      <Card sx={{ p: 2, mb: 5 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
-            <Iconify icon="" /> {t('Orders')}
+            <Iconify icon="" /> {t('Kitchen Orders')}
           </Typography>
           <Breadcrumbs separator="›" aria-label="breadcrumb">
             {breadcrumbs}
@@ -188,51 +211,73 @@ const SingleKitchenOrder = () => {
         </Stack>
       </Card>
 
-      <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+
+      <Box sx={{ width: '100%', bgcolor: 'white' }}>
+
         <Grid container padding={2} spacing={3}>
           <Grid item xs={6}>
-            <Box sx={{ width: '100%' }}>
-              <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
+            <Box sx={{ width: '100%', }}>
+              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
                 <CardContent>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    <strong>{t('Customer')}:</strong>
-                  </Typography>
+
                   <Typography variant="body1">
-                    <strong>{t('Employee')}:</strong>
+                    <strong>{t('Order Id')}:</strong> ORD-${kitchenOrderData?.order?._id?.substring(0, 6)}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>{t('Total Price')}:</strong> {kitchenOrderData?.totalPrice}
+                    <strong>{t('Order Type')}:</strong>
+                    {kitchenOrderData?.order?.type}
+                  </Typography>
+                  <Typography variant="body1" sx={{ mt: 1 }}>
+                    <strong>{t('Completed Percentage')}:</strong>{`${kitchenOrderData?.completedPercentage?.toFixed(2)}%`}
+
                   </Typography>
                 </CardContent>
               </Card>
             </Box>
           </Grid>
 
-          <Grid item xs={6}>
-            <Box sx={{ width: '100%' }}>
-              <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
+          <Grid item xs={6} >
+
+
+            <Box sx={{ width: '100%' }} >
+              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
                 <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography mt={1} variant="body1">
-                      <strong>{t('Status')}:</strong> {kitchenOrderData?.status}
-                    </Typography>
-                  </Box>
+
+                  <Typography variant="body1">
+                    <strong>{t('Status')}:</strong> {kitchenOrderData?.status}
+                  </Typography>
+                 
 
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>{t('Chef')}:</strong>
+                    <strong>{t('Chef')}:</strong>{kitchenOrderData?.chef?.firstName}
                   </Typography>
 
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>{t('Table Type')}:</strong> {kitchenOrderData?.table}
+                    <strong>{t('Table No.')}:</strong> {kitchenOrderData?.table}
                   </Typography>
-                  <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-                    {t('Assign Chef')}
-                  </Button>
+
                 </CardContent>
+
+
               </Card>
+
             </Box>
+
           </Grid>
+
+
         </Grid>
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+
+
+          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+            {isChefAssigned ? 'Update Chef' : 'Assign Chef'}
+          </Button>
+          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+            {t('Add Extra Items')}
+          </Button>
+          
+        </Box>
 
         <Card>
           <Box sx={{ height: 'auto', width: '100%' }}>
@@ -246,22 +291,46 @@ const SingleKitchenOrder = () => {
           </Box>
         </Card>
       </Box>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>{t('Select a Chef')}</DialogTitle>
-        <DialogContent>
-          <Select fullWidth value={selectedChef} onChange={(e) => setSelectedChef(e.target.value)}>
-            {rows
-              .filter((chef) => chef.role === 'Chef')
-              .map((chef, index) => (
-                <MenuItem key={index} value={chef._id}>
-                  {t(chef.firstName)}
-                </MenuItem>
-              ))}
-          </Select>
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <DialogTitle >{t('Select a Chef')}</DialogTitle>
+        <DialogContent  >
+          <IconButton
+            onClick={() => setOpen(false)}
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              color: 'grey',
+              '&:hover': {
+                color: 'red'
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <FormControl fullWidth sx={{ mt: 1 }}>
+            <InputLabel id="chef-label">{t('Select Chef')}</InputLabel>
+            <Select
+              value={selectedChef}
+              onChange={(e) => setSelectedChef(e.target.value)}
+              labelId="chef-label"
+              label={t('Select Chef')}
+
+            >
+
+              {rows
+                .filter((chef) => chef.role === 'Chef')
+                .map((chef, index) => (
+                  <MenuItem key={index} value={chef._id}>
+                    {t(chef.firstName)}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>{t('Cancel')}</Button>
-          <Button variant="contained" color="primary" onClick={handleAssignChef}>
+          <Button variant="contained" color="primary" onClick={handleAssignChef} >
             {t('Assign')}
           </Button>
         </DialogActions>

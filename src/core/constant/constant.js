@@ -1,3 +1,5 @@
+import { Check } from "@mui/icons-material";
+
 export const enums = Object.freeze({
   Daily: 'Daily',
   Weekly: 'Weekly',
@@ -5,5 +7,6 @@ export const enums = Object.freeze({
   Company: 'Company',
   superAdmin: 'superAdmin',
   Manager: 'Manager',
-  OrderTaker: 'OrderTaker'
+  OrderTaker: 'OrderTaker',
+  Chef: 'Chef'
 });
