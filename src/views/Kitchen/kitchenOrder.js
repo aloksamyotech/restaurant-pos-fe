@@ -28,6 +28,10 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate, useParams } from 'react-router';
 import { t } from 'i18next';
 import CloseIcon from '@mui/icons-material/Close';
+import AddExtraItem from './addExtraItem';
+import { Snackbar } from '@mui/material';
+
+
 
 
 const SingleKitchenOrder = () => {
@@ -38,10 +42,16 @@ const SingleKitchenOrder = () => {
   const [kitchenOrderData, setKitchenOrderData] = useState([]);
   const [latestItemCompeted, setCheckboxItem] = useState([]);
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedChef, setSelectedChef] = useState('');
   const [rows, setRows] = useState([]);
   const [orderidForupdate, setorderidForupdate] = useState();
   const [isChefAssigned, setIsChefAssigned] = useState(false);
+  const handleDialogOpen = () => setDialogOpen(true);
+  const handleDialogClose = () => setDialogOpen(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
@@ -68,6 +78,8 @@ const SingleKitchenOrder = () => {
       setCheckboxItem(latestItemCompeted);
 
       const orderId = response?.data?.order?._id;
+      setorderidForupdate(orderId);
+      
 
       if (orderId) {
         const orderResponse = await getApi(urls?.order?.getbyid?.replace(':id', orderId));
@@ -150,12 +162,17 @@ const SingleKitchenOrder = () => {
         chef: selectedChef,
         status: 'In Progress'
       });
-
-
+      setSnackbarMessage(t('Chef Assign successfully!'));
+      setSnackbarOpen(true);
       setOpen(false);
       fetchData();
     } catch (error) {
       console.error('Error assigning chef:', error);
+      setSnackbarMessage(t('Error Assigning Chef!'));
+      setSnackbarOpen(true);
+    }
+    finally {
+      setSnackbarOpen(true);
     }
   };
 
@@ -200,6 +217,13 @@ const SingleKitchenOrder = () => {
 
   return (
     <Container>
+      <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={3000}
+              message={snackbarMessage}
+              onClose={() => setSnackbarOpen(false)}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            />
       <Card sx={{ p: 2, mb: 5 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -267,15 +291,23 @@ const SingleKitchenOrder = () => {
 
 
         </Grid>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
 
 
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? 'Update Chef' : 'Assign Chef'}
           </Button>
-          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+          <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}
           </Button>
+          <AddExtraItem 
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          orderId={orderidForupdate} 
+          setSnackbarMessage={setSnackbarMessage}
+          setSnackbarOpen={setSnackbarOpen}
+          fetchindex={fetchData}
+         />
           
         </Box>
 

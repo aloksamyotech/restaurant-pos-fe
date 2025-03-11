@@ -87,8 +87,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const onSubmit = async () => {
+const onSubmit = async () => {
     setLoading(true);
     try {
       let items = cartItems.map((item) => ({
@@ -161,16 +160,20 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
       if (!kitchenId) {
         return;
       }
-      const tablePayload = {
-        status:"Occupied",
-        
-      };
+     
+      if(orderType === 'Dining'){
+        const tablePayload = {
+          status:"Occupied",
+          
+        };
+      
      const tableResponse = await updateApi(urls?.table?.update?.replace(':id',selectedTableId), tablePayload);
-
+   
+      }
       setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
       reset();
-    } catch (error) {
+    }  catch (error) {
       console.error(error);
     }
   };
@@ -338,7 +341,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                 padding: '16px'
               }}
             >
-              <Button type="submit" variant="contained" color="primary" disabled={loading}>
+              <Button type="submit" variant="contained" color="primary" disabled={loading || !rows[0]?.tableNumber}>
                 {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
