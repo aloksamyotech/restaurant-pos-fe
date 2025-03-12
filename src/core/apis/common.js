@@ -34,7 +34,8 @@ export const getUserInfoFromToken = () => {
     const decodedToken = jwtDecode(token);
     return {
       firstName: decodedToken?.firstName || 'N/A',
-      role: decodedToken?.role || 'N/A'
+      role: decodedToken?.role || 'N/A',
+      id: decodedToken?._id || 'N/A',
     };
   } catch (error) {
     console.error('Invalid token', error);

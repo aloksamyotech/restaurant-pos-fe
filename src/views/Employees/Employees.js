@@ -15,7 +15,8 @@ import {
   FormHelperText,
   Radio,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Select
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -25,10 +26,12 @@ import { postApi, updateApi } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { t } from 'i18next';
+import currencyCodes from "currency-codes"
 
 const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen, employeeData = {}, editMode = false }) => {
   const {
     control,
+    watch,
     handleSubmit,
     reset,
     register,
@@ -259,6 +262,25 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 )}
               />
             </Grid>
+            {(watch('AsignRole') === 'superAdmin' && (
+              <Grid item xs={12} sm={6}>
+
+                <Controller
+                  name="currency"
+                  control={control}
+                  render={({ field }) => (
+                    <Select {...field} fullWidth>
+                      {currencyOptions.map((currency) => (
+                        <MenuItem key={currency.code} value={currency.code}>
+                          {currency.name} - {currency.code}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </Grid>
+            ))}
+
 
             <Grid item xs={12}>
               <Controller

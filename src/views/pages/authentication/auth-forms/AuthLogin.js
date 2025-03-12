@@ -102,6 +102,8 @@ const FirebaseLogin = ({ ...others }) => {
               localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.accessToken);
 
               const Role = response.data.loginEmployee.role;
+              console.log('Role', Role);
+              
 
               if (Role === enums?.superAdmin) {
                 window.location.replace('/dashboard/default');
@@ -110,6 +112,9 @@ const FirebaseLogin = ({ ...others }) => {
               } else if (Role === enums?.OrderTaker) {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums?.Company) {
+                window.location.replace('/dashboard/default');
+              }
+              else if (Role === enums?.Chef) {
                 window.location.replace('/dashboard/default');
               }
             }

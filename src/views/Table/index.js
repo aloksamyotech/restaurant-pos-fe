@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import AddModifierDialog from './AddTable';
-
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { urls } from 'core/constant/urls';
-import { getApi } from 'core/apis/apiClient.js';
+import { getApi,updateApi } from 'core/apis/apiClient.js';
 import { deleteApi } from 'core/apis/apiClient.js';
 import DeleteConfirmationDialog from '../../common/commonDelete';
 import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
 import { useTranslation } from 'react-i18next';
+import UpdateIcon from '@mui/icons-material/Update';
+import {enums} from 'core/constant/constant';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -25,16 +26,21 @@ const Categories = () => {
   const handleDialogOpen = () => setDialogOpen(true);
   const handleDialogClose = () => setDialogOpen(false);
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedModifier, setSelectedModifier] = useState(null);
 
-  const handleEditDialogOpen = (modifier) => {
-    setSelectedModifier(modifier);
-    setEditDialogOpen(true);
-  };
-  const handleEditDialogClose = () => {
-    setEditDialogOpen(false);
-  };
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(null);
+
+  const handleEditDialogOpen = (table) => {
+    setSelectedTable(table);
+    setIsEditMode(true);
+    setDialogOpen(true);
+    };
+    const handleUpdateStatus=async(table)=>{
+      const response = await updateApi(urls?.table?.update?.replace(':id', table?.id), 
+      { status: table?.status === enums?.Occupied ? enums?.Vacant : enums?.Occupied });
+      fetchData();
+    }
+  
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -57,8 +63,20 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      editable: false,
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          sx={{
+            color: params.row.status === enums?.Occupied ? "green" : "red",
+            fontWeight: "bold"
+          }}
+        >
+          {params.row.status}
+        </Typography>
+      )
     },
+   
     {
       field: 'space',
       headerName: t('Seating Capacity'),
@@ -67,6 +85,24 @@ const Categories = () => {
       headerAlign: 'center',
       editable: true,
       align: 'center'
+    },
+    {
+      field: 'update status',
+      headerName: t('Change Status'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      editable: false,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={() => handleUpdateStatus(params.row)}
+        >
+          <UpdateIcon/>
+        </Button>
+      )
     },
 
     {
@@ -178,9 +214,10 @@ const Categories = () => {
             open={dialogOpen}
             onClose={handleDialogClose}
             fetchData={fetchData}
-            setRows={setRows}
+            table={selectedTable}
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
+            isEdit={isEditMode}
           />
         </Stack>
       </Card>

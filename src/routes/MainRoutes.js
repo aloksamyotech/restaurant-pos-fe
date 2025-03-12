@@ -27,6 +27,7 @@ const CustomersView = Loadable(lazy(() => import('views/Customers/customerView')
 const SingleKitchenOrder = Loadable(lazy(() => import('views/Kitchen/kitchenOrder')));
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
 const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
+const MyOrders = Loadable(lazy(() => import('views/MyOrders')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 const userPermissions = getPermissionFromToken();
@@ -233,6 +234,16 @@ const MainRoutes = {
           path: 'kitchen',
 
           element: <ProtectedRoute element={<Kitchen />} requiredPermission="Kitchen" />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'myOrders',
+
+          element: <ProtectedRoute element={<MyOrders />} requiredPermission="My Orders" />
         }
       ]
     },

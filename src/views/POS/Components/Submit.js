@@ -24,12 +24,13 @@ import {
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { postApi, getApi } from 'core/apis/apiClient.js';
+import { postApi, getApi,updateApi } from 'core/apis/apiClient.js';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 import { t } from 'i18next';
 import { useEffect } from 'react';
+import {enums} from 'core/constant/constant';
 
 const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const {
@@ -71,12 +72,15 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
 
   const [rows, setRows] = useState([]);
   const [selectedTableNumber, setSelectedTableNumber] = useState(null);
+  const [selectedTableId, setSelectedTableId] = useState(null);
 
   const fetchData = async () => {
     const response = await getApi(urls?.table?.get);
 
-    const formattedData = response?.data?.map((item, index) => ({
-      tableNumber: item?.tableNumber
+    const formattedData = response?.data?.filter(item => item?.status === "Vacant")?.map((item, index) => ({
+      tableNumber: item?.tableNumber,
+      status: item?.status,
+      _id: item?._id
     }));
 
     setRows(formattedData);
@@ -84,8 +88,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const onSubmit = async () => {
+const onSubmit = async () => {
     setLoading(true);
     try {
       let items = cartItems.map((item) => ({
@@ -150,14 +153,28 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
         order: orderId,
         table: selectedTableNumber
       };
+     
+      
       const kitchenResponse = await postApi(urls?.kitchen?.create, kitchenPayload);
 
       const kitchenId = kitchenResponse?.data?._id;
-
+      if (!kitchenId) {
+        return;
+      }
+     
+      if(orderType === enums?.Dining){
+        const tablePayload = {
+          status:"Occupied",
+          
+        };
+      
+     const tableResponse = await updateApi(urls?.table?.update?.replace(':id',selectedTableId), tablePayload);
+   
+      }
       setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
       reset();
-    } catch (error) {
+    }  catch (error) {
       console.error(error);
     }
   };
@@ -275,8 +292,19 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                     <Grid item xs={6}>
                       <Autocomplete
                         disablePortal
-                        options={rows?.map((item) => item?.tableNumber) || []}
-                        onChange={(event, newValue) => setSelectedTableNumber(newValue)}
+                        options={rows?.map((item) => item) || []}
+                        getOptionLabel={(option) => option?.tableNumber?.toString()} 
+                        
+                        onChange={(event, newValue) => {
+                          if (newValue) {
+                           
+                            setSelectedTableNumber(newValue?.tableNumber); 
+                            setSelectedTableId(newValue?._id); 
+                          } else {
+                            setSelectedTableNumber(null);
+                            setSelectedTableId(null);
+                          }
+                        }}
                         renderInput={(params) => <TextField {...params} label="Service Table" />}
                       />
                     </Grid>
@@ -314,7 +342,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                 padding: '16px'
               }}
             >
-              <Button type="submit" variant="contained" color="primary" disabled={loading}>
+              <Button type="submit" variant="contained" color="primary" disabled={loading || !rows[0]?.tableNumber}>
                 {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
