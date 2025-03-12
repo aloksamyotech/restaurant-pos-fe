@@ -7,7 +7,7 @@ import { getPermissionFromToken } from 'core/apis/common';
 import { Navigate } from 'react-router';
 // dashboard routing
 
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const Table = Loadable(lazy(() => import('views/Table')));
 const POS = Loadable(lazy(() => import('views/POS')));
 const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
