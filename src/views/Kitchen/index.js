@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import MyOrder from 'views/MyOrders';
+
 const Kitchen = () => {
   const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ const Kitchen = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/kitchen/singleKitchenOrder/${row.id}`, { state: row });
   };
+  const statusColors = { "In Progress": "orange", pending: "red", Completed: "green"}
   const columns = [
     { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
 
@@ -63,11 +65,8 @@ const Kitchen = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
-        let color = 'gray'; 
-    
-        if (params.value === 'In Progress') color = 'orange';
-        else if (params.value === 'pending') color = 'red';
-        else if (params.value === 'Completed') color = 'green';
+         const color = statusColors[params.value] || "defaultColor"
+      
     
         return (
           <span style={{ color, fontWeight: 'bold' }}>
