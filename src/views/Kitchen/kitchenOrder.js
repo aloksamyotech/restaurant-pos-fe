@@ -30,8 +30,7 @@ import { t } from 'i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import AddExtraItem from './addExtraItem';
 import { Snackbar } from '@mui/material';
-
-
+import {enums} from 'core/constant/constant';
 
 
 const SingleKitchenOrder = () => {
@@ -124,10 +123,10 @@ const SingleKitchenOrder = () => {
         completedPercentage: newCompletedPercentage,
         itemCompeted: updatedItemCompeted,
         status: newCompletedPercentage === 0
-          ? 'Pending'
+          ? enums?.Pending
           : newCompletedPercentage === 100
-            ? 'Completed'
-            : 'In Progress'
+            ? enums?.Completed
+            : enums?.InProgress
       });
 
       fetchData();
@@ -295,7 +294,7 @@ const SingleKitchenOrder = () => {
 
 
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-            {isChefAssigned ? 'Update Chef' : 'Assign Chef'}
+            {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}

@@ -30,6 +30,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 import { t } from 'i18next';
 import { useEffect } from 'react';
+import {enums} from 'core/constant/constant';
 
 const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const {
@@ -161,7 +162,7 @@ const onSubmit = async () => {
         return;
       }
      
-      if(orderType === 'Dining'){
+      if(orderType === enums?.Dining){
         const tablePayload = {
           status:"Occupied",
           

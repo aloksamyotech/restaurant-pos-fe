@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
 import { useTranslation } from 'react-i18next';
 import UpdateIcon from '@mui/icons-material/Update';
+import {enums} from 'core/constant/constant';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const Categories = () => {
     };
     const handleUpdateStatus=async(table)=>{
       const response = await updateApi(urls?.table?.update?.replace(':id', table?.id), 
-      { status: table?.status === 'Occupied' ? 'Vacant' : 'Occupied' });
+      { status: table?.status === enums?.Occupied ? enums?.Vacant : enums?.Occupied });
       fetchData();
     }
   
@@ -67,7 +68,7 @@ const Categories = () => {
         <Typography
           variant="body2"
           sx={{
-            color: params.row.status === "Occupied" ? "green" : "red",
+            color: params.row.status === enums?.Occupied ? "green" : "red",
             fontWeight: "bold"
           }}
         >

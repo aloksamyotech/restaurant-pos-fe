@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
-// import Iconify from '../../../ui-component/iconify';
 import SearchBar from 'common/searchBar';
 import HomeIcon from '@mui/icons-material/Home';
 import { DataGrid } from '@mui/x-data-grid';
@@ -11,6 +10,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { getUserInfoFromToken } from 'core/apis/common';
+
 
 const Kitchen = () => {
   const navigate = useNavigate();
@@ -26,6 +26,8 @@ const Kitchen = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/kitchen/singleKitchenOrder/${row.id}`, { state: row });
   };
+  const statusColors = { "In Progress": "orange", pending: "red", Completed: "green"}
+  
   const columns = [
     { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
 
@@ -64,11 +66,12 @@ const Kitchen = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
-        let color = 'gray'; 
+        // let color = 'gray'; 
     
-        if (params.value === 'In Progress') color = 'orange';
-        else if (params.value === 'pending') color = 'red';
-        else if (params.value === 'Completed') color = 'green';
+        // if (params.value === 'In Progress') color = 'orange';
+        // else if (params.value === 'pending') color = 'red';
+        // else if (params.value === 'Completed') color = 'green';
+        const color = statusColors[params.value] || "defaultColor"
     
         return (
           <span style={{ color, fontWeight: 'bold' }}>
@@ -103,13 +106,10 @@ const Kitchen = () => {
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const UserInfo = getUserInfoFromToken();
-  console.log("UserInfo",UserInfo);
-  
-  const fetchData = async () => {
+ const fetchData = async () => {
     const response = await getApi(urls?.kitchen?.get);
     const ChefId = UserInfo?.id;
-    console.log(response, "response");
-    
+   
     const filteredData = response?.data?.filter((item) => item?.chef === ChefId);
 
     const formattedData = filteredData?.map((item, index) => ({

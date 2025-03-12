@@ -1,4 +1,4 @@
-import { Check } from "@mui/icons-material";
+import { Check, Dining } from "@mui/icons-material";
 
 export const enums = Object.freeze({
   Daily: 'Daily',
@@ -8,5 +8,13 @@ export const enums = Object.freeze({
   superAdmin: 'superAdmin',
   Manager: 'Manager',
   OrderTaker: 'OrderTaker',
-  Chef: 'Chef'
+  Chef: 'Chef',
+  Pending: 'Pending',
+  InProgress: 'In Progress',
+  Completed: 'Completed',
+  AssignChef: 'Assign Chef',
+  UpdateChef: 'Update Chef',
+  Dining: 'Dining',
+  Vacant: 'Vacant',
+  Occupied: 'Occupied',
 });
