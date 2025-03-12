@@ -66,11 +66,7 @@ const Kitchen = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => {
-        // let color = 'gray'; 
-    
-        // if (params.value === 'In Progress') color = 'orange';
-        // else if (params.value === 'pending') color = 'red';
-        // else if (params.value === 'Completed') color = 'green';
+       
         const color = statusColors[params.value] || "defaultColor"
     
         return (
