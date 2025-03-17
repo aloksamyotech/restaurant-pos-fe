@@ -20,7 +20,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     height: 210,
     background: theme.palette.secondary[800],
     borderRadius: '50%',
-    top: 100,
+    top: 50,
     right: -95,
     [theme.breakpoints.down('sm')]: {
       top: -105,
@@ -34,7 +34,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     height: 210,
     background: theme.palette.secondary[800],
     borderRadius: '50%',
-    top: -125,
+    top: 125,
     right: -15,
     opacity: 0.5,
     [theme.breakpoints.down('sm')]: {
@@ -61,7 +61,7 @@ const EarningCard = ({ isLoading,keyName, value }) => {
               <Grid item sx={{ mb: 0.75 }}>
                 <Grid container alignItems="center">
                   <Grid item>
-                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>Rs.{value}</Typography>
+                    <Typography sx={{ fontSize: '1.0rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>{keyName}</Typography>
                   </Grid>
                  
                 </Grid>
@@ -74,7 +74,8 @@ const EarningCard = ({ isLoading,keyName, value }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  {keyName}
+                  Rs.{value}
+                  
                 </Typography>
               </Grid>
             </Grid>

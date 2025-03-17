@@ -10,14 +10,18 @@ import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
+  
   backgroundColor: theme.palette.primary.dark,
   color: '#fff',
   overflow: 'hidden',
   position: 'relative',
-  '&>div': {
-    position: 'relative',
-    zIndex: 5
-  },
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+  wordBreak: 'keep-all', 
+  whiteSpace: 'nowrap',
+ 
   '&:after': {
     content: '""',
     position: 'absolute',
@@ -26,7 +30,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     background: theme.palette.primary[800],
     borderRadius: '50%',
     zIndex: 1,
-    top: -85,
+    top: 50,
     right: -95,
     [theme.breakpoints.down('sm')]: {
       top: -105,
@@ -41,7 +45,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
     height: 210,
     background: theme.palette.primary[800],
     borderRadius: '50%',
-    top: -125,
+    top: 125,
     right: -15,
     opacity: 0.5,
     [theme.breakpoints.down('sm')]: {
@@ -71,7 +75,7 @@ const TotalOrderLineChartCard = ({ isLoading, keyName, value }) => {
                     <Grid container alignItems="center">
                       <Grid item>
                        
-                          <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>Rs.{value}</Typography>
+                          <Typography sx={{ fontSize: '1.0rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>{keyName} </Typography>
                        
                       </Grid>
                     
@@ -83,7 +87,8 @@ const TotalOrderLineChartCard = ({ isLoading, keyName, value }) => {
                             color: theme.palette.primary[200]
                           }}
                         >
-                          {keyName} 
+                          Rs.{value}
+                          
                         </Typography>
                       </Grid>
                     </Grid>

@@ -58,7 +58,7 @@ const Dashboard = () => {
             <TotalOrderLineChartCard keyName={"Total Discount Amount"} value={totalDiscountamount} isLoading={isLoading} />
           </Grid>
           <Grid item lg={3} md={6} sm={6} xs={12}>
-            <EarningCard  keyName={"Total Profit After Expense"} value={totalProfitAfteExpense}  isLoading={isLoading} />
+            <EarningCard  keyName={"Net Profit"} value={totalProfitAfteExpense}  isLoading={isLoading} />
           </Grid>
           <Grid item sm={6} xs={12} md={6} lg={3}>
             <TotalOrderLineChartCard keyName={"Total Profit Amount"} value={totalProfitamount} isLoading={isLoading} />

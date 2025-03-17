@@ -14,8 +14,8 @@ import { t } from 'i18next';
       phone: item?.phone || t('N/A'),
       price: item?.totalPrice || t('N/A'),
       discount: item?.discount,
-      cost: item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0),
-      profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0) + item?.discount),
+      cost: item?.items?.reduce((acc, curr) => acc + (curr?.cost) * (curr?.quantity), 0),
+      profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + (curr?.cost) * (curr?.quantity), 0) + item?.discount),
       payable: item?.totalPrice - item?.discount,
       
     }));
