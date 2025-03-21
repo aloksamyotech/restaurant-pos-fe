@@ -26,7 +26,7 @@ const Kitchen = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/kitchen/singleKitchenOrder/${row.id}`, { state: row });
   };
-  const statusColors = { "In Progress": "orange", pending: "red", Completed: "green"}
+  const statusColors = { "In Progress": "orange", Pending: "red", Completed: "green"}
   
   const columns = [
     { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
@@ -111,7 +111,7 @@ const Kitchen = () => {
     const formattedData = filteredData?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      orderId: `ORD-${item?.order?._id?.substring(0, 6)}`,
+      orderId: `{item?.order?._id?.substring(19, 24)}`,
       table: item?.table || '--',
       status: item?.status || '--',
       orderType: item?.order?.type || '--'

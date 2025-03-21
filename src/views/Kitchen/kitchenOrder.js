@@ -30,8 +30,8 @@ import { t } from 'i18next';
 import CloseIcon from '@mui/icons-material/Close';
 import AddExtraItem from './addExtraItem';
 import { Snackbar } from '@mui/material';
-import {enums} from 'core/constant/constant';
-
+import { enums } from 'core/constant/constant';
+import LinearWithValueLabel from './progressBar';
 
 const SingleKitchenOrder = () => {
   const navigate = useNavigate();
@@ -66,8 +66,6 @@ const SingleKitchenOrder = () => {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
 
-
-
       if (!response?.data?.chef) {
         setIsChefAssigned(false);
       } else {
@@ -78,19 +76,18 @@ const SingleKitchenOrder = () => {
 
       const orderId = response?.data?.order?._id;
       setorderidForupdate(orderId);
-      
+
 
       if (orderId) {
         const orderResponse = await getApi(urls?.order?.getbyid?.replace(':id', orderId));
         const items = orderResponse?.data?.items || [];
-
         const formattedItemRows = items.map((item, index) => ({
           id: index + 1,
           serial: index + 1,
           items: item?.name || t('N/A'),
           itemId: item?.id,
           quantity: item?.quantity || '0',
-          completedPercentage: latestItemCompeted.includes(item?.id) ? 100 : 0
+          completedPercentage: latestItemCompeted.includes(item?.serial) ? 100 : 0
         }));
 
         setItemRow(formattedItemRows);
@@ -105,19 +102,18 @@ const SingleKitchenOrder = () => {
   }, []);
 
 
-  const handleCheckboxChange = async (orderId, ItemId, currentStatus) => {
+  const handleCheckboxChange = async (serial, orderId) => {
     try {
-      let updatedItemCompeted = [...latestItemCompeted];
 
-      if (currentStatus === 0) {
-        updatedItemCompeted.push(ItemId);
-      } else {
-        updatedItemCompeted = updatedItemCompeted.filter((id) => id !== ItemId);
-      }
-      const totalItems = itemRow.length;
+      let updatedItemCompeted = latestItemCompeted.includes(serial)
+        ? latestItemCompeted.filter((s) => s !== serial)
+        : [...latestItemCompeted, serial];
+
+      const totalItems = itemRow?.length || 1;
       const completedItems = updatedItemCompeted.length;
 
       const newCompletedPercentage = (completedItems / totalItems) * 100;
+      fetchData();
 
       await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
         completedPercentage: newCompletedPercentage,
@@ -135,8 +131,9 @@ const SingleKitchenOrder = () => {
     }
   };
 
-  const checkbox = (itemId) => {
-    return latestItemCompeted.includes(itemId);
+  const checkbox = (serial) => {
+
+    return latestItemCompeted.includes(serial);
   };
 
   const fetchChef = async () => {
@@ -206,23 +203,24 @@ const SingleKitchenOrder = () => {
       renderCell: (params) => (
         <input
           type="checkbox"
-          checked={checkbox(params?.row?.itemId)}
-          onChange={() => handleCheckboxChange(id, params?.row?.itemId, params?.row?.completedPercentage)}
+          checked={checkbox(params?.row?.serial)}
+          onChange={() => handleCheckboxChange(params?.row?.serial, id)}
           style={{ width: '15px', height: '15px' }}
         />
       )
+
     }
   ];
 
   return (
     <Container>
       <Snackbar
-              open={snackbarOpen}
-              autoHideDuration={3000}
-              message={snackbarMessage}
-              onClose={() => setSnackbarOpen(false)}
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            />
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      />
       <Card sx={{ p: 2, mb: 5 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h3" component="h2">
@@ -244,7 +242,7 @@ const SingleKitchenOrder = () => {
                 <CardContent>
 
                   <Typography variant="body1">
-                    <strong>{t('Order Id')}:</strong> ORD-${kitchenOrderData?.order?._id?.substring(0, 6)}
+                    <strong>{t('Order Id')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Order Type')}:</strong>
@@ -269,7 +267,7 @@ const SingleKitchenOrder = () => {
                   <Typography variant="body1">
                     <strong>{t('Status')}:</strong> {kitchenOrderData?.status}
                   </Typography>
-                 
+
 
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Chef')}:</strong>{kitchenOrderData?.chef?.firstName}
@@ -291,23 +289,22 @@ const SingleKitchenOrder = () => {
 
         </Grid>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-
-
-          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+          <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
+         <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}
           </Button>
-          <AddExtraItem 
-          open={dialogOpen}
-          onClose={handleDialogClose}
-          orderId={orderidForupdate} 
-          setSnackbarMessage={setSnackbarMessage}
-          setSnackbarOpen={setSnackbarOpen}
-          fetchindex={fetchData}
-         />
-          
+          <AddExtraItem
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            orderId={orderidForupdate}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+            fetchindex={fetchData}
+          />
+
         </Box>
 
         <Card>

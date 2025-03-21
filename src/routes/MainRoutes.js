@@ -7,7 +7,7 @@ import { getPermissionFromToken } from 'core/apis/common';
 import { Navigate } from 'react-router';
 // dashboard routing
 
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default/home.js')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const Table = Loadable(lazy(() => import('views/Table')));
 const POS = Loadable(lazy(() => import('views/POS')));
 const Invoice = Loadable(lazy(() => import('views/POS/Components/invoice.js')));
@@ -28,6 +28,8 @@ const SingleKitchenOrder = Loadable(lazy(() => import('views/Kitchen/kitchenOrde
 const OverallReport = Loadable(lazy(() => import('views/Reports')));
 const Kitchen = Loadable(lazy(() => import('views/Kitchen')));
 const MyOrders = Loadable(lazy(() => import('views/MyOrders')));
+const Profile = Loadable(lazy(() => import('views/Profile')));
+
 
 // ==============================|| MAIN ROUTING ||============================== //
 const userPermissions = getPermissionFromToken();
@@ -254,6 +256,16 @@ const MainRoutes = {
           path: 'table',
 
           element: <ProtectedRoute element={<Table />} requiredPermission="Table" />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'profile',
+
+          element: <ProtectedRoute element={<Profile />} requiredPermission="Profile" />
         }
       ]
     }
