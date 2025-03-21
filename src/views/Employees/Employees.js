@@ -16,7 +16,8 @@ import {
   Radio,
   IconButton,
   InputAdornment,
-  Select
+  Select,
+  InputLabel
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -43,6 +44,10 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+  const currencyOptions = currencyCodes.data.map((currency) => ({
+    code: currency.code,
+    name: currency.currency,
+  }));
 
   useEffect(() => {
     if (editMode && employeeData) {
@@ -201,6 +206,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                     <MenuItem value="Manager">{t('Manager')}</MenuItem>
                     <MenuItem value="OrderTaker">{t('Order Taker')}</MenuItem>
                     <MenuItem value="Chef">{t('Chef')}</MenuItem>
+                    <MenuItem value="superAdmin">{t('superAdmin')}</MenuItem>
                   </TextField>
                 )}
               />
@@ -262,20 +268,26 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                 )}
               />
             </Grid>
-            {(watch('AsignRole') === 'superAdmin' && (
+            {(watch('role') === 'superAdmin' && (
               <Grid item xs={12} sm={6}>
 
                 <Controller
                   name="currency"
                   control={control}
                   render={({ field }) => (
-                    <Select {...field} fullWidth>
+                    
+                    <FormControl fullWidth>
+          <InputLabel>{t('Currency')}</InputLabel>
+                      
+                    <Select {...field} label={t('Currency')}>
                       {currencyOptions.map((currency) => (
                         <MenuItem key={currency.code} value={currency.code}>
                           {currency.name} - {currency.code}
                         </MenuItem>
                       ))}
                     </Select>
+                    </FormControl>
+                    
                   )}
                 />
               </Grid>

@@ -10,7 +10,11 @@ export const urls = Object.freeze({
     updatePermissions: base + '/employee/updateEmployeePermissions/:id',
     delete: base + '/employee/deleteEmployee/:id',
     get: base + '/employee/getEmployees',
-    getbyid: base + '/employee/fetchEmployee/:id'
+    getbyid: base + '/employee/fetchEmployee/:id',
+    updateLogo:base + '/employee/updateLogo',
+    resetPassword: base + '/employee/updatePassword',
+    
+
   },
   foodCategory: {
     create: base + '/category/addCategory',
@@ -88,5 +92,10 @@ export const urls = Object.freeze({
     get: base + '/kitchen/findAllKitchenOrder',
     getSingleOrder: base + '/kitchen/findAllKitchenOrderById/:id',
     updateKitchenOrder: base + '/kitchen/updateKitchenOrder/:id'
+  },
+  Emailurl: {
+    
+    fetch: base + '/email/getBlockedEmail',
+    toggle: base + '/email/toggleEmail'
   }
 });

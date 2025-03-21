@@ -224,6 +224,15 @@ export const People = filterMenuItems({
       url: '/dashboard/customers',
       icon: icons.AccountCircleIcon,
       breadcrumbs: false
-    }
+    },
+    {
+      id: '17',
+      title: 'Profile',
+      type: 'item',
+      url: '/dashboard/profile',
+      icon: icons.AccountCircleIcon,
+      breadcrumbs: false
+    },
+
   ]
 });

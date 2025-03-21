@@ -16,6 +16,8 @@ const Invoice = (props) => {
   const invoiceId = params?.invoiceId || props?.invoiceId;
 
   const [rowData, setrowdata] = useState({});
+  const [itemRow, setitemRow] = useState([]);
+  const[grandTotal, setGrandTotal]=useState({});
 
   const fetchData = async () => {
     const response = await getApi(urls?.invoice?.getbyid?.replace(':id', invoiceId));
@@ -37,27 +39,44 @@ const Invoice = (props) => {
       expectedTime: invoice?.expectedTime ? `${invoice.expectedTime} min` : 'N/A',
       phone: invoice?.customerId?.phone || 'N/A',
       address: invoice?.customerId?.address || 'N/A',
-      email: invoice?.customerId?.email || 'N/A'
+      email: invoice?.customerId?.email || 'N/A',
+      orderId: invoice?.orderId || 'N/A'
     };
-
-    const formattedItemRows =
-      invoice?.items?.map((item, index) => ({
-        id: index + 1,
-        serial: index + 1,
-        items: item?.name || 'N/A',
-        price: item?.price?.toFixed(2) || '0.00',
-        quantity: item?.quantity || '0'
-      })) || [];
-
     setrowdata(formattedData);
-    setitemRow(formattedItemRows);
+
+  
   };
 
   useEffect(() => {
     fetchData();
   }, [invoiceId]);
 
-  const finalPrice = rowData.totalPrice - rowData.discount;
+  const fetchItems = async () => {
+
+    if (rowData?.orderId) {
+      const OrderId = rowData?.orderId;
+      const orderResponse = await getApi(urls?.order?.getbyid?.replace(':id', OrderId));
+      const items = orderResponse?.data?.items || [];
+      const totalPrice = orderResponse?.data?.totalPrice || '0.00';
+      const discount = orderResponse?.data?.discount || '0.00';
+      setGrandTotal({totalPrice,discount});
+      const formattedItemRows = items.map((item, index) => ({
+        id: index + 1,
+        serial: index + 1,
+        items: item?.name || t('N/A'),
+        price: item?.price?.toFixed(2) || '0.00',
+        quantity: item?.quantity || '0',
+        }));
+        setitemRow(formattedItemRows);
+    }
+
+  }
+  useEffect(() => {
+    if (rowData?.orderId !== 'N/A') {
+      fetchItems();
+    }
+  }, [rowData?.orderId]);
+     const finalPrice = ((grandTotal?.totalPrice) - (grandTotal?.discount));
 
   const columns = [
     {
@@ -91,9 +110,7 @@ const Invoice = (props) => {
       align: 'center'
     }
   ];
-  const [itemRow, setitemRow] = useState([]);
-
-  const handlePrint = () => {
+const handlePrint = () => {
     window.print();
   };
 

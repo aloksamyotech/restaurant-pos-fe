@@ -50,14 +50,13 @@ const AddExtraItem = ({ open, onClose, orderId,setSnackbarOpen,setSnackbarMessag
         if (response?.success) {
           fetchData();
           fetchindex();
-          
           setSnackbarMessage(t('Extra Item Added Successfully!'));
           setSnackbarOpen(true);
         } else {
           setSnackbarMessage(t('Failed to Add Extra Item !'));
           setSnackbarOpen(true);
         }
-    
+        reset();
         onClose();
       };
 

@@ -342,7 +342,7 @@ const onSubmit = async () => {
                 padding: '16px'
               }}
             >
-              <Button type="submit" variant="contained" color="primary" disabled={loading || !rows[0]?.tableNumber}>
+              <Button type="submit" variant="contained" color="primary" disabled={loading || (orderType !== "Pickup" &&!rows[0]?.tableNumber)}>
                 {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>
