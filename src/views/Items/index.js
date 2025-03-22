@@ -16,6 +16,7 @@ import { Snackbar } from '@mui/material';
 import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import ItemDialog from './addEditItem';
 import { useNavigate } from 'react-router';
+import BulkUploadCategory from './bulkUploadButton';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -53,6 +54,11 @@ const Categories = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
+    const handleBulkDialogOpen = () => {
+      setBulkDialogOpen(true);
+    };
+    const handleBulkDialogClose = () => setBulkDialogOpen(false);
 
   const columns = [
     {
@@ -237,6 +243,17 @@ const Categories = () => {
             setSnackbarOpen={setSnackbarOpen}
             isEdit={isEditMode}
           />
+          <Button variant="contained" color="primary" onClick={handleBulkDialogOpen}>
+            {t('Bulk Upload')}
+          </Button>
+          <BulkUploadCategory
+            open={bulkDialogOpen}
+            fetchData={fetchData}
+            onClose={handleBulkDialogClose}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+          />
+          
         </Stack>
       </Card>
 

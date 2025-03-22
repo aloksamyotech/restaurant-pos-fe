@@ -289,6 +289,8 @@ const SingleKitchenOrder = () => {
 
         </Grid>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+         
+          <Typography>Order Complete Percentage</Typography>
           <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
@@ -296,6 +298,7 @@ const SingleKitchenOrder = () => {
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}
           </Button>
+          
           <AddExtraItem
             open={dialogOpen}
             onClose={handleDialogClose}
@@ -304,6 +307,7 @@ const SingleKitchenOrder = () => {
             setSnackbarOpen={setSnackbarOpen}
             fetchindex={fetchData}
           />
+          
 
         </Box>
 

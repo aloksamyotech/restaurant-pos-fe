@@ -1,5 +1,7 @@
 const base = 'http://localhost:7200/api/v1';
 const imageBase = 'http://localhost:7200';
+// const imageBase = 'https://pos.samyotech.in';
+// const base ="https://pos.samyotech.in/api/v1"
 // let base = 'http://165.22.218.55:7200/api/v1'
 export const urls = Object.freeze({
   base,
@@ -29,6 +31,7 @@ export const urls = Object.freeze({
     get: base + '/item/getItems',
     update: base + '/item/updateItem/:id',
     delete: base + '/item/deleteItem/:id',
+    bulkUpload: base + '/item/bulkUploadItem',
     image: imageBase
   },
   modifier: {
