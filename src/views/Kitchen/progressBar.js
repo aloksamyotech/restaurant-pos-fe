@@ -26,8 +26,7 @@ LinearProgressWithLabel.propTypes = {
 export default function LinearWithValueLabel({ completedPercentage }) {
   return (
     <Box sx={{ width: '100%' }}>
-        <Typography>Order Complete Percentage</Typography>
-      <LinearProgressWithLabel value={completedPercentage} />
+        <LinearProgressWithLabel value={completedPercentage} />
     </Box>
   );
 }

@@ -8,14 +8,18 @@ import Dropdown from './Components/dropDown';
 import CartDialog from './Components/Submit';
 import { Box } from '@mui/system';
 import { t } from 'i18next';
+import POSCategories from './Components/categoryItemList';
 
 const POS = () => {
   const [cartStore, setCart] = useState([]);
   const [dishesPerRow, setDishesPerRow] = useState(3);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const dishes = useDishes();
   const [searchQuery, setSearchQuery] = useState('');
   const [orderTypeError, setOrderTypeError] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+  const dishes = useDishes(categories); 
+  
 
   const filteredDishes = dishes.filter((dish) => dish?.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -81,7 +85,10 @@ const POS = () => {
         </Card>
 
         <Grid container spacing={0.5}>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={2}>
+            <POSCategories categories={categories} setCategories={setCategories}/>
+            </Grid>
+          <Grid item xs={12} md={6}>
             <DishesGrid dishes={filteredDishes} onAddToCart={handleAddToCart} dishesPerRow={dishesPerRow} />
           </Grid>
 
