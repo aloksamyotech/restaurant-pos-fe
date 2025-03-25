@@ -44,7 +44,7 @@ const AddExtraItem = ({ open, onClose, orderId,setSnackbarOpen,setSnackbarMessag
     }, []);
     const onSubmit = async (data) => {
         const formData = { ...data,id:orderId};
-        console.log("formDataaaaa",formData);
+        
         const response = await updateApi(urls?.order?.update?.replace(':id', orderId), formData);
     
         if (response?.success) {

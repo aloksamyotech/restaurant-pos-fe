@@ -26,7 +26,9 @@ export const getPermissionFromToken = () => {
 };
 
 export const getUserInfoFromToken = () => {
-  const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+  const token = localStorage?.getItem('$2b$10$ehdPSDmr6P');
+ 
+  
   if (!token) {
     return null;
   }

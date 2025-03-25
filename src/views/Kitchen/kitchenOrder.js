@@ -114,7 +114,7 @@ const SingleKitchenOrder = () => {
 
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
-
+      if (kitchenOrderData?.chef?.firstName){
       await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
         completedPercentage: newCompletedPercentage,
         itemCompeted: updatedItemCompeted,
@@ -126,9 +126,17 @@ const SingleKitchenOrder = () => {
       });
 
       fetchData();
+    }
+    else{
+      setSnackbarMessage(t('First Assign Chef'));
+      setSnackbarOpen(true);
+      setOpen(false);
+    }
     } catch (error) {
       console.error('Error updating status:', error);
     }
+  
+  
   };
 
   const checkbox = (serial) => {
