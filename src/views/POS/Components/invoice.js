@@ -6,18 +6,18 @@ import { useParams } from 'react-router';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
 import css from 'assets/printInvoice.css';
-
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 
 const Invoice = (props) => {
   const params = useParams();
-
   const invoiceId = params?.invoiceId || props?.invoiceId;
-
   const [rowData, setrowdata] = useState({});
   const [itemRow, setitemRow] = useState([]);
   const[grandTotal, setGrandTotal]=useState({});
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
+  
+  
 
   const fetchData = async () => {
     const response = await getApi(urls?.invoice?.getbyid?.replace(':id', invoiceId));
@@ -175,7 +175,7 @@ const handlePrint = () => {
 
         <Box textAlign="right">
           <Typography variant="h4" color="primary">
-            {t('Total')}: {t('Rs.')}. {finalPrice}
+            {t('Total')}: {currency} {finalPrice}
           </Typography>
         </Box>
 

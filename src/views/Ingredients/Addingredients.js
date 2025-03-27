@@ -29,6 +29,7 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
   });
 
   const [loading, setLoading] = useState(false);
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   const onSubmit = async (data) => {
     const formData = { ...data };
@@ -143,7 +144,7 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                     helperText={errors?.cost ? errors?.cost?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}
@@ -174,7 +175,7 @@ const AddIngredientDialog = ({ open, onClose, fetchData, setSnackbarMessage, set
                     helperText={errors?.price ? errors?.price?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { Container, Stack, Card, Typography, Box, Avatar, Grid, Divider, Button, Tooltip, Breadcrumbs, Link } from '@mui/material';
+import { Container, Stack, Card, Typography, Box, Avatar, Grid, Divider, Button, Tooltip, Breadcrumbs, Link, Snackbar } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Tabs from '@mui/material/Tabs';
@@ -18,6 +18,7 @@ import EditEmployee from './Employees';
 import { t } from 'i18next';
 
 const ViewPage = () => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const [rowData, setRowData] = useState({});
@@ -73,6 +74,13 @@ const ViewPage = () => {
 
   return (
     <Container>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      />
       <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <Stack spacing={3}>
         <Card sx={{ p: 2, mb: 3 }}>
@@ -160,8 +168,8 @@ const ViewPage = () => {
                             open={editDialogOpen}
                             onClose={closeEditDialog}
                             fetchData={fetchUserData}
+                            setSnackbarOpen={setSnackbarOpen}
                             setSnackbarMessage={toast.success}
-                            setSnackbarOpen={() => {}}
                             employeeData={rowData}
                             editMode={true}
                           />

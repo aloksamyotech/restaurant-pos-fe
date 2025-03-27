@@ -29,7 +29,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
   } = useForm({
     mode: 'all'
   });
-
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
@@ -132,7 +132,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                     helperText={errors.cost ? errors.cost.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}
@@ -161,7 +161,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                     helperText={errors.price ? errors.price.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

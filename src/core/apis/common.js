@@ -26,7 +26,8 @@ export const getPermissionFromToken = () => {
 };
 
 export const getUserInfoFromToken = () => {
-  const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+  const token = localStorage?.getItem('$2b$10$ehdPSDmr6P');
+  
   if (!token) {
     return null;
   }
@@ -36,6 +37,7 @@ export const getUserInfoFromToken = () => {
       firstName: decodedToken?.firstName || 'N/A',
       role: decodedToken?.role || 'N/A',
       id: decodedToken?._id || 'N/A',
+      currency:decodedToken?.currency || 'N/A'
     };
   } catch (error) {
     console.error('Invalid token', error);

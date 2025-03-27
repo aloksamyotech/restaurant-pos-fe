@@ -96,16 +96,13 @@ const FirebaseLogin = ({ ...others }) => {
         onSubmit={async (values) => {
           try {
             const response = await postApi(urls?.employee?.login, values);
-
             if (response.success === true) {
               toast.success('Login Successfull');
-              localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.accessToken);
+              localStorage.setItem('$2b$10$ehdPSDmr6P', response?.data?.accessToken);
+              localStorage.setItem('$2b$10$ehdPSDmr6P1', response?.data?.loginEmployee?.currency);
 
               const Role = response.data.loginEmployee.role;
-              console.log('Role', Role);
-              
-
-              if (Role === enums?.superAdmin) {
+             if (Role === enums?.superAdmin) {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums?.Manager) {
                 window.location.replace('/dashboard/default');

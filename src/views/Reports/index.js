@@ -16,7 +16,6 @@ import {
 import { DataGrid } from '@mui/x-data-grid';
 import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
-
 import { Stack } from '@mui/system';
 import { enums } from 'core/constant/constant';
 import { t } from 'i18next';
@@ -85,7 +84,7 @@ const OverallReport = () => {
   const [duration, setDuration] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
   const handleDurationChange = (event) => {
     setDuration(event.target.value);
     const now = new Date();
@@ -157,12 +156,12 @@ const OverallReport = () => {
   }, []);
 
   const summaryData = [
-    { label: t('Total sale amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.price, 0) },
-    { label: t('Total cost amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.cost, 0) },
-    { label: t('Total discount amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.discount, 0) },
-    { label: t('Total profit amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.profit, 0) },
-    { label: t('Total payable amount'), value: 'Rs.' + rows.reduce((acc, row) => acc + row.payable, 0) },
-    { label: t('Tax'), value: 'Rs.' + 0 }
+    { label: t('Total sale amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.price, 0)}`},
+    { label: t('Total cost amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.cost, 0) }`},
+    { label: t('Total discount amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.discount, 0) }`},
+    { label: t('Total profit amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.profit, 0) }`},
+    { label: t('Total payable amount'), value: `${currency} ${ rows.reduce((acc, row) => acc + row.payable, 0) }`},
+    { label: t('Tax'), value: `${currency} ${ + 0 }`}
   ];
 
   return (

@@ -8,6 +8,7 @@ import { Box, Grid,Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
+
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
   color: '#fff',
@@ -48,6 +49,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 const EarningCard = ({ isLoading,keyName, value }) => {
   const theme = useTheme();
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   return (
     <>
@@ -74,7 +76,7 @@ const EarningCard = ({ isLoading,keyName, value }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  Rs.{value}
+                  {currency} {value}
                   
                 </Typography>
               </Grid>

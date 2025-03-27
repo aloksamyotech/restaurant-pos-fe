@@ -6,7 +6,9 @@ import { t } from 'i18next';
 import { urls } from 'core/constant/urls';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 
+
 const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
 
   const handleRemoveDish = (id) => {
@@ -130,10 +132,10 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="h6">{cartItem?.name}</Typography>
                     <Typography variant="body2" color="textSecondary">
-                      {t('Price')}: Rs. {cartItem?.price}
+                      {t('Price')}: {currency} {cartItem?.price}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      {t('Subtotal')}: Rs. {cartItem?.price * cartItem?.quantity}
+                      {t('Subtotal')}: {currency} {cartItem?.price * cartItem?.quantity}
                     </Typography>
                   </Box>
 
@@ -157,7 +159,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
           }}
         >
           <Typography variant="h6" color="primary">
-            {t('Total')}: Rs. {totalPrice.toFixed(2)}
+            {t('Total')}: {currency} {totalPrice.toFixed(2)}
           </Typography>
           <Button
             variant="contained"

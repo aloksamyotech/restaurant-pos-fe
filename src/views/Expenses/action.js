@@ -20,6 +20,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Loader from 'common/loader';
 import { useTranslation } from 'react-i18next';
 
+
 const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackbarMessage }) => {
   const { t } = useTranslation();
   const {
@@ -46,6 +47,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
   }, [tag, reset]);
 
   const [expenseTypes, setExpenseTypes] = useState([]);
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   useEffect(() => {
     const fetchExpenseTypes = async () => {
@@ -203,7 +205,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                     helperText={errors?.amount ? errors?.amount?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

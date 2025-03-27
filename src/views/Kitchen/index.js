@@ -107,7 +107,7 @@ const Kitchen = () => {
       serial: index + 1,
       orderId: `ORD-${item?.order?._id?.substring(0, 6)}`,
       table: item?.table || '--',
-      status: item?.completedPercentage || '--',
+      status: item?.completedPercentage || '0',
       orderType: item?.order?.type || '--',
 }));
 

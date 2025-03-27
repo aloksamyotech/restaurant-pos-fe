@@ -13,6 +13,7 @@ import { getUserInfoFromToken } from 'core/apis/common';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { urls } from 'core/constant/urls';
+import demoImage from '../../../assets/images/Dummy_Image.png'
 
 // ==============================|| MAIN LOGO ||============================== //
 
@@ -39,9 +40,9 @@ const LogoSection = () => {
   }, []);
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      {/* <Logo /> */}
+      
       <img src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : "/fallback.png"} alt='Logo Loading' style={{ marginLeft: "15px" }}></img>
-
+      
     </ButtonBase>
   );
 };

@@ -3,10 +3,12 @@ import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 import { urls } from 'core/constant/urls';
 
+
 const DishCard = ({ dish, onAddToCart }) => {
   const { id, name, image, price, cost } = dish;
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
-  return (
+   return (
     <Card
       variant="outlined"
       onClick={() => onAddToCart({ id, name, image, price, cost })}
@@ -27,7 +29,7 @@ const DishCard = ({ dish, onAddToCart }) => {
       />
       <CardContent sx={{ height: '0', padding: '15px', textAlign: 'center', border: '1px' }}>
         <Typography color="rgb(55 65 81)">{name}</Typography>
-        <Typography color="rgb(37 99 235)">Rs.{price.toFixed(2)}</Typography>
+        <Typography color="rgb(37 99 235)">{currency} {price.toFixed(2)}</Typography>
       </CardContent>
     </Card>
   );

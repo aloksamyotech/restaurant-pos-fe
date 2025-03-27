@@ -32,6 +32,7 @@ import { t } from 'i18next';
 import { useEffect } from 'react';
 import {enums} from 'core/constant/constant';
 
+
 const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const {
     handleSubmit,
@@ -43,7 +44,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   });
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
-
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [paymentMode, setPaymentMode] = useState('Cash');
@@ -240,10 +241,10 @@ const onSubmit = async () => {
                         </Grid>
                         <Grid item xs={3} sx={{ textAlign: 'right' }}>
                           <Typography variant="body2" color="textSecondary">
-                            {t('Price')}: Rs. {item?.price.toFixed(2)}
+                            {t('Price')}: {currency} {item?.price.toFixed(2)}
                           </Typography>
                           <Typography variant="body2" color="textSecondary">
-                            {t('Subtotal')}: Rs. {(item?.price * item?.quantity).toFixed(2)}
+                            {t('Subtotal')}: {currency} {(item?.price * item?.quantity).toFixed(2)}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -325,7 +326,7 @@ const onSubmit = async () => {
                     {t('Total Price')}
                   </Typography>
                   <Typography variant="h5" color="secondary">
-                    Rs. {adjustedPrice.toFixed(2)}
+                  {currency} {adjustedPrice.toFixed(2)}
                   </Typography>
                 </Box>
               </>
