@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
-
 import Iconify from '../../ui-component/iconify';
 import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
@@ -259,7 +258,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 550, width: '100%' }}>
-          <DataGrid rows={filteredRows} rowHeight={100} columns={columns} getRowId={(row) => row.id} />
+          <DataGrid rows={filteredRows} rowHeight={80} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

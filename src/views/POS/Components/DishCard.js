@@ -22,12 +22,12 @@ const DishCard = ({ dish, onAddToCart }) => {
     >
       <CardMedia
         component="img"
-        height="129px"
+        height="100px"
         image={image ? `${urls?.item?.image}${image}` : Dummy_Image}
         alt={name}
         sx={{ borderRadius: '8px', padding: '4px' }}
       />
-      <CardContent sx={{ height: '0', padding: '15px', textAlign: 'center', border: '1px' }}>
+      <CardContent sx={{ height: '0', padding: '0', textAlign: 'center', border: '0' }}>
         <Typography color="rgb(55 65 81)">{name}</Typography>
         <Typography color="rgb(37 99 235)">{currency} {price.toFixed(2)}</Typography>
       </CardContent>

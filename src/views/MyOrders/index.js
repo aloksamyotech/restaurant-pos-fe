@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { getUserInfoFromToken } from 'core/apis/common';
+import LinearWithValueLabel from 'views/Kitchen/progressBar';
 
 
 const Kitchen = () => {
@@ -57,25 +58,19 @@ const Kitchen = () => {
       headerAlign: 'center',
       align: 'center'
     },
-    {
-      field: 'status',
-      headerName: t('Status'),
-      type: 'string',
-      sortable: false,
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => {
-       
-        const color = statusColors[params.value] || "defaultColor"
-    
-        return (
-          <span style={{ color, fontWeight: 'bold' }}>
-            {params.value}
-          </span>
-        );
-      }
-    },
+   
+      {
+          field: "status",
+          headerName: t("Status"),
+          type: "string",
+          sortable: false,
+          flex: 1,
+          headerAlign: "center",
+          align: "center",
+          renderCell: (params) => {
+            return <LinearWithValueLabel completedPercentage={params.value} />;
+          },
+        },
 
     {
       field: 'action',
@@ -111,9 +106,9 @@ const Kitchen = () => {
     const formattedData = filteredData?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      orderId: `{item?.order?._id?.substring(19, 24)}`,
+      orderId: item?.order?._id?.substring(19, 24),
       table: item?.table || '--',
-      status: item?.status || '--',
+      status: item?.completedPercentage || '0',
       orderType: item?.order?.type || '--'
     }));
 

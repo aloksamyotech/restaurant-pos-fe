@@ -205,7 +205,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 550, width: '100%' }}>
-          <DataGrid rows={filteredRows} rowHeight={100} columns={columns} getRowId={(row) => row.id} />
+          <DataGrid rows={filteredRows} rowHeight={80} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>
