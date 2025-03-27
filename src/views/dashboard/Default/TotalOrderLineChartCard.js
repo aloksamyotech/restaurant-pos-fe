@@ -9,6 +9,7 @@ import SkeletonTotalOrderCard from 'ui-component/cards/Skeleton/EarningCard';
 
 
 
+
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   
   backgroundColor: theme.palette.primary.dark,
@@ -59,6 +60,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 const TotalOrderLineChartCard = ({ isLoading, keyName, value }) => {
   const theme = useTheme();
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
  return (
     <>
@@ -87,7 +89,7 @@ const TotalOrderLineChartCard = ({ isLoading, keyName, value }) => {
                             color: theme.palette.primary[200]
                           }}
                         >
-                          Rs.{value}
+                          {currency} {value}
                           
                         </Typography>
                       </Grid>

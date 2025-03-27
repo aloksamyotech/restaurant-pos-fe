@@ -17,7 +17,8 @@ import {
   IconButton,
   InputAdornment,
   Select,
-  InputLabel
+  InputLabel,
+  Snackbar
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
@@ -28,8 +29,14 @@ import { useEffect } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { t } from 'i18next';
 import currencyCodes from "currency-codes"
+import currencySymbolMap from "currency-symbol-map";
+import { getUserInfoFromToken } from 'core/apis/common';
 
-const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen, employeeData = {}, editMode = false }) => {
+const AddUser = ({ open, onClose, fetchData, employeeData = {}, editMode = false }) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+ 
+  
   const {
     control,
     watch,
@@ -42,11 +49,13 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
   });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const values = getUserInfoFromToken();
+ 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const currencyOptions = currencyCodes.data.map((currency) => ({
     code: currency.code,
     name: currency.currency,
+    symbol: currencySymbolMap(currency.code),
   }));
 
   useEffect(() => {
@@ -63,13 +72,19 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
       let response;
       if (editMode) {
         response = await updateApi(urls?.employee?.update.replace(':id', employeeData?._id), formData);
-      } else {
+      
+        if (response.success===true && data?.currency) {
+          localStorage.setItem('$2b$10$ehdPSDmr6P1', data?.currency);
+}
+        
+  } else {
         response = await postApi(urls?.employee?.create, formData);
       }
       fetchData();
       reset();
       onClose();
-      setSnackbarMessage(editMode ? t('Employee updated successfully!') : t('Employee added successfully!'));
+      const successMessage = editMode ? t('Employee updated successfully!') : t('Employee added successfully!');
+    setSnackbarMessage(successMessage);
       setSnackbarOpen(true);
     } catch (error) {
       console.error(error);
@@ -77,11 +92,19 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
-      setSnackbarOpen(true);
+     
     }
   };
 
   return (
+  
+  <> <Snackbar
+    open={snackbarOpen}
+    autoHideDuration={3000}
+    message={snackbarMessage}
+    onClose={() => setSnackbarOpen(false)}
+    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+  />
     <Dialog open={open} onClose={onClose}>
       <DialogTitle padding={0}>{editMode ? t('Edit Employee') : t('Add New Employee')}</DialogTitle>
       <DialogContent>
@@ -281,8 +304,8 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
                       
                     <Select {...field} label={t('Currency')}>
                       {currencyOptions.map((currency) => (
-                        <MenuItem key={currency.code} value={currency.code}>
-                          {currency.name} - {currency.code}
+                        <MenuItem key={currency.symbol} value={currency.symbol}>
+                          {currency.name} - {currency.code}-{currency.symbol}
                         </MenuItem>
                       ))}
                     </Select>
@@ -333,6 +356,7 @@ const AddUser = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarOpen
         </form>
       </DialogContent>
     </Dialog>
+    </> 
   );
 };
 

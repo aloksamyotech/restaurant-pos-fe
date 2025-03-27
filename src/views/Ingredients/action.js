@@ -28,6 +28,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
     mode: 'all'
   });
   const [loading, setLoading] = useState(false);
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   useEffect(() => {
     if (ingredient) {
@@ -150,7 +151,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                     helperText={errors.cost ? errors.cost.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}
@@ -179,7 +180,7 @@ const EditDialog = ({ open, onClose, ingredient, fetchData, setSnackbarOpen, set
                     helperText={errors.price ? errors.price.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

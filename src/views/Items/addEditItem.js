@@ -31,7 +31,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState(null);
 
@@ -234,7 +234,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                     helperText={errors?.cost ? errors?.cost?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}
@@ -265,7 +265,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                     helperText={errors?.price ? errors?.price?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

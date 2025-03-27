@@ -30,6 +30,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
 
   const [image, setImage] = useState(null);
   const [dishImage, setDishImage] = useState('');
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   const handleImageChange = (e) => {
     const file = e?.target?.files[0];
@@ -174,7 +175,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                     helperText={errors?.cost ? errors?.cost?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}
@@ -205,7 +206,7 @@ const AddItemDialog = ({ open, onClose, fetchData, setSnackbarMessage, setSnackb
                     helperText={errors?.price ? errors?.price?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

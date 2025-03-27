@@ -30,6 +30,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
     mode: 'all'
   });
   const [loading, setLoading] = useState(false);
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
 
   const onSubmit = async (data) => {
     const formData = { ...data, expenseNameId: data.expenseNameId };
@@ -185,7 +186,7 @@ const AddExpense = ({ open, onClose, fetchData, setSnackbarMessage, setSnackbarO
                     helperText={errors?.amount ? errors?.amount?.message : ''}
                     type="number"
                     InputProps={{
-                      startAdornment: <InputAdornment position="start">₹</InputAdornment>
+                      startAdornment: <InputAdornment position="start">{currency}</InputAdornment>
                     }}
                   />
                 )}

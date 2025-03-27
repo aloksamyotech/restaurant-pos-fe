@@ -114,7 +114,7 @@ const SingleKitchenOrder = () => {
 
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
-      if (kitchenOrderData?.chef?.firstName){
+      if (kitchenOrderData?.chef?.firstName && orderId){
       await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
         completedPercentage: newCompletedPercentage,
         itemCompeted: updatedItemCompeted,
