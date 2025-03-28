@@ -13,8 +13,7 @@ const Dropdown = ({ dishesPerRow, setDishesPerRow }) => {
         <MenuItem value={2}>{t('2 Dishes Per Row')}</MenuItem>
         <MenuItem value={3}>{t('3 Dishes Per Row')}</MenuItem>
         <MenuItem value={4}>{t('4 Dishes Per Row')}</MenuItem>
-        <MenuItem value={5}>{t('6 Dishes Per Row')}</MenuItem>
-      </Select>
+         </Select>
     </Box>
   );
 };

@@ -50,9 +50,9 @@ const SingleKitchenOrder = () => {
   const handleDialogClose = () => setDialogOpen(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-
-
-  const breadcrumbs = [
+  const [statusCompletedItems, setStatusCompletedItems] = useState();
+ 
+const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
@@ -60,7 +60,7 @@ const SingleKitchenOrder = () => {
       {t('Kitchen')}
     </Link>
   ];
-
+ 
   const fetchData = async () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
@@ -110,8 +110,8 @@ const SingleKitchenOrder = () => {
         : [...latestItemCompeted, serial];
 
       const totalItems = itemRow?.length || 1;
-      const completedItems = updatedItemCompeted.length;
-
+      const completedItems = updatedItemCompeted.length || 0;
+      setStatusCompletedItems(completedItems);
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
       if (kitchenOrderData?.chef?.firstName && orderId){
@@ -314,6 +314,8 @@ const SingleKitchenOrder = () => {
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
             fetchindex={fetchData}
+            statusCompletedItems={statusCompletedItems}
+            id={id}
           />
           
 

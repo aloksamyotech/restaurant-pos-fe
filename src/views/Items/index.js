@@ -195,8 +195,10 @@ const Categories = () => {
       price: item?.price,
       categoryId: item?.categoryId?.categoryName,
       itemCategoryId: item?.categoryId?._id,
-      ingredient: item?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A'
+      ingredient: item?.ingredientId?.map((ingredient) => ingredient?.name).join(', ') || 'N/A',
+      ingredientId: item?.ingredientId?.map((ingredient) => ingredient?._id) || 'N/A'
     }));
+
 
     setRows(formattedData);
   };

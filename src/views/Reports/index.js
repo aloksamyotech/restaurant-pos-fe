@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
-import {
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper
-} from '@mui/material';
+import {Typography,Card,} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { urls } from 'core/constant/urls';
 import { getApi } from 'core/apis/apiClient.js';
@@ -115,6 +103,18 @@ const OverallReport = () => {
       fetchData(firstDayOfMonth.toISOString(), lastDayOfMonth.toISOString());
     }
   };
+  const handleStartDateChange = (event) => {
+    const newStartDate = event.target.value;
+    setStartDate(newStartDate);
+    fetchData(newStartDate, endDate); 
+  };
+  
+  const handleEndDateChange = (event) => {
+    const newEndDate = event.target.value;
+   setEndDate(newEndDate);
+    fetchData(startDate, newEndDate); 
+  };
+  
 
   const fetchData = async (startDate, endDate) => {
     const response = await getApi(urls?.order?.get);
@@ -201,10 +201,14 @@ const OverallReport = () => {
                 type="date"
                 value={startDate.split('T')[0]}
                 InputLabelProps={{ shrink: true }}
+                onChange={handleStartDateChange}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField fullWidth label={t('Ending date')} type="date" value={endDate.split('T')[0]} InputLabelProps={{ shrink: true }} />
+              <TextField fullWidth label={t('Ending date')} 
+              type="date" value={endDate.split('T')[0]} 
+              InputLabelProps={{ shrink: true }}
+              onChange={handleEndDateChange} />
             </Grid>
           </Grid>
         </Box>
