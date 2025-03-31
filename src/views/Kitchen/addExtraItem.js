@@ -18,11 +18,11 @@ import { t } from 'i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
 import { urls } from 'core/constant/urls';
-import { getApi,updateApi } from 'core/apis/apiClient.js';
+import { getApi,updateApi, updateApiPatch } from 'core/apis/apiClient.js';
 import { useEffect } from 'react';
 
 
-const AddExtraItem = ({ open, onClose, orderId,setSnackbarOpen,setSnackbarMessage ,fetchindex}) => {
+const AddExtraItem = ({ open, onClose, orderId,setSnackbarOpen,setSnackbarMessage ,fetchindex,statusCompletedItems,id}) => {
     const {
         control,
         handleSubmit,
@@ -39,15 +39,23 @@ const AddExtraItem = ({ open, onClose, orderId,setSnackbarOpen,setSnackbarMessag
         setRows(response.data);
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+        useEffect(() => {
+            fetchData();
+        }, []);
     const onSubmit = async (data) => {
         const formData = { ...data,id:orderId};
         
         const response = await updateApi(urls?.order?.update?.replace(':id', orderId), formData);
+       
+        const totalItems = response?.data?.items?.length || 1;
+       const newCompletedPercentage = (statusCompletedItems / totalItems) * 100;
+        
     
         if (response?.success) {
+            await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
+                completedPercentage: newCompletedPercentage,
+            })
+            
           fetchData();
           fetchindex();
           setSnackbarMessage(t('Extra Item Added Successfully!'));

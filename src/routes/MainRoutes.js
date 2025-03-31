@@ -7,6 +7,7 @@ import { getPermissionFromToken } from 'core/apis/common';
 import { Navigate } from 'react-router';
 // dashboard routing
 
+const Home = Loadable(lazy(() => import('views/dashboard/Default/home')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const Table = Loadable(lazy(() => import('views/Table')));
 const POS = Loadable(lazy(() => import('views/POS')));
@@ -44,14 +45,16 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: <Home />
+
     },
     {
       path: 'dashboard',
       children: [
         {
           path: 'default',
-          element: <DashboardDefault />
+          element: <ProtectedRoute element={<DashboardDefault />} requiredPermission="Dashboard" />
+          
         }
       ]
     },

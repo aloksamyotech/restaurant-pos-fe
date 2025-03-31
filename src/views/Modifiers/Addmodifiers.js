@@ -176,7 +176,7 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">

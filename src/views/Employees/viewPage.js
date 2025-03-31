@@ -19,6 +19,7 @@ import { t } from 'i18next';
 
 const ViewPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
   const [rowData, setRowData] = useState({});
