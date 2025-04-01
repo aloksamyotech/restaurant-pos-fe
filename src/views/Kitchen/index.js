@@ -38,7 +38,7 @@ const Kitchen = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
     {
       field: 'orderType',
@@ -46,7 +46,7 @@ const Kitchen = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
 
     {

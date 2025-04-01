@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Breadcrumbs, Link } from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Breadcrumbs, Link, Popover } from '@mui/material';
 import SortIcon from '@mui/icons-material/Sort';
 import Iconify from '../../ui-component/iconify';
 import AddExpensesTypeDialog from './AddExpensesType';
@@ -16,6 +16,8 @@ import { Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router';
 import SearchBar from 'common/searchBar';
 import { t } from 'i18next';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+
 const Categories = () => {
   const navigate = useNavigate();
   const breadcrumbs = [
@@ -45,6 +47,16 @@ const Categories = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const columns = [
     { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
@@ -55,7 +67,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
     {
       field: 'desc',
@@ -63,7 +75,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
 
     {
@@ -74,14 +86,33 @@ const Categories = () => {
 
       flex: 1,
       renderCell: (params) => (
-        <Stack direction="row" spacing={4}>
+        <>
+
+        <MoreHorizIcon onClick={handleClick} />
+
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          sx={{
+            '& .MuiPopover-paper': {
+              boxShadow: 'none'
+            }
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}>
+        
+        <Stack direction="row" spacing={1}>
           <EditIcon
             color="primary"
             onClick={() => handleEditDialogOpen(params.row)}
             sx={{
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
           />
@@ -99,7 +130,7 @@ const Categories = () => {
               color: 'red',
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
             onClick={() => setDeleteDialogOpen(params.row.id)}
@@ -117,6 +148,8 @@ const Categories = () => {
             }}
           />
         </Stack>
+        </Popover>
+        </>
       )
     }
   ];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link, Snackbar } from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, IconButton, Breadcrumbs, Link, Snackbar, Popover } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,6 +14,7 @@ import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import CategoryDialog from './Category';
 import { useNavigate } from 'react-router';
 import BulkUploadCategory from './bulkUploadButton';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -36,6 +37,16 @@ const Categories = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [rows, setRows] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const handleDialogOpen = () => {
     setSelectedCategory(null);
@@ -63,7 +74,7 @@ const Categories = () => {
       id: item?._id,
       serial: index + 1,
       name: item?.categoryName,
-      desc: item?.desc,
+      desc: item?.desc || '--',
       categoryImage: item?.categoryImage ? `${urls?.item?.image}${item.categoryImage}` : Dummy_Image,
       isAvailable: item?.true
     }));
@@ -84,10 +95,9 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true,
       renderCell: (params) =>
         params.value ? (
-          <img src={params.value} alt={t('Category')} style={{ maxWidth: '100px', height: 'auto' }} />
+          <img src={params.value} alt={t('Category')} style={{ maxWidth: '50px', height: '50px' }} />
         ) : (
           <Typography>{t('No Image')}</Typography>
         )
@@ -98,7 +108,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
     {
       field: 'desc',
@@ -106,7 +116,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
     {
       field: 'action',
@@ -115,40 +125,66 @@ const Categories = () => {
       align: 'center',
       flex: 1,
       renderCell: (params) => (
-        <Stack direction="row" spacing={4}>
-          <EditIcon
-            color="primary"
-            onClick={() => handleEditDialogOpen(params.row)}
+        <>
+
+          <MoreHorizIcon onClick={handleClick} />
+
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
             sx={{
-              cursor: 'pointer',
-              '&:hover': {
-                boxShadow: 3
+              '& .MuiPopover-paper': {
+                boxShadow: 'none'
               }
             }}
-          />
-          <DeleteIcon
-            sx={{
-              color: 'red',
-              cursor: 'pointer',
-              '&:hover': {
-                boxShadow: 3
-              }
-            }}
-            onClick={() => setDeleteDialogOpen(params.row.id)}
-          />
-          <DeleteConfirmationDialog
-            open={deleteDialogOpen === params?.row?.id}
-            onClose={() => setDeleteDialogOpen(null)}
-            onConfirm={async () => {
-              await deleteApi(urls?.foodCategory?.delete?.replace(':id', params.row.id));
-              setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
-              await fetchData();
-              setSnackbarMessage(t('Category deleted successfully!'));
-              setSnackbarOpen(true);
-              setDeleteDialogOpen(null);
-            }}
-          />
-        </Stack>
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}>
+            <Stack direction="row" spacing={3} padding={1}>
+              <EditIcon
+                color="primary"
+                onClick={() => handleEditDialogOpen(params.row)}
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    
+                   scale: 1.1
+                  }
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+              />
+              <DeleteIcon
+                sx={{
+                  color: 'red',
+                  cursor: 'pointer',
+                  '&:hover': {
+                    
+                    scale: 1.1
+                  }
+                }}
+                onClick={() => setDeleteDialogOpen(params.row.id)}
+              />
+              <DeleteConfirmationDialog
+                open={deleteDialogOpen === params?.row?.id}
+                onClose={() => setDeleteDialogOpen(null)}
+                onConfirm={async () => {
+                  await deleteApi(urls?.foodCategory?.delete?.replace(':id', params.row.id));
+                  setRows((prevRows) => prevRows.filter((row) => row.id !== params.row.id));
+                  await fetchData();
+                  setSnackbarMessage(t('Category deleted successfully!'));
+                  setSnackbarOpen(true);
+                  setDeleteDialogOpen(null);
+                }}
+              />
+            </Stack>
+          </Popover>
+        </>
       )
     }
   ];
@@ -205,7 +241,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 550, width: '100%' }}>
-          <DataGrid rows={filteredRows} rowHeight={80} columns={columns} getRowId={(row) => row.id} />
+          <DataGrid rows={filteredRows} rowHeight={50} columns={columns} getRowId={(row) => row.id}  />
         </Box>
       </Card>
     </Container>

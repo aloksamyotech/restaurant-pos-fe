@@ -13,7 +13,7 @@ const ImageUploadComponent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Handle image file change
+  
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {

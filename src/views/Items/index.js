@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link, Popover } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
@@ -16,6 +16,7 @@ import Dummy_Image from '../../../src/assets/images/Dummy_Image.png';
 import ItemDialog from './addEditItem';
 import { useNavigate } from 'react-router';
 import BulkUploadCategory from './bulkUploadButton';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -33,6 +34,16 @@ const Categories = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const handleDialogOpen = () => {
     setSelectedTag(null);
@@ -71,7 +82,6 @@ const Categories = () => {
       field: 'name',
       headerName: t('Item Name'),
       flex: 1,
-      editable: true,
       headerAlign: 'center',
       align: 'center'
     },
@@ -79,20 +89,18 @@ const Categories = () => {
       field: 'desc',
       headerName: t('Description'),
       flex: 1,
-
       headerAlign: t('center'),
       align: 'center',
-      editable: true
+      
     },
 
     {
       field: 'image',
       headerName: t('Dish Image'),
       width: 150,
-      editable: true,
-      renderCell: (params) =>
+       renderCell: (params) =>
         params.value ? (
-          <img src={params.value} alt="Category" style={{ maxWidth: '100px', height: 'auto' }} />
+          <img src={params.value} alt="Category" style={{ maxWidth: '50px', height: '50px' }} />
         ) : (
           <Typography>No Image</Typography>
         )
@@ -103,7 +111,6 @@ const Categories = () => {
       headerName: t('Preparing Cost'),
       type: 'number',
       flex: 1,
-      editable: true,
       headerAlign: 'center',
       align: 'center'
     },
@@ -121,7 +128,6 @@ const Categories = () => {
       headerName: t('Category'),
       type: 'string',
       flex: 1,
-      editable: true,
       headerAlign: 'center',
       align: 'center'
     },
@@ -130,7 +136,6 @@ const Categories = () => {
       headerName: t('Ingredients'),
       type: [],
       flex: 1,
-      editable: true,
       headerAlign: 'center',
       align: 'center'
     },
@@ -139,17 +144,34 @@ const Categories = () => {
       headerName: t('Action'),
       headerAlign: 'center',
       align: 'center',
-
       flex: 1,
       renderCell: (params) => (
-        <Stack direction="row" spacing={4}>
+        <>
+
+        <MoreHorizIcon onClick={handleClick} />
+
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          sx={{
+            '& .MuiPopover-paper': {
+              boxShadow: 'none'
+            }
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}>
+        <Stack direction="row" spacing={1}>
           <EditIcon
             color="primary"
             onClick={() => handleEditDialogOpen(params?.row)}
             sx={{
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
           />
@@ -159,7 +181,7 @@ const Categories = () => {
               color: 'red',
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
             onClick={() => setDeleteDialogOpen(params?.row?.id)}
@@ -178,6 +200,8 @@ const Categories = () => {
             }}
           />
         </Stack>
+        </Popover>
+        </>
       )
     }
   ];
@@ -189,7 +213,7 @@ const Categories = () => {
       id: item?._id,
       serial: index + 1,
       name: item?.name,
-      desc: item?.desc,
+      desc: item?.desc || '--',
       image: item?.itemImage ? `${urls?.item?.image}${item.itemImage}` : Dummy_Image,
       cost: item?.cost,
       price: item?.price,
@@ -260,7 +284,7 @@ const Categories = () => {
 
       <Card>
         <Box sx={{ height: 550, width: '100%' }}>
-          <DataGrid rows={filteredRows} rowHeight={80} columns={columns} getRowId={(row) => row.id} />
+          <DataGrid rows={filteredRows} rowHeight={50} columns={columns} getRowId={(row) => row.id} />
         </Box>
       </Card>
     </Container>

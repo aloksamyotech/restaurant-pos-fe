@@ -12,6 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 
+
 const CustomerView = () => {
   const navigate = useNavigate();
   const breadcrumbs = [
@@ -76,6 +77,8 @@ const CustomerView = () => {
 
   const fetchData = async () => {
     const response = await getApi(urls?.customer?.getbyid.replace(':id', id));
+   
+    
 
     setRows(response.data);
   };
@@ -125,18 +128,18 @@ const CustomerView = () => {
         <Stack direction="row" spacing={50} sx={{}}>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" color="" sx={{ m: 3 }}>
-              {t('Name')} :{}
+              {t('Name')} :{rows?.name || 'N/A'}
             </Typography>
             <Typography variant="h5" textAlign="" color="">
-              {t('Email')} :{}
+              {t('Email')} :{rows?.email || 'N/A'}
             </Typography>
           </Stack>
           <Stack direction="column" spacing={1} sx={{}}>
             <Typography variant="h5" textAlign="left" color="">
-              {t('Address')} :{}
+              {t('Address')} :{rows?.address || 'N/A'}
             </Typography>
             <Typography variant="h5" textAlign="left" color="">
-              {t('Phone')} :{rows.phone}
+              {t('Phone')} :{rows?.phone || 'N/A'}
             </Typography>
           </Stack>
         </Stack>

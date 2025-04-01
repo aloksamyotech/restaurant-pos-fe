@@ -32,6 +32,7 @@ import AddExtraItem from './addExtraItem';
 import { Snackbar } from '@mui/material';
 import { enums } from 'core/constant/constant';
 import LinearWithValueLabel from './progressBar';
+import HandleStatus from './handleStatus';
 
 const SingleKitchenOrder = () => {
   const navigate = useNavigate();
@@ -51,8 +52,8 @@ const SingleKitchenOrder = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [statusCompletedItems, setStatusCompletedItems] = useState();
- 
-const breadcrumbs = [
+
+  const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
@@ -60,7 +61,7 @@ const breadcrumbs = [
       {t('Kitchen')}
     </Link>
   ];
- 
+
   const fetchData = async () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
@@ -114,29 +115,25 @@ const breadcrumbs = [
       setStatusCompletedItems(completedItems);
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
-      if (kitchenOrderData?.chef?.firstName && orderId){
-      await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
-        completedPercentage: newCompletedPercentage,
-        itemCompeted: updatedItemCompeted,
-        status: newCompletedPercentage === 0
-          ? enums?.Pending
-          : newCompletedPercentage === 100
-            ? enums?.Completed
-            : enums?.InProgress
-      });
+      if (kitchenOrderData?.chef?.firstName) {
+        await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
+          completedPercentage: newCompletedPercentage,
+          itemCompeted: updatedItemCompeted,
+         
+        });
 
-      fetchData();
-    }
-    else{
-      setSnackbarMessage(t('First Assign Chef'));
-      setSnackbarOpen(true);
-      setOpen(false);
-    }
+        fetchData();
+      }
+      else {
+        setSnackbarMessage(t('First Assign Chef'));
+        setSnackbarOpen(true);
+        setOpen(false);
+      }
     } catch (error) {
       console.error('Error updating status:', error);
     }
-  
-  
+
+
   };
 
   const checkbox = (serial) => {
@@ -164,7 +161,7 @@ const breadcrumbs = [
     try {
       const response = await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
         chef: selectedChef,
-        status: 'In Progress'
+        
       });
       setSnackbarMessage(t('Chef Assign successfully!'));
       setSnackbarOpen(true);
@@ -297,16 +294,18 @@ const breadcrumbs = [
 
         </Grid>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-         
+
           <Typography>Order Complete Percentage</Typography>
           <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
-         <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+          <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}/>
+          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}
           </Button>
-          
+
           <AddExtraItem
             open={dialogOpen}
             onClose={handleDialogClose}
@@ -317,7 +316,7 @@ const breadcrumbs = [
             statusCompletedItems={statusCompletedItems}
             id={id}
           />
-          
+
 
         </Box>
 
@@ -331,6 +330,7 @@ const breadcrumbs = [
               }}
             />
           </Box>
+
         </Card>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>

@@ -16,22 +16,30 @@ const POSCategories = ({ categories, setCategories }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-         const categoryResponse = await getApi(urls?.foodCategory?.get);
-         const fetchedCategories = categoryResponse?.data || [];
-         const itemResponse = await getApi(urls?.item?.get);
-         const items = itemResponse?.data || [];
-         const formattedCategories = fetchedCategories.map((category) => {
+            const categoryResponse = await getApi(urls?.foodCategory?.get);
+
+
+            const fetchedCategories = categoryResponse?.data || [];
+            const itemResponse = await getApi(urls?.item?.get);
+            const items = itemResponse?.data || [];
+
+            const formattedCategories = fetchedCategories.map((category) => {
                 const filteredItems = items.filter((item) => String(item?.categoryId?._id) === String(category?._id));
+
+
                 return {
                     ...category,
-                    checked: true,
+
+                    selected: false,
                     items: filteredItems.map((item) => ({
                         ...item,
-                        checked: true
+                        checked: false
                     }))
                 };
             });
             setCategories(formattedCategories);
+
+
 
         };
 
@@ -39,12 +47,13 @@ const POSCategories = ({ categories, setCategories }) => {
     }, []);
 
     const handleCategoryChange = (categoryId) => {
-        setCategories((prevCategories) =>
+      setCategories((prevCategories) =>
             prevCategories.map((category) =>
                 category._id === categoryId
                     ? {
                         ...category,
-                        checked: !category.checked,
+
+                        selected: !category.selected,
                         items: category.items.map((item) => ({
                             ...item,
                             checked: !category.checked
@@ -53,9 +62,12 @@ const POSCategories = ({ categories, setCategories }) => {
                     : category
             )
         );
+
     };
 
+
     const handleItemChange = (categoryId, itemId) => {
+
         setCategories((prevCategories) =>
             prevCategories.map((category) =>
                 category._id === categoryId
@@ -70,35 +82,35 @@ const POSCategories = ({ categories, setCategories }) => {
         );
     };
 
+
+
     return (
         <div>
             {categories.map((category) => (
-                <Accordion key={category._id}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={category.checked}
-                                    onChange={() => handleCategoryChange(category._id)}
-                                />
-                            }
-                            label={<Typography variant="h6">{category?.categoryName}</Typography>}
-                        />
+                <Accordion key={category._id} sx={{ margin: 0 }}>
+                    <AccordionSummary sx={{ cursor: "pointer", marginBottom: 0 }} expandIcon={<ExpandMoreIcon />}
+                        onClick={() => handleCategoryChange(category._id)}
+                    >
+
+                        <Typography variant="h6">{category?.categoryName}</Typography>
                     </AccordionSummary>
 
-                    <AccordionDetails>
+                    <AccordionDetails sx={{ padding: "0 16px", marginTop: "-15px" }}>
                         {category.items.map((item) => (
                             <FormControlLabel
                                 key={item._id}
                                 control={
                                     <Checkbox
+                                        size="small"
                                         checked={item.checked}
                                         onChange={() => handleItemChange(category._id, item._id)}
-                                        disabled={!category.checked} 
+
                                     />
+
+
                                 }
                                 label={item?.name}
-                                sx={{ marginLeft: 2 }}
+
                             />
                         ))}
                     </AccordionDetails>
@@ -109,3 +121,4 @@ const POSCategories = ({ categories, setCategories }) => {
 };
 
 export default POSCategories;
+

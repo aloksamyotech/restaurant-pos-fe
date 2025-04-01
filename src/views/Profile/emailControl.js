@@ -45,9 +45,7 @@ const EmailPermissions = () => {
   return (
     <Card sx={{ maxWidth: 400, p: 2, m: 2 }}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          {t('Blocked Email Roles')}
-        </Typography>
+        
         <FormGroup>
           {roles?.map((role) => (
             <FormControlLabel
