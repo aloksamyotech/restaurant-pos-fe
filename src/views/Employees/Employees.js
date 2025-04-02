@@ -71,10 +71,11 @@ const AddUser = ({ open, onClose, fetchData, employeeData = {}, editMode = false
     try {
       let response;
       if (editMode) {
-        response = await updateApi(urls?.employee?.update.replace(':id', employeeData?._id), formData);
+       response = await updateApi(urls?.employee?.update.replace(':id', employeeData?._id), formData);
       
         if (response.success===true && data?.currency) {
           localStorage.setItem('$2b$10$ehdPSDmr6P1', data?.currency);
+          
 }
         
   } else {
@@ -84,11 +85,12 @@ const AddUser = ({ open, onClose, fetchData, employeeData = {}, editMode = false
       reset();
       onClose();
       const successMessage = editMode ? t('Employee updated successfully!') : t('Employee added successfully!');
-    setSnackbarMessage(successMessage);
+      setSnackbarMessage(successMessage);
       setSnackbarOpen(true);
+      
     } catch (error) {
       console.error(error);
-      setSnackbarMessage(editMode ? t('Employee updated successfully!') : t('Employee added successfully!'));
+      setSnackbarMessage(editMode ? t('Error Updating Employee!!') : t(' Error Adding Employee!'));
       setSnackbarOpen(true);
     } finally {
       setLoading(false);

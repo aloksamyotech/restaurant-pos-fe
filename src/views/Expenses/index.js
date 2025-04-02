@@ -180,7 +180,7 @@ const Categories = () => {
       id: item?._id,
       serial: index + 1,
       name: item?.name,
-      desc: item?.desc,
+      desc: item?.desc || '--',
       expenseCategoryId: item?.expenseNameId?._id,
       expenseNameId: item?.expenseNameId?.expenseName,
       amount: item?.amount,

@@ -100,7 +100,8 @@ const Categories = () => {
       width: 150,
        renderCell: (params) =>
         params.value ? (
-          <img src={params.value} alt="Category" style={{ maxWidth: '50px', height: '50px' }} />
+          <img src={params.value} alt="Category" style={{ maxWidth: '50px', height: '50px', borderRadius: "50%",
+            objectFit: "cover" }} />
         ) : (
           <Typography>No Image</Typography>
         )

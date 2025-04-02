@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { updateApiPatch } from "core/apis/apiClient";
 import { urls } from "core/constant/urls";
+import { t } from 'i18next';
 
-const OrderCloseDialog = (props,setSnackbarMessage,setSnackbarOpen) => {
+const OrderCloseDialog = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {kitchenId} = props;
-  console.log("kitchenId",kitchenId);
+  const {kitchenId,setSnackbarOpen,setSnackbarMessage,fetchData} = props;
 
   const handleConfirm = async () => {
     
@@ -18,6 +18,7 @@ const OrderCloseDialog = (props,setSnackbarMessage,setSnackbarOpen) => {
       if (response.success) {
         setSnackbarOpen(true);
         setSnackbarMessage(t('Order Closed Successfully'));
+        fetchData();
       } else {
         setSnackbarOpen(true);
         setSnackbarMessage(t('Error Closed Successfully'));

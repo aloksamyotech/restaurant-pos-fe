@@ -66,7 +66,7 @@ const SingleKitchenOrder = () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
-
+      
       if (!response?.data?.chef) {
         setIsChefAssigned(false);
       } else {
@@ -119,7 +119,7 @@ const SingleKitchenOrder = () => {
         await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
           completedPercentage: newCompletedPercentage,
           itemCompeted: updatedItemCompeted,
-         
+
         });
 
         fetchData();
@@ -157,16 +157,18 @@ const SingleKitchenOrder = () => {
 
   const handleAssignChef = async () => {
     if (!selectedChef) return;
-
-    try {
+try {
       const response = await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
         chef: selectedChef,
-        
+
       });
-      setSnackbarMessage(t('Chef Assign successfully!'));
-      setSnackbarOpen(true);
-      setOpen(false);
-      fetchData();
+      if (response.success) {
+
+        setSnackbarMessage(t('Chef Assign successfully!'));
+        setSnackbarOpen(true);
+        setOpen(false);
+        fetchData();
+      }
     } catch (error) {
       console.error('Error assigning chef:', error);
       setSnackbarMessage(t('Error Assigning Chef!'));
@@ -243,7 +245,7 @@ const SingleKitchenOrder = () => {
         <Grid container padding={2} spacing={3}>
           <Grid item xs={6}>
             <Box sx={{ width: '100%', }}>
-              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
+              <Card sx={{ border: '2px solid', borderColor: 'divider', }}>
                 <CardContent>
 
                   <Typography variant="body1">
@@ -266,7 +268,7 @@ const SingleKitchenOrder = () => {
 
 
             <Box sx={{ width: '100%' }} >
-              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
+              <Card sx={{ border: '2px solid', borderColor: 'divider' }}>
                 <CardContent>
 
                   <Typography variant="body1">
@@ -293,12 +295,14 @@ const SingleKitchenOrder = () => {
 
 
         </Grid>
+        <Typography sx={{marginLeft:5}}>Order Complete Percentage</Typography>
+       <Box sx={{p:1}}> <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} /></Box>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
 
-          <Typography>Order Complete Percentage</Typography>
-          <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
+          
+         
           <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen}/>
+            setSnackbarOpen={setSnackbarOpen} fetchData={fetchData}/>
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
@@ -356,11 +360,8 @@ const SingleKitchenOrder = () => {
               value={selectedChef}
               onChange={(e) => setSelectedChef(e.target.value)}
               labelId="chef-label"
-              label={t('Select Chef')}
-
-            >
-
-              {rows
+              label={t('Select Chef')}>
+                 {rows
                 .filter((chef) => chef.role === 'Chef')
                 .map((chef, index) => (
                   <MenuItem key={index} value={chef._id}>

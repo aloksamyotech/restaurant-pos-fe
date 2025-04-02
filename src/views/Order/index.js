@@ -59,18 +59,6 @@ const Categories = () => {
       align: 'center'
     },
     {
-      field: 'paymentStatus',
-      headerName: t('Payment Status'),
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => (
-        <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
-          {t(params?.row?.paymentStatus)}
-        </Button>
-      )
-    },
-    {
       field: 'action',
       headerName: t('Action'),
       flex: 1,

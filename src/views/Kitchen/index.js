@@ -117,7 +117,7 @@ const Kitchen = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const filteredRows = rows?.filter((row) => row?.table?.toString().toLowerCase().includes(searchTerm?.toLowerCase()));
+  const filteredRows = rows?.filter((row) => row?.orderId?.toString().toLowerCase().includes(searchTerm?.toLowerCase()));
   return (
     <Container>
 

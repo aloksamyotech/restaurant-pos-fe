@@ -97,7 +97,8 @@ const Categories = () => {
       align: 'center',
       renderCell: (params) =>
         params.value ? (
-          <img src={params.value} alt={t('Category')} style={{ maxWidth: '50px', height: '50px' }} />
+          <img src={params.value} alt={t('Category')} style={{ maxWidth: '50px', height: '50px', borderRadius: "75%",
+            objectFit: "cover" }} />
         ) : (
           <Typography>{t('No Image')}</Typography>
         )

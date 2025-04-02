@@ -122,7 +122,7 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                       <IconButton onClick={() => handleDecrementQuantity(cartItem?.id)}>
                         <Remove />
                       </IconButton>
-                      <Typography sx={{ mx: 1 }}>{cartItem?.quantity}</Typography>
+                      <Typography sx={{ mt:1 }}>{cartItem?.quantity}</Typography>
                       <IconButton onClick={() => handleIncrementQuantity(cartItem?.id)}>
                         <Add />
                       </IconButton>
@@ -130,11 +130,11 @@ const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogCl
                   </Box>
 
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6">{cartItem?.name}</Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant="h5">{cartItem?.name}</Typography>
+                    <Typography variant="h6" color="textSecondary" sx={{fontWeight:'bold'}}>
                       {t('Price')}: {currency} {cartItem?.price}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant="h6" color="textSecondary" sx={{fontWeight:'bold'}}>
                       {t('Subtotal')}: {currency} {cartItem?.price * cartItem?.quantity}
                     </Typography>
                   </Box>
