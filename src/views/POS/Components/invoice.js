@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Divider, Paper, Button, Card, Grid } from '@mui/material';
+import { Box, Typography, Divider, Paper, Button, Card, Grid, Select, MenuItem, TableContainer, TableHead, TableCell, TableRow, TableBody, Table } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import { useParams } from 'react-router';
@@ -14,12 +14,11 @@ const Invoice = (props) => {
   const invoiceId = params?.invoiceId || props?.invoiceId;
   const [rowData, setrowdata] = useState({});
   const [itemRow, setitemRow] = useState([]);
-  const[grandTotal, setGrandTotal]=useState({});
+  const [grandTotal, setGrandTotal] = useState({});
+  const [printSize, setPrintSize] = useState("A4");
   const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
-  
-  
 
-  const fetchData = async () => {
+const fetchData = async () => {
     const response = await getApi(urls?.invoice?.getbyid?.replace(':id', invoiceId));
 
     const invoice = response?.data;
@@ -44,7 +43,7 @@ const Invoice = (props) => {
     };
     setrowdata(formattedData);
 
-  
+
   };
 
   useEffect(() => {
@@ -59,15 +58,15 @@ const Invoice = (props) => {
       const items = orderResponse?.data?.items || [];
       const totalPrice = orderResponse?.data?.totalPrice || '0.00';
       const discount = orderResponse?.data?.discount || '0.00';
-      setGrandTotal({totalPrice,discount});
+      setGrandTotal({ totalPrice, discount });
       const formattedItemRows = items.map((item, index) => ({
         id: index + 1,
         serial: index + 1,
         items: item?.name || t('N/A'),
         price: item?.price?.toFixed(2) || '0.00',
         quantity: item?.quantity || '0',
-        }));
-        setitemRow(formattedItemRows);
+      }));
+      setitemRow(formattedItemRows);
     }
 
   }
@@ -76,7 +75,7 @@ const Invoice = (props) => {
       fetchItems();
     }
   }, [rowData?.orderId]);
-     const finalPrice = ((grandTotal?.totalPrice) - (grandTotal?.discount));
+  const finalPrice = ((grandTotal?.totalPrice) - (grandTotal?.discount));
 
   const columns = [
     {
@@ -110,11 +109,38 @@ const Invoice = (props) => {
       align: 'center'
     }
   ];
-const handlePrint = () => {
+  const handlePrint = (size) => {
+    let printStyle = document.createElement("style");
+  
+    if (size === "small") {
+      printStyle.innerHTML = `
+        @media print {
+            @page { size: 80mm auto; margin: 5mm; }
+            #invoice-print { width: 80mm; font-size: 12px; padding: 5px; }
+            .MuiTable-root, .MuiTableCell-root {
+                font-size: 10px !important;
+                padding: 2px !important;
+            }
+            .MuiTableHead-root {
+                display: none;
+            }
+        }
+      `;
+    } else {
+      printStyle.innerHTML = `
+        @media print {
+            @page { size: A4; margin: 20mm; }
+            #invoice-print { width: 100%; font-size: 14px; padding: 20px; }
+        }
+      `;
+    }
+  
+    document.head.appendChild(printStyle);
     window.print();
+    document.head.removeChild(printStyle);
   };
-
-  return (
+  
+return (
     <Box sx={{ padding: 4, maxWidth: '100%', margin: '0 auto' }} id="invoice-print">
       <Paper elevation={3} sx={{ padding: 4 }}>
         <Typography variant="h3" textAlign="center" color="primary" gutterBottom>
@@ -159,16 +185,33 @@ const handlePrint = () => {
         </Typography>
         <Divider sx={{ mb: 3 }} />
         <Card>
-          <Box sx={{ height: 'auto', width: '100%' }}>
-            <DataGrid
-              rows={itemRow}
-              columns={columns}
-              pagination
-              components={{
-                Pagination: () => null
-              }}
-            />
-          </Box>
+         
+       <Box sx={{ height: 'auto', width: '100%' }}>
+       <TableContainer component={Paper}>
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell align="center">{t('S.No')}</TableCell>
+        <TableCell align="center">{t('Item Name')}</TableCell>
+        <TableCell align="center">{t('Price')}</TableCell>
+        <TableCell align="center">{t('Quantity')}</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {itemRow.map((row, index) => (
+        <TableRow key={index}>
+          <TableCell align="center">{row.serial}</TableCell>
+          <TableCell align="center">{row.items}</TableCell>
+          <TableCell align="center">{row.price}</TableCell>
+          <TableCell align="center">{row.quantity}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+
+       </Box>
+
         </Card>
 
         <Divider sx={{ my: 3 }} />
@@ -179,11 +222,23 @@ const handlePrint = () => {
           </Typography>
         </Box>
 
-        <Box textAlign="center" mt={4}>
-          <Button variant="contained" color="primary" onClick={handlePrint}>
-            {t('Print Invoice')}
+        <Box textAlign="center" mt={4} className="no-print">
+          <Select
+            value={printSize}
+            onChange={(e) => setPrintSize(e.target.value)}
+            sx={{ marginRight: 2 }}
+          >
+            <MenuItem value="A4">A4 (Full Page)</MenuItem>
+            <MenuItem value="small">80mm Receipt</MenuItem>
+          </Select>
+
+          <Button variant="contained" color="primary" onClick={() => handlePrint(printSize)}>
+            {t("Print Invoice")}
           </Button>
         </Box>
+
+
+
       </Paper>
     </Box>
   );
