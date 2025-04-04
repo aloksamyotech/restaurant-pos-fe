@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import { updateApiPatch } from "core/apis/apiClient";
+import { updateApi, updateApiPatch } from "core/apis/apiClient";
 import { urls } from "core/constant/urls";
 import { t } from 'i18next';
 
@@ -8,14 +8,18 @@ const OrderCloseDialog = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {kitchenId,setSnackbarOpen,setSnackbarMessage,fetchData} = props;
-
-  const handleConfirm = async () => {
+  const {kitchenId,setSnackbarOpen,setSnackbarMessage,fetchData,orderId,customerId} = props;
+ 
+   const handleConfirm = async () => {
     
-    const response =  await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', kitchenId), {
-                status: "Completed"
+    const response =  await updateApi(urls?.order?.updateStatus.replace(':id', orderId), {
+              orderStatus: "Completed",
+              orderId: orderId,      
+              
+
                 });
-      if (response.success) {
+              
+      if (response?.success) {
         setSnackbarOpen(true);
         setSnackbarMessage(t('Order Closed Successfully'));
         fetchData();

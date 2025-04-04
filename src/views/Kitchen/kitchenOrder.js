@@ -66,7 +66,7 @@ const SingleKitchenOrder = () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
-      
+     
       if (!response?.data?.chef) {
         setIsChefAssigned(false);
       } else {
@@ -76,7 +76,8 @@ const SingleKitchenOrder = () => {
       setCheckboxItem(latestItemCompeted);
 
       const orderId = response?.data?.order?._id;
-      setorderidForupdate(orderId);
+      const customerId = response?.data?.order?.customerId;
+      setorderidForupdate({orderId,customerId});
 
 
       if (orderId) {
@@ -302,7 +303,7 @@ try {
           
          
           <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen} fetchData={fetchData}/>
+            setSnackbarOpen={setSnackbarOpen} fetchData={fetchData} orderId={orderidForupdate?.orderId} customerId={orderidForupdate?.customerId}/>
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
