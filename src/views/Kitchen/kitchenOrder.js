@@ -34,6 +34,7 @@ import { enums } from 'core/constant/constant';
 import LinearWithValueLabel from './progressBar';
 import HandleStatus from './handleStatus';
 
+
 const SingleKitchenOrder = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -76,8 +77,7 @@ const SingleKitchenOrder = () => {
       setCheckboxItem(latestItemCompeted);
 
       const orderId = response?.data?.order?._id;
-      const customerId = response?.data?.order?.customerId;
-      setorderidForupdate({orderId,customerId});
+      setorderidForupdate(orderId);
 
 
       if (orderId) {
@@ -102,6 +102,8 @@ const SingleKitchenOrder = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  console.log("kitchenOrderDataiii",kitchenOrderData);
+  
 
 
   const handleCheckboxChange = async (serial, orderId) => {
@@ -250,7 +252,7 @@ try {
                 <CardContent>
 
                   <Typography variant="body1">
-                    <strong>{t('Order Id')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
+                    <strong>{t('Order ID')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Order Type')}:</strong>
@@ -296,7 +298,7 @@ try {
 
 
         </Grid>
-        <Typography sx={{marginLeft:5}}>Order Complete Percentage</Typography>
+        <Typography sx={{marginLeft:5}}>{t('Order Complete Percentage')}</Typography>
        <Box sx={{p:1}}> <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} /></Box>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
 
@@ -305,10 +307,10 @@ try {
           <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen} fetchData={fetchData} orderId={orderidForupdate?.orderId} customerId={orderidForupdate?.customerId}/>
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-            {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
+            {isChefAssigned ? t(enums?.UpdateChef) : t(enums?.AssignChef)}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            {t('Add Extra Items')}
+            {t('Add Extra Item')}
           </Button>
 
           <AddExtraItem

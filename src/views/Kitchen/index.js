@@ -34,7 +34,7 @@ const Kitchen = () => {
 
     {
       field: 'orderId',
-      headerName: t('Order Id'),
+      headerName: t('Order ID'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',

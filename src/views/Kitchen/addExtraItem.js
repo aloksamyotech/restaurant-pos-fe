@@ -31,6 +31,8 @@ const AddExtraItem = ({ open, onClose, orderId, setSnackbarOpen, setSnackbarMess
     } = useForm({
         mode: 'all'
     });
+   
+    
 
     const [rows, setRows] = useState([]);
     const fetchData = async () => {
@@ -71,7 +73,7 @@ const AddExtraItem = ({ open, onClose, orderId, setSnackbarOpen, setSnackbarMess
     return (
         <>
             <Dialog open={open} onClose={onClose} fullWidth>
-                <DialogTitle>{t('Add Extra Items')}</DialogTitle>
+                <DialogTitle>{t('Add Extra Item')}</DialogTitle>
                 <DialogContent >
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Grid container spacing={2} marginTop={'1px'}>
@@ -100,7 +102,7 @@ const AddExtraItem = ({ open, onClose, orderId, setSnackbarOpen, setSnackbarMess
                                         <TextField
                                             {...field}
                                             select
-                                            label="Items"
+                                            label={t("Item")}
                                             variant="outlined"
                                             fullWidth
                                             error={!!errors.item}

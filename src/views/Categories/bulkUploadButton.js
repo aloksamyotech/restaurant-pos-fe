@@ -62,13 +62,13 @@ const BulkUploadCategory = (props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} rowSpacing={4} direction="column">
             <Grid item>
-              <Typography sx={{ display: 'inline', marginRight: '10px' }}>Download Sample File</Typography>
+              <Typography sx={{ display: 'inline', marginRight: '10px' }}>{t('Download Sample File')}</Typography>
               <Typography
                 color="primary"
                 onClick={() => window.open(SampleFile, '_blank')}
                 sx={{ display: 'inline', '&:hover': { textDecoration: 'underline', cursor: 'pointer' } }}
               >
-                Click here!
+                {t('Click here!')}
               </Typography>
             </Grid>
             <Grid item>

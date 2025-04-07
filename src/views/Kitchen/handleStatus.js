@@ -34,16 +34,16 @@ const OrderCloseDialog = (props) => {
   return (
     <div>
       <Button variant="contained" color="primary" onClick={handleOpen}>
-        Close Order
+        {t('Close Order')}
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Confirm Order Closure</DialogTitle>
+        <DialogTitle>{t('Confirm Order Closure')}</DialogTitle>
         <DialogContent>
-          Are you sure you want to close this order?
+          {t('Are you sure you want to close this order?')}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleConfirm} color="primary">Yes</Button>
-          <Button onClick={handleClose} color="secondary">No</Button>
+          <Button onClick={handleConfirm} color="primary">{t('Yes')}</Button>
+          <Button onClick={handleClose} color="secondary">{t('No')}</Button>
         </DialogActions>
       </Dialog>
     </div>

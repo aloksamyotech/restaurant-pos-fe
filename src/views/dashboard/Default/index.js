@@ -13,6 +13,9 @@ import AppConversionRates from './AppConversionCard';
 import AppCurrentVisits from './AppCurrentVisitCard';
 import ApiData from './apiData';
 import ExpenseData from './expenseApiData';
+import { useTranslation } from 'react-i18next';
+
+
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
@@ -31,6 +34,8 @@ const Dashboard = () => {
   const totalExpenseamount = fetchExpenseData.reduce((acc, row) => acc + row.amount, 0)
   const totalProfitAfteExpense = totalProfitamount - totalExpenseamount
   const totalTax=0
+  const { t } = useTranslation();
+
 
 
   return (
@@ -38,34 +43,34 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={3} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard keyName={"Total sale Amount"} value={totalSaleamount} isLoading={isLoading} />
+            <TotalOrderLineChartCard keyName={t('Total Sale Amount')} value={totalSaleamount} isLoading={isLoading} />
           </Grid>
           <Grid item lg={3} md={6} sm={6} xs={12}>
-            <EarningCard keyName={"Total Payable Amount"} value={totalPayableamount} isLoading={isLoading} />
+            <EarningCard keyName={t("Total Payable Amount")} value={totalPayableamount} isLoading={isLoading} />
           </Grid>
           <Grid item sm={6} xs={12} md={6} lg={3}>
-            <TotalOrderLineChartCard keyName={"Total Cost Amount"} value={totalCostamount}  isLoading={isLoading} />
+            <TotalOrderLineChartCard keyName={t("Total Cost Amount")} value={totalCostamount}  isLoading={isLoading} />
           </Grid>
 
           <Grid item sm={6} xs={12} md={6} lg={3}>
-            <EarningCard keyName={"Total Expense Amount"} value={totalExpenseamount} isLoading={isLoading} />
+            <EarningCard keyName={t("Total Expense Amount")} value={totalExpenseamount} isLoading={isLoading} />
           </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={3} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard keyName={"Total Discount Amount"} value={totalDiscountamount} isLoading={isLoading} />
+            <TotalOrderLineChartCard keyName={t("Total Discount Amount")} value={totalDiscountamount} isLoading={isLoading} />
           </Grid>
           <Grid item lg={3} md={6} sm={6} xs={12}>
-            <EarningCard  keyName={"Net Profit"} value={totalProfitAfteExpense}  isLoading={isLoading} />
+            <EarningCard  keyName={t("Net Profit")} value={totalProfitAfteExpense}  isLoading={isLoading} />
           </Grid>
           <Grid item sm={6} xs={12} md={6} lg={3}>
-            <TotalOrderLineChartCard keyName={"Total Profit Amount"} value={totalProfitamount} isLoading={isLoading} />
+            <TotalOrderLineChartCard keyName={t("Total Profit Amount")} value={totalProfitamount} isLoading={isLoading} />
           </Grid>
 
           <Grid item sm={6} xs={12} md={6} lg={3}>
-            <EarningCard keyName={"Total Tax Amount"} value={totalTax}isLoading={isLoading} />
+            <EarningCard keyName={t("Total Tax Amount")} value={totalTax}isLoading={isLoading} />
           </Grid>
         </Grid>
       </Grid>
