@@ -30,23 +30,20 @@ const OrderView = () => {
   const [rowData, setrowdata] = useState({});
   const [invoiceID, setinvoiceID] = useState();
 
+  
   const fetchData = async () => {
     const response = await getApi(urls?.order.getbyid.replace(':id', id));
-
     const order = response?.data;
 
     const formattedData = {
       id: order?._id,
-      customer: order?.customer || t('N/A'),
-      employee: order?.employee || t('N/A'),
       totalPrice: order?.totalPrice?.toFixed(2) || '0.00',
       discount: order?.discount?.toFixed(2) || '0.00',
       tax: order?.tax?.toFixed(2) || '0.00',
-      paymentStatus: t('Paid'),
       chef: order?.chef || t('N/A'),
       type: order?.type || t('N/A'),
-      status: order?.status || t('Pending'),
-      expectedTime: order?.expectedTime ? `${order.expectedTime} ${t('min')}` : t('N/A')
+      status: order?.status,
+      
     };
     const formattedItemRows =
       order?.items?.map((item, index) => ({
@@ -147,17 +144,9 @@ const OrderView = () => {
                     }}
                   >
                     <CardContent>
-                      <Box sx={{ textAlign: 'left', mb: 1 }}>
-                        <Typography variant="body1" sx={{ mt: 2 }}>
-                          <strong>{t('Customer')}:</strong>
-                          {}
-                        </Typography>
-                      </Box>
-                      <Typography variant="body1">
-                        <strong>{t('Employee')}:</strong> {}
-                      </Typography>
+                     
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('totalPrice')}:</strong> {rowData?.totalPrice}
+                        <strong>{t('TotalPrice')}:</strong> {rowData?.totalPrice}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
                         <strong>{t('Discount')}:</strong> {rowData?.discount}
@@ -179,12 +168,7 @@ const OrderView = () => {
                     }}
                   >
                     <CardContent>
-                      <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Payment Status')}:</strong>{' '}
-                        <Button variant="contained" size="small" color="success" sx={{ textTransform: 'none' }}>
-                          {rowData?.paymentStatus}
-                        </Button>
-                      </Typography>
+                     
 
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography mt={1} variant="body1">
@@ -192,16 +176,14 @@ const OrderView = () => {
                         </Typography>
                       </Box>
 
-                      <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Expected Time')}:</strong>
-                      </Typography>
+                     
 
                       <Typography variant="body1" sx={{ mt: 1 }}>
                         <strong>{t('Chef')}:</strong>
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Table Type')}:</strong>
+                        <strong>{t('Table Type')}:</strong> {rowData?.type}
                       </Typography>
                     </CardContent>
                   </Card>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link } from '@mui/material';
+import { Stack, Button, Container, Typography, Card, Box, TextField, Checkbox, IconButton, Grid, Breadcrumbs, Link, Popover } from '@mui/material';
 import Iconify from '../../ui-component/iconify';
 import AddModifierDialog from './AddTable';
 import HomeIcon from '@mui/icons-material/Home';
@@ -16,6 +16,7 @@ import SearchBar from 'common/searchBar';
 import { useTranslation } from 'react-i18next';
 import UpdateIcon from '@mui/icons-material/Update';
 import {enums} from 'core/constant/constant';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -45,6 +46,16 @@ const Categories = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const columns = [
     { field: 'serial', headerName: t('S.No'), flex: 1, headerAlign: 'center', align: 'center' },
@@ -55,7 +66,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: true
+      
     },
     {
       field: 'status',
@@ -63,7 +74,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: false,
+      
       renderCell: (params) => (
         <Typography
           variant="body2"
@@ -83,7 +94,6 @@ const Categories = () => {
       type: 'number',
       flex: 1,
       headerAlign: 'center',
-      editable: true,
       align: 'center'
     },
     {
@@ -92,7 +102,7 @@ const Categories = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      editable: false,
+     
       renderCell: (params) => (
         <Button
           variant="contained"
@@ -113,14 +123,32 @@ const Categories = () => {
 
       flex: 1,
       renderCell: (params) => (
-        <Stack direction="row" spacing={4}>
+        <>
+
+        <MoreHorizIcon onClick={handleClick} />
+
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          sx={{
+            '& .MuiPopover-paper': {
+              boxShadow: 'none'
+            }
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}>
+        <Stack direction="row" spacing={1}>
           <EditIcon
             color="primary"
             onClick={() => handleEditDialogOpen(params?.row)}
             sx={{
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
           />
@@ -130,7 +158,7 @@ const Categories = () => {
               color: 'red',
               cursor: 'pointer',
               '&:hover': {
-                boxShadow: 3
+                scale: 1.1
               }
             }}
             onClick={() => setDeleteDialogOpen(params?.row?.id)}
@@ -148,6 +176,8 @@ const Categories = () => {
             }}
           />
         </Stack>
+        </Popover>
+        </>
       )
     }
   ];

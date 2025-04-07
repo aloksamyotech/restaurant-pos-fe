@@ -32,6 +32,7 @@ import AddExtraItem from './addExtraItem';
 import { Snackbar } from '@mui/material';
 import { enums } from 'core/constant/constant';
 import LinearWithValueLabel from './progressBar';
+import HandleStatus from './handleStatus';
 
 const SingleKitchenOrder = () => {
   const navigate = useNavigate();
@@ -51,8 +52,8 @@ const SingleKitchenOrder = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [statusCompletedItems, setStatusCompletedItems] = useState();
- 
-const breadcrumbs = [
+
+  const breadcrumbs = [
     <Link underline="hover" key="1" color="primary" onClick={() => navigate('/dashboard/pos')} sx={{ cursor: 'pointer' }}>
       <HomeIcon />
     </Link>,
@@ -60,12 +61,12 @@ const breadcrumbs = [
       {t('Kitchen')}
     </Link>
   ];
- 
+
   const fetchData = async () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
-
+     
       if (!response?.data?.chef) {
         setIsChefAssigned(false);
       } else {
@@ -75,7 +76,8 @@ const breadcrumbs = [
       setCheckboxItem(latestItemCompeted);
 
       const orderId = response?.data?.order?._id;
-      setorderidForupdate(orderId);
+      const customerId = response?.data?.order?.customerId;
+      setorderidForupdate({orderId,customerId});
 
 
       if (orderId) {
@@ -114,29 +116,25 @@ const breadcrumbs = [
       setStatusCompletedItems(completedItems);
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
-      if (kitchenOrderData?.chef?.firstName && orderId){
-      await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
-        completedPercentage: newCompletedPercentage,
-        itemCompeted: updatedItemCompeted,
-        status: newCompletedPercentage === 0
-          ? enums?.Pending
-          : newCompletedPercentage === 100
-            ? enums?.Completed
-            : enums?.InProgress
-      });
+      if (kitchenOrderData?.chef?.firstName) {
+        await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
+          completedPercentage: newCompletedPercentage,
+          itemCompeted: updatedItemCompeted,
 
-      fetchData();
-    }
-    else{
-      setSnackbarMessage(t('First Assign Chef'));
-      setSnackbarOpen(true);
-      setOpen(false);
-    }
+        });
+
+        fetchData();
+      }
+      else {
+        setSnackbarMessage(t('First Assign Chef'));
+        setSnackbarOpen(true);
+        setOpen(false);
+      }
     } catch (error) {
       console.error('Error updating status:', error);
     }
-  
-  
+
+
   };
 
   const checkbox = (serial) => {
@@ -160,16 +158,18 @@ const breadcrumbs = [
 
   const handleAssignChef = async () => {
     if (!selectedChef) return;
-
-    try {
+try {
       const response = await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
         chef: selectedChef,
-        status: 'In Progress'
+
       });
-      setSnackbarMessage(t('Chef Assign successfully!'));
-      setSnackbarOpen(true);
-      setOpen(false);
-      fetchData();
+      if (response.success) {
+
+        setSnackbarMessage(t('Chef Assign successfully!'));
+        setSnackbarOpen(true);
+        setOpen(false);
+        fetchData();
+      }
     } catch (error) {
       console.error('Error assigning chef:', error);
       setSnackbarMessage(t('Error Assigning Chef!'));
@@ -246,7 +246,7 @@ const breadcrumbs = [
         <Grid container padding={2} spacing={3}>
           <Grid item xs={6}>
             <Box sx={{ width: '100%', }}>
-              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
+              <Card sx={{ border: '2px solid', borderColor: 'divider', }}>
                 <CardContent>
 
                   <Typography variant="body1">
@@ -269,7 +269,7 @@ const breadcrumbs = [
 
 
             <Box sx={{ width: '100%' }} >
-              <Card sx={{ border: '1px solid', borderColor: 'divider', bgcolor: 'rgb(33,150,243)', color: 'white', }}>
+              <Card sx={{ border: '2px solid', borderColor: 'divider' }}>
                 <CardContent>
 
                   <Typography variant="body1">
@@ -296,17 +296,21 @@ const breadcrumbs = [
 
 
         </Grid>
+        <Typography sx={{marginLeft:5}}>Order Complete Percentage</Typography>
+       <Box sx={{p:1}}> <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} /></Box>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+
+          
          
-          <Typography>Order Complete Percentage</Typography>
-          <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
-         <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
+          <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen} fetchData={fetchData} orderId={orderidForupdate?.orderId} customerId={orderidForupdate?.customerId}/>
+          <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
             {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
             {t('Add Extra Items')}
           </Button>
-          
+
           <AddExtraItem
             open={dialogOpen}
             onClose={handleDialogClose}
@@ -317,7 +321,7 @@ const breadcrumbs = [
             statusCompletedItems={statusCompletedItems}
             id={id}
           />
-          
+
 
         </Box>
 
@@ -331,6 +335,7 @@ const breadcrumbs = [
               }}
             />
           </Box>
+
         </Card>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
@@ -356,11 +361,8 @@ const breadcrumbs = [
               value={selectedChef}
               onChange={(e) => setSelectedChef(e.target.value)}
               labelId="chef-label"
-              label={t('Select Chef')}
-
-            >
-
-              {rows
+              label={t('Select Chef')}>
+                 {rows
                 .filter((chef) => chef.role === 'Chef')
                 .map((chef, index) => (
                   <MenuItem key={index} value={chef._id}>

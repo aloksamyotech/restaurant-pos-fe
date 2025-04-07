@@ -33,7 +33,7 @@ const ExpenseReport = () => {
     const formattedData = response.data.map((item, index) => ({
       serial: index + 1,
       name: item?.name,
-      desc: item?.desc,
+      desc: item?.desc || 'N/A',
       amount: item?.amount,
       expenseType: item?.expenseNameId?.expenseName,
       createdAt: new Date(item?.createdAt).toLocaleDateString()

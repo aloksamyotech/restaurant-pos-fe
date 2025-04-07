@@ -190,7 +190,8 @@ const Profile = () => {
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Mobile')}:</Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Typography>{rowData?.mobileNumber}</Typography>
+                          <Typography>{rowData?.phoneNumber
+                      }</Typography>
                         </Grid>
                       </Grid>
                     </CardContent>
@@ -216,13 +217,13 @@ const Profile = () => {
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Full Name')}:</Typography>
                         </Grid>
                         <Grid item xs={9}>
-                          <Typography>{rowData.Name}</Typography>
+                          <Typography>{rowData?.firstName}{rowData?.lastName}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Role')}:</Typography>
                         </Grid>
                         <Grid item xs={9}>
-                          <Typography>{rowData.AsignRole}</Typography>
+                          <Typography>{rowData.role}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Gender')}:</Typography>

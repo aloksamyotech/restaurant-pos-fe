@@ -41,7 +41,7 @@ const LogoSection = () => {
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
       
-      <img src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : "/fallback.png"} alt='Logo Loading' style={{ marginLeft: "15px" }}></img>
+      <img src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : "/fallback.png"} alt='Logo Loading' width={50} height ={50} style={{ marginLeft: "15px" }}></img>
       
     </ButtonBase>
   );

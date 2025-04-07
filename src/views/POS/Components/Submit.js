@@ -24,13 +24,13 @@ import {
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
-import { postApi, getApi,updateApi } from 'core/apis/apiClient.js';
+import { postApi, getApi, updateApi } from 'core/apis/apiClient.js';
 import { useNavigate } from 'react-router';
 import CloseIcon from '@mui/icons-material/Close';
 import Dummy_Image from '../../../assets/images/Dummy_Image.png';
 import { t } from 'i18next';
 import { useEffect } from 'react';
-import {enums} from 'core/constant/constant';
+import { enums } from 'core/constant/constant';
 
 
 const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
@@ -52,6 +52,12 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const [phone, setPhoneNumber] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [navigateTo, setNavigateTo] = useState('');
+  const [email, setEmail] = useState('');
+
+const handleEmailChange = (event) => {
+  setEmail(event.target.value);
+};
+
 
   const handlePaymentModeChange = (event) => {
     setPaymentMode(event.target.value);
@@ -89,7 +95,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   useEffect(() => {
     fetchData();
   }, []);
-const onSubmit = async () => {
+  const onSubmit = async () => {
     setLoading(true);
     try {
       let items = cartItems.map((item) => ({
@@ -100,7 +106,7 @@ const onSubmit = async () => {
         cost: item?.cost
       }));
 
-      const phonedata = { phone };
+      const phonedata = { phone,email };
       const customerResponse = await postApi(urls?.customer?.create, phonedata);
       const customerId = customerResponse?.data?._id;
 
@@ -154,28 +160,28 @@ const onSubmit = async () => {
         order: orderId,
         table: selectedTableNumber
       };
-     
-      
+
+
       const kitchenResponse = await postApi(urls?.kitchen?.create, kitchenPayload);
 
       const kitchenId = kitchenResponse?.data?._id;
       if (!kitchenId) {
         return;
       }
-     
-      if(orderType === enums?.Dining){
+
+      if (orderType === enums?.Dining) {
         const tablePayload = {
-          status:"Occupied",
-          
+          status: "Occupied",
+
         };
-      
-     const tableResponse = await updateApi(urls?.table?.update?.replace(':id',selectedTableId), tablePayload);
-   
+
+        const tableResponse = await updateApi(urls?.table?.update?.replace(':id', selectedTableId), tablePayload);
+
       }
       setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
       reset();
-    }  catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -289,18 +295,30 @@ const onSubmit = async () => {
                       helperText={phone.length > 0 && phone.length !== 10 ? t('Mobile number must be exactly 10 digits.') : ''}
                     />
                   </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      fullWidth
+                      label={t('Email')}
+                      variant="outlined"
+                      value={email}
+                      onChange={handleEmailChange}
+                      error={email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
+                      helperText={email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? t('Enter a valid email address.') : ''}
+                    />
+                  </Grid>
+
                   {orderType !== 'Pickup' && (
                     <Grid item xs={6}>
                       <Autocomplete
                         disablePortal
                         options={rows?.map((item) => item) || []}
-                        getOptionLabel={(option) => option?.tableNumber?.toString()} 
-                        
+                        getOptionLabel={(option) => option?.tableNumber?.toString()}
+
                         onChange={(event, newValue) => {
                           if (newValue) {
-                           
-                            setSelectedTableNumber(newValue?.tableNumber); 
-                            setSelectedTableId(newValue?._id); 
+
+                            setSelectedTableNumber(newValue?.tableNumber);
+                            setSelectedTableId(newValue?._id);
                           } else {
                             setSelectedTableNumber(null);
                             setSelectedTableId(null);
@@ -326,7 +344,7 @@ const onSubmit = async () => {
                     {t('Total Price')}
                   </Typography>
                   <Typography variant="h5" color="secondary">
-                  {currency} {adjustedPrice.toFixed(2)}
+                    {currency} {adjustedPrice.toFixed(2)}
                   </Typography>
                 </Box>
               </>
@@ -343,7 +361,7 @@ const onSubmit = async () => {
                 padding: '16px'
               }}
             >
-              <Button type="submit" variant="contained" color="primary" disabled={loading || (orderType !== "Pickup" &&!rows[0]?.tableNumber)}>
+              <Button type="submit" variant="contained" color="primary" disabled={loading || (orderType !== "Pickup" && !rows[0]?.tableNumber)}>
                 {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>

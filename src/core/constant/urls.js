@@ -1,7 +1,7 @@
-// const base = 'http://localhost:7200/api/v1';
-// const imageBase = 'http://localhost:7200';
-const imageBase = 'https://pos.samyotech.in';
-const base ="https://pos.samyotech.in/api/v1"
+const base = 'http://localhost:7200/api/v1';
+const imageBase = 'http://localhost:7200';
+// const imageBase = 'https://pos.samyotech.in';
+// const base ="https://pos.samyotech.in/api/v1"
 // let base = 'http://165.22.218.55:7200/api/v1'
 export const urls = Object.freeze({
   base,
@@ -72,6 +72,7 @@ export const urls = Object.freeze({
     getTotalQty: base + '/order/getTotalQty/',
     getorderbycustomerid: base + '/order/getorderbycustomerid/:id',
     update: base + '/order/updateOrder/:id',
+    updateStatus: base + '/order/updateOrderStatus/:id'
   },
   customer: {
     create: base + '/customer/addCustomer',
