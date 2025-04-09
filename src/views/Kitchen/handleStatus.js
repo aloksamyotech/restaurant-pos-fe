@@ -8,26 +8,23 @@ const OrderCloseDialog = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {kitchenId,setSnackbarOpen,setSnackbarMessage,fetchData,orderId,customerId} = props;
- 
-   const handleConfirm = async () => {
-    
-    const response =  await updateApi(urls?.order?.updateStatus.replace(':id', orderId), {
-              orderStatus: "Completed",
-              orderId: orderId,      
-              
+  const { kitchenId, setSnackbarOpen, setSnackbarMessage, fetchData, orderId, customerId } = props;
 
-                });
-              
-      if (response?.success) {
-        setSnackbarOpen(true);
-        setSnackbarMessage(t('Order Closed Successfully'));
-        fetchData();
-      } else {
-        setSnackbarOpen(true);
-        setSnackbarMessage(t('Error Closed Successfully'));
-      }
-    
+  const handleConfirm = async () => {
+    const response = await updateApiPatch(urls?.kitchen?.updateOrderStatus.replace(':id', kitchenId), {
+      status: "Completed",
+      orderId: orderId,
+    });
+
+    if (response?.success) {
+      setSnackbarOpen(true);
+      setSnackbarMessage(t('Order Closed Successfully'));
+      fetchData();
+    } else {
+      setSnackbarOpen(true);
+      setSnackbarMessage(t('Error Closed Successfully'));
+    }
+
     handleClose();
   };
 

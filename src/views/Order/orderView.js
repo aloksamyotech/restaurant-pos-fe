@@ -30,11 +30,9 @@ const OrderView = () => {
   const [rowData, setrowdata] = useState({});
   const [invoiceID, setinvoiceID] = useState();
 
-  
   const fetchData = async () => {
     const response = await getApi(urls?.order.getbyid.replace(':id', id));
     const order = response?.data;
-
     const formattedData = {
       id: order?._id,
       totalPrice: order?.totalPrice?.toFixed(2) || '0.00',
@@ -42,8 +40,7 @@ const OrderView = () => {
       tax: order?.tax?.toFixed(2) || '0.00',
       chef: order?.chef || t('N/A'),
       type: order?.type || t('N/A'),
-      status: order?.status,
-      
+      status: order?.status
     };
     const formattedItemRows =
       order?.items?.map((item, index) => ({
@@ -61,6 +58,10 @@ const OrderView = () => {
   useEffect(() => {
     fetchData();
   }, [id]);
+
+  const totalAmount = rowData?.totalPrice;
+  const discountPercentage = rowData?.discount;
+  const finalPrice = totalAmount - (discountPercentage * totalAmount) / 100;
 
   const fetchDataByOrderId = async () => {
     const response = await getApi(urls?.invoice?.getbyorderid.replace(':id', id));
@@ -144,15 +145,11 @@ const OrderView = () => {
                     }}
                   >
                     <CardContent>
-                     
                       <Typography variant="body1" sx={{ mt: 1 }}>
                         <strong>{t('TotalPrice')}:</strong> {rowData?.totalPrice}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Discount')}:</strong> {rowData?.discount}
-                      </Typography>
-                      <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Tax')}:</strong> {}
+                        <strong>{t('Discount')}:</strong> {rowData?.discount} {'%'}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -168,18 +165,8 @@ const OrderView = () => {
                     }}
                   >
                     <CardContent>
-                     
-
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography mt={1} variant="body1">
-                          <strong>{t('Status')}:</strong> {}
-                        </Typography>
-                      </Box>
-
-                     
-
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t('Chef')}:</strong>
+                        <strong>{t('Final Price')}:</strong> {finalPrice}
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 1 }}>

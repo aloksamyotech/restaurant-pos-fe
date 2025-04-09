@@ -75,8 +75,10 @@ const fetchData = async () => {
       fetchItems();
     }
   }, [rowData?.orderId]);
-  const finalPrice = ((grandTotal?.totalPrice) - (grandTotal?.discount));
-
+  const totalAmount =grandTotal?.totalPrice;
+  const discountPercentage =grandTotal?.discount;
+  const finalPrice = (totalAmount - ((discountPercentage*totalAmount)/100));
+  
   const columns = [
     {
       field: 'serial',
