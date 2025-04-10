@@ -19,7 +19,7 @@ const OverallReport = () => {
     },
     {
       field: 'phone',
-      headerName: t('Phone No.'),
+      headerName: t('Phone No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center'
@@ -156,12 +156,12 @@ const OverallReport = () => {
   }, []);
 
   const summaryData = [
-    { label: t('Total sale amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.price, 0)}`},
-    { label: t('Total cost amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.cost, 0) }`},
-    { label: t('Total discount amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.discount, 0) }`},
-    { label: t('Total profit amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.profit, 0) }`},
-    { label: t('Total payable amount'), value: `${currency} ${ rows.reduce((acc, row) => acc + row.payable, 0) }`},
-    { label: t('Tax'), value: `${currency} ${ + 0 }`}
+    { label: t('Total Sale Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.price, 0)}`},
+    { label: t('Total Cost Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.cost, 0) }`},
+    { label: t('Total Discount Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.discount, 0) }`},
+    { label: t('Total Profit Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.profit, 0) }`},
+    { label: t('Total Payable Amount'), value: `${currency} ${ rows.reduce((acc, row) => acc + row.payable, 0) }`},
+    { label: t('Total Tax Amount'), value: `${currency} ${ + 0 }`}
   ];
 
   return (

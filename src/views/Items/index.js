@@ -35,11 +35,13 @@ const Categories = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
+  const [selectedPopover, setSelectedPopover] = useState(null);
+  const handleClick = (event,id) => {
+    setSelectedPopover(id);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    setSelectedPopover(null);
     setAnchorEl(null);
   };
   const open = Boolean(anchorEl);
@@ -149,11 +151,11 @@ const Categories = () => {
       renderCell: (params) => (
         <>
 
-        <MoreHorizIcon onClick={handleClick} />
+        <MoreHorizIcon onClick={(event) => handleClick(event, params.row.id)} />
 
         <Popover
-          id={id}
-          open={open}
+          id={`popover-${params.row.id}`}
+          open={selectedPopover === params.row.id}
           anchorEl={anchorEl}
           onClose={handleClose}
           sx={{

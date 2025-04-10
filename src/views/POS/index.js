@@ -64,7 +64,7 @@ const POS = () => {
 
             <Grid item xs={2}>
               <FormControl fullWidth error={orderTypeError}>
-                <InputLabel id="demo-simple-select-label">Order Type</InputLabel>
+                <InputLabel id="demo-simple-select-label">{t('Order Type')}</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"

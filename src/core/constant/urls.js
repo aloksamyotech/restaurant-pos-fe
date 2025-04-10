@@ -95,7 +95,8 @@ export const urls = Object.freeze({
     create: base + '/kitchen/addKitchenOrder',
     get: base + '/kitchen/findAllKitchenOrder',
     getSingleOrder: base + '/kitchen/findAllKitchenOrderById/:id',
-    updateKitchenOrder: base + '/kitchen/updateKitchenOrder/:id'
+    updateKitchenOrder: base + '/kitchen/updateKitchenOrder/:id',
+    updateOrderStatus: base + '/kitchen/updateOrderStatus/:id'
   },
   Emailurl: {
     

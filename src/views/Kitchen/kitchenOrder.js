@@ -66,7 +66,7 @@ const SingleKitchenOrder = () => {
     try {
       const response = await getApi(urls?.kitchen?.getSingleOrder?.replace(':id', id));
       setKitchenOrderData(response?.data);
-     
+
       if (!response?.data?.chef) {
         setIsChefAssigned(false);
       } else {
@@ -76,9 +76,7 @@ const SingleKitchenOrder = () => {
       setCheckboxItem(latestItemCompeted);
 
       const orderId = response?.data?.order?._id;
-      const customerId = response?.data?.order?.customerId;
-      setorderidForupdate({orderId,customerId});
-
+      setorderidForupdate(orderId);
 
       if (orderId) {
         const orderResponse = await getApi(urls?.order?.getbyid?.replace(':id', orderId));
@@ -99,33 +97,40 @@ const SingleKitchenOrder = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const callNumber = async () => {
+    let serial = 0;
+    let updatedItemCompeted = latestItemCompeted.includes(serial)
+      ? latestItemCompeted.filter((s) => s !== serial)
+      : [...latestItemCompeted, serial];
 
+    const totalItems = itemRow?.length || 1;
+    const completedItems = updatedItemCompeted.length -1 || 0;
+
+    setStatusCompletedItems(completedItems);
+    const newCompletedPercentage = (completedItems / totalItems) * 100;
+    fetchData();
+  };
 
   const handleCheckboxChange = async (serial, orderId) => {
     try {
-
       let updatedItemCompeted = latestItemCompeted.includes(serial)
         ? latestItemCompeted.filter((s) => s !== serial)
         : [...latestItemCompeted, serial];
 
       const totalItems = itemRow?.length || 1;
       const completedItems = updatedItemCompeted.length || 0;
+
       setStatusCompletedItems(completedItems);
       const newCompletedPercentage = (completedItems / totalItems) * 100;
       fetchData();
       if (kitchenOrderData?.chef?.firstName) {
         await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', orderId), {
           completedPercentage: newCompletedPercentage,
-          itemCompeted: updatedItemCompeted,
-
+          itemCompeted: updatedItemCompeted
         });
 
         fetchData();
-      }
-      else {
+      } else {
         setSnackbarMessage(t('First Assign Chef'));
         setSnackbarOpen(true);
         setOpen(false);
@@ -133,12 +138,14 @@ const SingleKitchenOrder = () => {
     } catch (error) {
       console.error('Error updating status:', error);
     }
-
-
   };
 
-  const checkbox = (serial) => {
+  useEffect(() => {
+    fetchData();
+    callNumber();
+  }, []);
 
+  const checkbox = (serial) => {
     return latestItemCompeted.includes(serial);
   };
 
@@ -158,13 +165,12 @@ const SingleKitchenOrder = () => {
 
   const handleAssignChef = async () => {
     if (!selectedChef) return;
-try {
+    try {
       const response = await updateApiPatch(urls?.kitchen?.updateKitchenOrder.replace(':id', id), {
         chef: selectedChef,
-
+        status: 'In progress'
       });
       if (response.success) {
-
         setSnackbarMessage(t('Chef Assign successfully!'));
         setSnackbarOpen(true);
         setOpen(false);
@@ -174,8 +180,7 @@ try {
       console.error('Error assigning chef:', error);
       setSnackbarMessage(t('Error Assigning Chef!'));
       setSnackbarOpen(true);
-    }
-    finally {
+    } finally {
       setSnackbarOpen(true);
     }
   };
@@ -216,7 +221,6 @@ try {
           style={{ width: '15px', height: '15px' }}
         />
       )
-
     }
   ];
 
@@ -240,75 +244,67 @@ try {
         </Stack>
       </Card>
 
-
       <Box sx={{ width: '100%', bgcolor: 'white' }}>
-
         <Grid container padding={2} spacing={3}>
           <Grid item xs={6}>
-            <Box sx={{ width: '100%', }}>
-              <Card sx={{ border: '2px solid', borderColor: 'divider', }}>
+            <Box sx={{ width: '100%' }}>
+              <Card sx={{ border: '2px solid', borderColor: 'divider' }}>
                 <CardContent>
-
                   <Typography variant="body1">
-                    <strong>{t('Order Id')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
+                    <strong>{t('Order ID')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Order Type')}:</strong>
                     {kitchenOrderData?.order?.type}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>{t('Completed Percentage')}:</strong>{`${kitchenOrderData?.completedPercentage?.toFixed(2)}%`}
-
+                    <strong>{t('Completed Percentage')}:</strong>
+                    {`${kitchenOrderData?.completedPercentage?.toFixed(2)}%`}
                   </Typography>
                 </CardContent>
               </Card>
             </Box>
           </Grid>
 
-          <Grid item xs={6} >
-
-
-            <Box sx={{ width: '100%' }} >
+          <Grid item xs={6}>
+            <Box sx={{ width: '100%' }}>
               <Card sx={{ border: '2px solid', borderColor: 'divider' }}>
                 <CardContent>
-
                   <Typography variant="body1">
                     <strong>{t('Status')}:</strong> {kitchenOrderData?.status}
                   </Typography>
 
-
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                    <strong>{t('Chef')}:</strong>{kitchenOrderData?.chef?.firstName}
+                    <strong>{t('Chef')}:</strong>
+                    {kitchenOrderData?.chef?.firstName}
                   </Typography>
 
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Table No.')}:</strong> {kitchenOrderData?.table}
                   </Typography>
-
                 </CardContent>
-
-
               </Card>
-
             </Box>
-
           </Grid>
-
-
         </Grid>
-        <Typography sx={{marginLeft:5}}>Order Complete Percentage</Typography>
-       <Box sx={{p:1}}> <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} /></Box>
+        <Typography sx={{ marginLeft: 5 }}>{t('Order Complete Percentage')}</Typography>
+        <Box sx={{ p: 1 }}>
+          {' '}
+          <LinearWithValueLabel completedPercentage={kitchenOrderData?.completedPercentage} />
+        </Box>
         <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-
-          
-         
-          <HandleStatus kitchenId={id} setSnackbarMessage={setSnackbarMessage}
-            setSnackbarOpen={setSnackbarOpen} fetchData={fetchData} orderId={orderidForupdate?.orderId} customerId={orderidForupdate?.customerId}/>
+          <HandleStatus
+            kitchenId={id}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarOpen={setSnackbarOpen}
+            fetchData={fetchData}
+            orderId={orderidForupdate}
+          />
           <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-            {isChefAssigned ? enums?.UpdateChef : enums?.AssignChef}
+            {isChefAssigned ? t(enums?.UpdateChef) : t(enums?.AssignChef)}
           </Button>
           <Button variant="contained" color="primary" onClick={handleDialogOpen}>
-            {t('Add Extra Items')}
+            {t('Add Extra Item')}
           </Button>
 
           <AddExtraItem
@@ -321,8 +317,6 @@ try {
             statusCompletedItems={statusCompletedItems}
             id={id}
           />
-
-
         </Box>
 
         <Card>
@@ -335,12 +329,11 @@ try {
               }}
             />
           </Box>
-
         </Card>
       </Box>
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        <DialogTitle >{t('Select a Chef')}</DialogTitle>
-        <DialogContent  >
+      <Dialog open={open} onClose={() => setOpen(false)}  >
+        <DialogTitle>{t('Select a Chef')}</DialogTitle>
+        <DialogContent>
           <IconButton
             onClick={() => setOpen(false)}
             sx={{
@@ -355,14 +348,10 @@ try {
           >
             <CloseIcon />
           </IconButton>
-          <FormControl fullWidth sx={{ mt: 1 }}>
+          <FormControl fullWidth sx={{ mt: 1, minWidth:"300px" }}>
             <InputLabel id="chef-label">{t('Select Chef')}</InputLabel>
-            <Select
-              value={selectedChef}
-              onChange={(e) => setSelectedChef(e.target.value)}
-              labelId="chef-label"
-              label={t('Select Chef')}>
-                 {rows
+            <Select value={selectedChef} onChange={(e) => setSelectedChef(e.target.value)} labelId="chef-label" label={t('Select Chef')}>
+              {rows
                 .filter((chef) => chef.role === 'Chef')
                 .map((chef, index) => (
                   <MenuItem key={index} value={chef._id}>
@@ -374,7 +363,7 @@ try {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>{t('Cancel')}</Button>
-          <Button variant="contained" color="primary" onClick={handleAssignChef} >
+          <Button variant="contained" color="primary" onClick={handleAssignChef}>
             {t('Assign')}
           </Button>
         </DialogActions>

@@ -4,7 +4,7 @@ import { Divider, Grid, Stack, Typography, useMediaQuery, Box } from '@mui/mater
 import AuthWrapper1 from '../AuthWrapper1.js';
 import AuthCardWrapper from '../AuthCardWrapper.js';
 import AuthLogin from '../auth-forms/AuthLogin.js';
-import demoImage from '../../../../assets/images/Dummy_Image.png'
+import demoImage from '../../../../assets/images/Dummy_Image.png';
 import AuthFooter from 'ui-component/cards/AuthFooter.js';
 import InventoryImage from 'assets/images/dashboard_default_image.jpg';
 
@@ -34,7 +34,7 @@ const Login = () => {
               backgroundColor: theme.palette.background.paper
             }}
           >
-            <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} container spacing={2} alignItems="center">
               <Grid item sx={{ mb: 2, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
                 <Box
                   sx={{
@@ -42,18 +42,17 @@ const Login = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: '2px',
-                    marginLeft: 12
+                    marginLeft: 18.5
                   }}
                 >
-                 
-                <img src={demoImage} width="50" height="50" alt='Logo Loading' style={{ marginLeft: "15px", }}></img>
+                  <img src={demoImage} width="50" height="50" alt="Logo Loading"></img>
                 </Box>
               </Grid>
 
               <Grid item xs={12} sx={{ marginTop: '-20px' }}>
                 <Stack alignItems="center">
                   <Typography variant="h3" sx={{ fontWeight: 700, textAlign: 'center', color: '#240046' }}>
-                    Welcome to Reastaurant POS
+                    Welcome to Restaurant POS
                   </Typography>
                   <Typography textAlign="center" variant="body2" sx={{ color: 'black' }}>
                     Login to use the platform
@@ -113,7 +112,9 @@ const Login = () => {
               }}
             >
               Restaurant POS <br />
-              <span style={{ fontSize: '12px' }}>Streamline your Restaurant operations, manage orders, and enhance service with ease using our POS system.</span>
+              <span style={{ fontSize: '12px' }}>
+                Streamline your Restaurant operations, manage orders, and enhance service with ease using our POS system.
+              </span>
             </Typography>
           </Box>
         </Grid>

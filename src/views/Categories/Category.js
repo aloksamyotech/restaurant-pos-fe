@@ -8,6 +8,8 @@ import Loader from 'common/loader';
 import { useTranslation } from 'react-i18next';
 
 const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage, setSnackbarOpen, isEdit }) => {
+ 
+  
   const { t } = useTranslation();
   const {
     control,

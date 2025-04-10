@@ -11,14 +11,15 @@ import { gridSpacing } from 'store/constant';
 import getChartData from './chart-data/total-growth-bar-chart';
 import { getApi } from 'core/apis/apiClient.js';
 import { urls } from 'core/constant/urls';
+import { t } from 'i18next';
 const status = [
   {
     value: 'sales_amount',
-    label: 'Sales Amount'
+    label: t('Sales Amount')
   },
   {
     value: 'sold_quantity',
-    label: 'Sold Quantity'
+    label: t('Sold Quantity')
   }
 ];
 const TotalGrowthBarChart = ({ isLoading }) => {
@@ -91,7 +92,7 @@ const TotalGrowthBarChart = ({ isLoading }) => {
             <Grid item xs={12}>
               <Grid container alignItems="center" justifyContent="space-between">
                 <Grid item>
-                  <Typography variant="h4">Sales Report</Typography>
+                  <Typography variant="h4">{t('Sales Report')}</Typography>
                 </Grid>
                 <Grid item>
                   <Grid container spacing={2} justifyContent="flex-end">

@@ -105,7 +105,7 @@ const PasswordChangeComponent = () => {
         sx={{ mt: 2 }}
       >
         {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : t('Change Password')}{' '}
-        {/* Translated Button */}
+        
       </Button>
 
       {success && (

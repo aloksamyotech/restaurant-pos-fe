@@ -39,6 +39,7 @@ import { getUserInfoFromToken } from 'core/apis/common';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { t } from 'i18next';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -161,7 +162,7 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Hello,</Typography>
+                        <Typography variant="h4">{t('Hello')},</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                           {UserInfo?.firstName}
                         </Typography>
@@ -200,7 +201,7 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <IconLogout stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">Logout</Typography>} />
+                          <ListItemText primary={<Typography variant="body2">{t('Logout')}</Typography>} />
                         </ListItemButton>
                       </List>
                     </Box>

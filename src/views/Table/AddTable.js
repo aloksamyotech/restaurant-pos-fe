@@ -135,7 +135,11 @@ const AddModifierDialog = ({ open, onClose, fetchData, table, setSnackbarMessage
                 name="space"
                 control={control}
                 rules={{
-                  required: t('Space is required')
+                  required: t('Space is required'),
+                  max: {
+                    value: 50,
+                    message: t('Space must not be greater than 50'),
+                  }
                  }}
                 render={({ field }) => (
                   <TextField

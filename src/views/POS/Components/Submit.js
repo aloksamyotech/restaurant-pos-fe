@@ -20,7 +20,8 @@ import {
   MenuItem,
   IconButton,
   Snackbar,
-  Autocomplete
+  Autocomplete,
+  InputAdornment
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { urls } from 'core/constant/urls';
@@ -54,9 +55,9 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const [navigateTo, setNavigateTo] = useState('');
   const [email, setEmail] = useState('');
 
-const handleEmailChange = (event) => {
-  setEmail(event.target.value);
-};
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
 
 
   const handlePaymentModeChange = (event) => {
@@ -64,6 +65,7 @@ const handleEmailChange = (event) => {
   };
 
   const handleDiscountChange = (e) => {
+    
     const value = parseFloat(e.target.value);
     setDiscount(value);
   };
@@ -75,7 +77,7 @@ const handleEmailChange = (event) => {
     }
   };
 
-  const adjustedPrice = totalPrice - discount;
+  const adjustedPrice = totalPrice - ((discount * totalPrice) / 100);
 
   const [rows, setRows] = useState([]);
   const [selectedTableNumber, setSelectedTableNumber] = useState(null);
@@ -106,7 +108,7 @@ const handleEmailChange = (event) => {
         cost: item?.cost
       }));
 
-      const phonedata = { phone,email };
+      const phonedata = { phone, email };
       const customerResponse = await postApi(urls?.customer?.create, phonedata);
       const customerId = customerResponse?.data?._id;
 
@@ -282,11 +284,21 @@ const handleEmailChange = (event) => {
                       onChange={handleDiscountChange}
                       variant="outlined"
                       fullWidth
+                      error={discount < 0 || discount > 100}
+                      helperText={
+                        discount < 0 || discount > 100
+                          ? t('Discount must be between 0 and 100.')
+                          : ''
+                      }
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                      }}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
                       fullWidth
+                      required
                       label={t('Mobile Number')}
                       variant="outlined"
                       value={phone}
@@ -298,6 +310,7 @@ const handleEmailChange = (event) => {
                   <Grid item xs={6}>
                     <TextField
                       fullWidth
+                      required
                       label={t('Email')}
                       variant="outlined"
                       value={email}
