@@ -33,12 +33,13 @@ const AddExtraItem = (props) => {
   });
 
   const { open, onClose, orderId, setSnackbarOpen, setSnackbarMessage, fetchindex, statusCompletedItems, id } = props;
+ 
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
   const fetchData = async () => {
     const response = await getApi(urls?.item?.get);
 
-    setRows(response.data);
+    setRows(response?.data);
   };
 
   useEffect(() => {

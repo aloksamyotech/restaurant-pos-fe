@@ -97,22 +97,15 @@ const SingleKitchenOrder = () => {
     }
   };
 
-  const callNumber = async () => {
-    let serial = 0;
-    let updatedItemCompeted = latestItemCompeted.includes(serial)
-      ? latestItemCompeted.filter((s) => s !== serial)
-      : [...latestItemCompeted, serial];
-
-    const totalItems = itemRow?.length || 1;
-    const completedItems = updatedItemCompeted.length -1 || 0;
-
-    setStatusCompletedItems(completedItems);
-    const newCompletedPercentage = (completedItems / totalItems) * 100;
-    fetchData();
-  };
-
-  const handleCheckboxChange = async (serial, orderId) => {
+ 
+const handleCheckboxChange = async (serial, orderId) => {
     try {
+      if (!kitchenOrderData?.chef?.firstName) {
+        setSnackbarMessage(t('First Assign Chef'));
+        setSnackbarOpen(true);
+        setOpen(false);
+        return; 
+      }
       let updatedItemCompeted = latestItemCompeted.includes(serial)
         ? latestItemCompeted.filter((s) => s !== serial)
         : [...latestItemCompeted, serial];
@@ -142,8 +135,7 @@ const SingleKitchenOrder = () => {
 
   useEffect(() => {
     fetchData();
-    callNumber();
-  }, []);
+    }, []);
 
   const checkbox = (serial) => {
     return latestItemCompeted.includes(serial);
@@ -314,7 +306,7 @@ const SingleKitchenOrder = () => {
             setSnackbarMessage={setSnackbarMessage}
             setSnackbarOpen={setSnackbarOpen}
             fetchindex={fetchData}
-            statusCompletedItems={statusCompletedItems}
+            statusCompletedItems={statusCompletedItems ?? 0}
             id={id}
           />
         </Box>

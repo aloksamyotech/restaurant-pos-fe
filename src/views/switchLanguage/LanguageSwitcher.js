@@ -14,16 +14,13 @@ const LanguageSwitcher = () => {
       <LanguageIcon />
       <Box>
         <FormControl sx={{ fontSize: '0.875rem', pl: '10px', pr: '10px' }}>
-          <InputLabel sx={{ padding: '15px', display: 'flex', alignItems: 'center' }} id="language-select-label">
-            Language
-          </InputLabel>
+         
           <Select
-            labelId="language-select-label"
             defaultValue={i18n.language}
             onChange={(e) => changeLanguage(e.target.value)}
-            label="Language"
+            
           >
-            <MenuItem value="en">English</MenuItem>
+            <MenuItem value="en-US">English</MenuItem>
             <MenuItem value="es">Español</MenuItem>
             <MenuItem value="eh">हिन्दी</MenuItem>
           </Select>

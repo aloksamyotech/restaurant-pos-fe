@@ -127,27 +127,32 @@ const OverallReport = () => {
       return (!startDate || itemDate >= start) && (!endDate || itemDate <= end);
     });
 
-    const formattedData = filteredData.map((item, index) => ({
-      id: item?._id,
-      serial: index + 1,
-      phone: item?.phone || t('N/A'),
-      price: item?.totalPrice || t('N/A'),
-      discount: item?.discount,
-      cost: item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0),
-      profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0) + item?.discount),
-      payable: item?.totalPrice - item?.discount,
-      createdAt: item?.createdAt
-        ? new Date(item?.createdAt).toLocaleString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-          })
-        : t('N/A')
-    }));
-
+   const formattedData = filteredData.map((item, index) => {
+      const cost = item?.items?.reduce((acc, curr) => acc + curr?.cost * curr?.quantity, 0);
+      const discountAmount = (item?.totalPrice * item?.discount) / 100;
+    
+      return {
+        id: item?._id,
+        serial: index + 1,
+        phone: item?.phone || t('N/A'),
+        price: item?.totalPrice || t('N/A'),
+        discount: discountAmount, 
+        cost,
+        profit: item?.totalPrice - (cost + discountAmount),
+        payable: item?.totalPrice - discountAmount,
+        createdAt: item?.createdAt
+          ? new Date(item?.createdAt).toLocaleString('en-GB', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })
+          : t('N/A'),
+      };
+    });
+    
     setRows(formattedData);
   };
 

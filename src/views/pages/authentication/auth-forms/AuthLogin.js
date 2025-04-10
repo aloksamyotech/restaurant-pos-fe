@@ -85,8 +85,8 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'admin@gmail.com',
-          password: 'admin123',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -102,7 +102,7 @@ const FirebaseLogin = ({ ...others }) => {
               localStorage.setItem('$2b$10$ehdPSDmr6P1', response?.data?.loginEmployee?.currency);
 
               const Role = response.data.loginEmployee.role;
-             if (Role === enums?.superAdmin) {
+              if (Role === enums?.superAdmin) {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums?.Manager) {
                 window.location.replace('/dashboard/default');
@@ -110,8 +110,7 @@ const FirebaseLogin = ({ ...others }) => {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums?.Company) {
                 window.location.replace('/dashboard/default');
-              }
-              else if (Role === enums?.Chef) {
+              } else if (Role === enums?.Chef) {
                 window.location.replace('/dashboard/default');
               }
             }
@@ -124,7 +123,7 @@ const FirebaseLogin = ({ ...others }) => {
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values,setValues, submitForm }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
@@ -176,19 +175,39 @@ const FirebaseLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            
+
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Box>
             )}
 
-            <Box sx={{ mt: 2 }}>
-              <AnimateButton>
+            <Box sx={{ mt: 2  }}>
+            <Stack direction="column" spacing={1}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  setValues({
+                    email: 'admin@gmail.com',
+                    password: 'admin123',
+                    submit: null
+                  });
+                  setTimeout(() => {
+                    submitForm();
+                  }, 0);
+                }}
+              >
+                Admin Credentials
+              </Button>
+
+              <AnimateButton >
                 <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Log in
                 </Button>
               </AnimateButton>
+              </Stack>
             </Box>
           </form>
         )}
