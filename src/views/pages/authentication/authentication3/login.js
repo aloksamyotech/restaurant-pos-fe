@@ -6,7 +6,7 @@ import AuthCardWrapper from '../AuthCardWrapper.js';
 import AuthLogin from '../auth-forms/AuthLogin.js';
 import demoImage from '../../../../assets/images/Dummy_Image.png';
 import AuthFooter from 'ui-component/cards/AuthFooter.js';
-import InventoryImage from 'assets/images/dashboard_default_image.jpg';
+import RestaurantImage from 'assets/images/dashboard_default_image.jpg';
 
 const Login = () => {
   const theme = useTheme();
@@ -93,8 +93,8 @@ const Login = () => {
           >
             <Box
               component="img"
-              src={InventoryImage}
-              alt="Inventory Management"
+              src={RestaurantImage}
+              alt="Restaurant POS"
               sx={{
                 maxWidth: '60%',
                 maxHeight: '60%',

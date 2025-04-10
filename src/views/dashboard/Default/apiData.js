@@ -8,18 +8,22 @@ import { t } from 'i18next';
 
   const fetchData = async () => {
     const response = await getApi(urls?.order?.get);
-    const formattedData = response.data.map((item, index) => ({
-      id: item?._id,
-      serial: index + 1,
-      phone: item?.phone || t('N/A'),
-      price: item?.totalPrice || t('N/A'),
-      discount: item?.discount,
-      cost: item?.items?.reduce((acc, curr) => acc + (curr?.cost) * (curr?.quantity), 0),
-      profit: item?.totalPrice - (item?.items?.reduce((acc, curr) => acc + (curr?.cost) * (curr?.quantity), 0) + item?.discount),
-      payable: item?.totalPrice - item?.discount,
-      
-    }));
-
+    const formattedData = response.data.map((item, index) => {
+      const cost = item?.items?.reduce((acc, curr) => acc + (curr?.cost * curr?.quantity), 0);
+      const discountAmount = (item?.totalPrice * item?.discount) / 100;
+    
+      return {
+        id: item?._id,
+        serial: index + 1,
+        phone: item?.phone || t('N/A'),
+        price: item?.totalPrice || t('N/A'),
+        discount: discountAmount, 
+        cost,
+        profit: item?.totalPrice - (cost + discountAmount),
+        payable: item?.totalPrice - discountAmount,
+      };
+    });
+    
     setRows(formattedData);
   };
 

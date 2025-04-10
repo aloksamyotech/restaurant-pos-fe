@@ -37,7 +37,8 @@ export const getUserInfoFromToken = () => {
       firstName: decodedToken?.firstName || 'N/A',
       role: decodedToken?.role || 'N/A',
       id: decodedToken?._id || 'N/A',
-      currency:decodedToken?.currency || 'N/A'
+      currency:decodedToken?.currency || 'N/A',
+      email:decodedToken?.email || 'N/A'
     };
   } catch (error) {
     console.error('Invalid token', error);
