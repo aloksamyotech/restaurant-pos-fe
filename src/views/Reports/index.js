@@ -7,6 +7,7 @@ import { getApi } from 'core/apis/apiClient.js';
 import { Stack } from '@mui/system';
 import { enums } from 'core/constant/constant';
 import { t } from 'i18next';
+import GetTax from '../../common/getTax';
 
 const OverallReport = () => {
   const columns = [
@@ -67,7 +68,7 @@ const OverallReport = () => {
       align: 'center'
     }
   ];
-
+  const fetchtax=GetTax();
   const [rows, setRows] = useState([]);
   const [duration, setDuration] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -166,7 +167,7 @@ const OverallReport = () => {
     { label: t('Total Discount Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.discount, 0) }`},
     { label: t('Total Profit Amount'), value: `${currency} ${rows.reduce((acc, row) => acc + row.profit, 0) }`},
     { label: t('Total Payable Amount'), value: `${currency} ${ rows.reduce((acc, row) => acc + row.payable, 0) }`},
-    { label: t('Total Tax Amount'), value: `${currency} ${ + 0 }`}
+    { label: t('Total Tax Amount'), value: `${currency} ${Math.round(rows.reduce((acc, row) => acc + (row.price * (fetchtax / 100)), 0)) }`}
   ];
 
   return (

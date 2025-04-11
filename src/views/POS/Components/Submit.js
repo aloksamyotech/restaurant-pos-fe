@@ -33,7 +33,6 @@ import { t } from 'i18next';
 import { useEffect } from 'react';
 import { enums } from 'core/constant/constant';
 
-
 const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const {
     handleSubmit,
@@ -45,7 +44,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   });
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
-  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
+  const currency = localStorage.getItem('$2b$10$ehdPSDmr6P1');
   const [loading, setLoading] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [paymentMode, setPaymentMode] = useState('Cash');
@@ -59,13 +58,11 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
     setEmail(event.target.value);
   };
 
-
   const handlePaymentModeChange = (event) => {
     setPaymentMode(event.target.value);
   };
 
   const handleDiscountChange = (e) => {
-    
     const value = parseFloat(e.target.value);
     setDiscount(value);
   };
@@ -77,7 +74,7 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
     }
   };
 
-  const adjustedPrice = totalPrice - ((discount * totalPrice) / 100);
+  const adjustedPrice = totalPrice - (discount * totalPrice) / 100;
 
   const [rows, setRows] = useState([]);
   const [selectedTableNumber, setSelectedTableNumber] = useState(null);
@@ -86,11 +83,13 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
   const fetchData = async () => {
     const response = await getApi(urls?.table?.get);
 
-    const formattedData = response?.data?.filter(item => item?.status === "Vacant")?.map((item, index) => ({
-      tableNumber: item?.tableNumber,
-      status: item?.status,
-      _id: item?._id
-    }));
+    const formattedData = response?.data
+      ?.filter((item) => item?.status === 'Vacant')
+      ?.map((item, index) => ({
+        tableNumber: item?.tableNumber,
+        status: item?.status,
+        _id: item?._id
+      }));
 
     setRows(formattedData);
   };
@@ -163,7 +162,6 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
         table: selectedTableNumber
       };
 
-
       const kitchenResponse = await postApi(urls?.kitchen?.create, kitchenPayload);
 
       const kitchenId = kitchenResponse?.data?._id;
@@ -173,12 +171,10 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
 
       if (orderType === enums?.Dining) {
         const tablePayload = {
-          status: "Occupied",
-
+          status: 'Occupied'
         };
 
         const tableResponse = await updateApi(urls?.table?.update?.replace(':id', selectedTableId), tablePayload);
-
       }
       setSnackbarOpen(true);
       setNavigateTo(`invoice/${invoiceId}`);
@@ -285,13 +281,9 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                       variant="outlined"
                       fullWidth
                       error={discount < 0 || discount > 100}
-                      helperText={
-                        discount < 0 || discount > 100
-                          ? t('Discount must be between 0 and 100.')
-                          : ''
-                      }
+                      helperText={discount < 0 || discount > 100 ? t('Discount must be between 0 and 100.') : ''}
                       InputProps={{
-                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">%</InputAdornment>
                       }}
                     />
                   </Grid>
@@ -326,10 +318,8 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                         disablePortal
                         options={rows?.map((item) => item) || []}
                         getOptionLabel={(option) => option?.tableNumber?.toString()}
-
                         onChange={(event, newValue) => {
                           if (newValue) {
-
                             setSelectedTableNumber(newValue?.tableNumber);
                             setSelectedTableId(newValue?._id);
                           } else {
@@ -374,7 +364,15 @@ const CartDialog = ({ open, onClose, cartItems, orderType, resetCart }) => {
                 padding: '16px'
               }}
             >
-              <Button type="submit" variant="contained" color="primary" disabled={loading || (orderType !== "Pickup" && !rows[0]?.tableNumber)}>
+              {orderType !== 'Pickup' && !rows[0]?.tableNumber && (
+                <div style={{ color: 'red', marginBottom: '8px' }}>{t('All tables are occupied. Please wait...')}</div>
+              )}
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disabled={loading || (orderType !== 'Pickup' && !rows[0]?.tableNumber)}
+              >
                 {loading ? t('Placing Order...') : t('Place the order')}
               </Button>
               <Button onClick={onClose} variant="contained" color="primary" sx={{ fontWeight: 'bold' }}>

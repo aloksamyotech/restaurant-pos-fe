@@ -159,6 +159,8 @@ const CategoryDialog = ({ open, onClose, category, fetchData, setSnackbarMessage
                     label={t('Description')}
                     variant="outlined"
                     fullWidth
+                    multiline
+                    rows={3}
                     error={!!errors?.desc}
                     helperText={errors?.desc ? errors?.desc?.message : ''}
                   />

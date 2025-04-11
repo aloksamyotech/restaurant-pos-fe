@@ -128,6 +128,8 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
                     label={t('Description')}
                     variant="outlined"
                     fullWidth
+                    multiline
+                    rows={3}
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
@@ -137,7 +139,7 @@ const EditDialog = ({ open, onClose, tag, fetchData, setSnackbarOpen, setSnackba
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               {t('Submit')}
             </Button>
             <Button onClick={onClose} color="secondary">
