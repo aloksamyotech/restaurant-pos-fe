@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+
+
 export const sentApi = async (url, data) => {
   try {
     const response = await axios.post(url, data, {
@@ -17,6 +19,7 @@ export const sentApi = async (url, data) => {
 export const postApi = async (url, data, headers = {}) => {
   try {
     const defaultHeaders = {
+      authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
       'Content-Type': 'application/json',
       ...headers
     };
@@ -31,6 +34,7 @@ export const postApi = async (url, data, headers = {}) => {
 export const getApi = async (url, params = {}, headers = {}) => {
   try {
     const defaultHeaders = {
+      authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
       'Content-Type': 'application/json',
       ...headers
     };
@@ -50,6 +54,7 @@ export const updateApi = async (url, data, headers = {}) => {
     const isFormData = data instanceof FormData;
 
     const defaultHeaders = {
+      authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
       ...headers,
       ...(isFormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' })
     };
@@ -64,13 +69,14 @@ export const updateApi = async (url, data, headers = {}) => {
 export const updateApiPatch = async (url, data, headers = {}) => {
   try {
     const isFormData = data instanceof FormData;
+    const defaultHeaders = {
+      authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
+      ...headers,
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' })
+    };
 
-    const response = await axios.patch(url, data, {
-      headers: {
-        ...headers,
-        ...(isFormData ? {} : { 'Content-Type': 'application/json' })
-      }
-    });
+    const response = await axios.patch(url, data,{ headers: defaultHeaders });
+
     return response.data;
   } catch (error) {
     console.error('API Error:', error.response?.data || error.message);
@@ -81,6 +87,7 @@ export const updateApiPatch = async (url, data, headers = {}) => {
 export const deleteApi = async (url, headers = {}) => {
   try {
     const defaultHeaders = {
+      authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
       'Content-Type': 'application/json',
       ...headers
     };
