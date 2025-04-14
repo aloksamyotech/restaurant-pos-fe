@@ -203,6 +203,8 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
                     label={t('Description')}
                     variant="outlined"
                     fullWidth
+                    multiline
+                    rows={3}
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
@@ -332,7 +334,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               {t(isEdit ? 'Update' : 'Add')}
             </Button>
             <Button onClick={onClose} color="secondary">

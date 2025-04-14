@@ -105,7 +105,7 @@ const Categories = () => {
 
       <Card sx={{ p: 2, mb: 3 }}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
+         <Box sx={{width:'200px'}}> <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm}  /></Box>
         </Stack>
       </Card>
 

@@ -179,6 +179,8 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
                     label={t('Description')}
                     variant="outlined"
                     fullWidth
+                    multiline
+                    rows={3}
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />
@@ -188,7 +190,7 @@ const EditModifierDialog = ({ open, onClose, modifier, fetchData, setSnackbarOpe
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" disabled={loading}>
               {t('Edit Item')}
             </Button>
             <Button onClick={onClose} color="secondary">

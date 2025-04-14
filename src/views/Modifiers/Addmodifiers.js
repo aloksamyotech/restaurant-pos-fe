@@ -167,6 +167,8 @@ const AddModifierDialog = ({ open, onClose, fetchData, setRows, setSnackbarMessa
                     label={t('Description')}
                     variant="outlined"
                     fullWidth
+                    multiline
+                    rows={3}
                     error={!!errors.desc}
                     helperText={errors.desc ? errors.desc.message : ''}
                   />

@@ -12,6 +12,7 @@ import { gridSpacing } from 'store/constant';
 import AppConversionRates from './AppConversionCard';
 import AppCurrentVisits from './AppCurrentVisitCard';
 import ApiData from './apiData';
+import GetTax from '../../../common/getTax';
 import ExpenseData from './expenseApiData';
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +26,9 @@ const Dashboard = () => {
     setLoading(false);
   }, []);
   const fetchData = ApiData();
+  const fetchtax=GetTax();
+  
+  
   const fetchExpenseData = ExpenseData();
   const totalSaleamount = fetchData.reduce((acc, row) => acc + row.price, 0)
   const totalCostamount = fetchData.reduce((acc, row) => acc + row.cost, 0)
@@ -32,8 +36,8 @@ const Dashboard = () => {
   const totalProfitamount = fetchData.reduce((acc, row) => acc + row.profit, 0)
   const totalPayableamount = fetchData.reduce((acc, row) => acc + row.payable, 0)
   const totalExpenseamount = fetchExpenseData.reduce((acc, row) => acc + row.amount, 0)
-  const totalProfitAfteExpense = totalProfitamount - totalExpenseamount
-  const totalTax=0
+  const totalTax=Math.round(fetchData.reduce((acc, row) => acc + (row.price * fetchtax / 100), 0));
+  const totalProfitAfteExpense = totalProfitamount - (totalExpenseamount + totalTax);
   const { t } = useTranslation();
 
 
