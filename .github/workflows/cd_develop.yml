@@ -24,7 +24,7 @@ jobs:
           script: |
             echo "🚀 Starting Frontend Deployment..."
 
-            cd /products/restorent_pos_management/frontend/restaurant-pos-frontend
+            cd /products/restorent_pos_management/frontend/
 
             echo "📥 Pulling latest changes..."
             git stash
