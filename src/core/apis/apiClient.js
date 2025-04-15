@@ -6,6 +6,7 @@ export const sentApi = async (url, data) => {
   try {
     const response = await axios.post(url, data, {
       headers: {
+        authorization: `Bearer ${localStorage.getItem("$2b$10$ehdPSDmr6P")}`,
         'Content-Type': 'multipart/form-data'
       }
     });
