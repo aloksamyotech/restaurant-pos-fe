@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - "develop"
-    paths:
-      - 'frontend/**' 
-
+    
 jobs:
   deploy_frontend:
     name: Deploy Frontend to Develop
