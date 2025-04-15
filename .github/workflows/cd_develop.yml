@@ -26,7 +26,7 @@ jobs:
             cd /
             cd /products/restorent_pos_management/frontend/restaurant-pos-fe/
 
-            echo "📥 Pulling latest changes..."
+            echo "📥 Pulling latest changess..."
             git pull origin develop
             git log -1
 
