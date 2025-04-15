@@ -23,11 +23,10 @@ jobs:
           port: 22
           script: |
             echo "🚀 Starting Frontend Deployment..."
-
-            cd /products/restorent_pos_management/frontend/
+            cd /
+            cd /products/restorent_pos_management/frontend/restaurant-pos-fe/
 
             echo "📥 Pulling latest changes..."
-            git stash
             git pull origin develop
             git log -1
 
