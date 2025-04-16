@@ -60,7 +60,7 @@ const ProfileSection = () => {
   const handleLogout = async () => {
     localStorage.removeItem('$2b$10$ehdPSDmr6P');
     navigate('/login');
-    console.log('Logout');
+    
   };
 
   const handleClose = (event) => {
@@ -173,8 +173,8 @@ const ProfileSection = () => {
                     <Divider />
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 2 }}>
-                      {/*                       */}
+                    <Box sx={{mt: -2}}>
+                      
 
                       <List
                         component="nav"

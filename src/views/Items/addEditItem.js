@@ -334,7 +334,7 @@ const ItemDialog = ({ open, onClose, itemData, fetchData, setSnackbarOpen, setSn
           </Grid>
 
           <DialogActions>
-            <Button type="submit" variant="contained" color="primary" disabled={loading}>
+            <Button type="submit" variant="contained" color="primary" disabled={isLoading}>
               {t(isEdit ? 'Update' : 'Add')}
             </Button>
             <Button onClick={onClose} color="secondary">
