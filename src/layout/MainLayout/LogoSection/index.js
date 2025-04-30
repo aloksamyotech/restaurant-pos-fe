@@ -13,7 +13,7 @@ import { getUserInfoFromToken } from 'core/apis/common';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { urls } from 'core/constant/urls';
-import demoImage from '../../../assets/images/Dummy_Image.png'
+import demoImage from '../../../assets/images/Dummy_Image.png';
 
 // ==============================|| MAIN LOGO ||============================== //
 
@@ -28,9 +28,7 @@ const LogoSection = () => {
     const response = await getApi(urls?.employee?.getbyid.replace(':id', id));
     const user = response.data;
     const formattedData = {
-
-      image: user?.companyLogo,
-
+      image: user?.companyLogo
     };
     setrowdata(formattedData);
   };
@@ -40,9 +38,19 @@ const LogoSection = () => {
   }, []);
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      
-      <img src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : "/fallback.png"} alt='Logo Loading'  style={{ marginLeft: "15px", width:"50px", height:"50px", objectFit:"cover"}}></img>
-      
+      <img
+        src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : '/fallback.png'}
+        alt="Logo Loading"
+        style={{
+          marginLeft: '15px',
+          height: '50px',
+          width: 'auto', 
+          minWidth:'60px',
+          maxWidth: '155px',
+          objectFit: 'contain',
+          display: 'block'
+        }}
+      ></img>
     </ButtonBase>
   );
 };

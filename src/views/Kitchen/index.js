@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import MyOrder from 'views/MyOrders';
 import LinearWithValueLabel from './progressBar';
+import { getUserInfoFromToken } from 'core/apis/common';
 
 
 const Kitchen = () => {
@@ -93,10 +94,12 @@ const Kitchen = () => {
       )
     }
   ];
-
+  const values = getUserInfoFromToken();
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [tabValue, setTabValue] = useState(0);
+  // const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(values?.role === 'superAdmin' ? 0 : 1);
+
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -139,8 +142,8 @@ const Kitchen = () => {
       </Card>
       <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
         <Tabs variant="scrollable" value={tabValue} onChange={handleChange}>
-          <Tab value={0} label={t('All Order')} />
-          <Tab value={1} label={t('My Order')} />
+        {values?.role === 'superAdmin' && (<Tab value={0} label={t('All Order')} />  )}
+        {values?.role !== 'superAdmin' && (<Tab value={1} label={t('My Order')} /> )}
         </Tabs>
         <Divider sx={{ borderColor: 'grey.300' }} />
         {tabValue === 0 && (
