@@ -106,6 +106,7 @@ const Profile = () => {
                   </Box>
                 }
               />
+                {UserInfo?.role === 'superAdmin' && (
               <Tab
                 value={1}
                 label={
@@ -117,6 +118,7 @@ const Profile = () => {
                   </Box>
                 }
               />
+            )}
               <Tab
                 value={2}
                 label={
@@ -128,6 +130,7 @@ const Profile = () => {
                   </Box>
                 }
               />
+                {UserInfo?.role === 'superAdmin' && (
               <Tab
                 value={3}
                 label={
@@ -139,6 +142,7 @@ const Profile = () => {
                   </Box>
                 }
               />
+            )}
              
             </Tabs>
             <Divider sx={{ borderColor: 'grey.300' }} />
