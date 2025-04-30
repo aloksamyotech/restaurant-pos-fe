@@ -26,7 +26,7 @@ const LogoSection = () => {
     const id = UserInfo?.id;
 
     const response = await getApi(urls?.employee?.getbyid.replace(':id', id));
-    const user = response.data;
+    const user = response?.data;
     const formattedData = {
 
       image: user?.companyLogo,

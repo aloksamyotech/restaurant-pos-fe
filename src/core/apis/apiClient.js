@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { decryptWithAESKey } from 'common/decrypt';
 
 
 export const sentApi = async (url, data) => {
@@ -10,7 +10,8 @@ export const sentApi = async (url, data) => {
         'Content-Type': 'multipart/form-data'
       }
     });
-    return response.data;
+    let responseData = await decryptWithAESKey(response.data)
+    return JSON.parse(responseData)
   } catch (error) {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
@@ -26,7 +27,8 @@ export const postApi = async (url, data, headers = {}) => {
     };
 
     const response = await axios.post(url, data, { headers: defaultHeaders });
-    return response.data;
+    let responseData = await decryptWithAESKey(response.data)
+    return JSON.parse(responseData)
   } catch (error) {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
@@ -43,7 +45,9 @@ export const getApi = async (url, params = {}, headers = {}) => {
       headers: defaultHeaders,
       params: params
     });
-    return response.data;
+    let responseData = await decryptWithAESKey(response.data)
+    return JSON.parse(responseData)
+    
   } catch (error) {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
@@ -61,7 +65,8 @@ export const updateApi = async (url, data, headers = {}) => {
     };
 
     const response = await axios.put(url, data, { headers: defaultHeaders });
-    return response.data;
+    let responseData = await decryptWithAESKey(response.data)
+    return JSON.parse(responseData)
   } catch (error) {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
@@ -77,8 +82,8 @@ export const updateApiPatch = async (url, data, headers = {}) => {
     };
 
     const response = await axios.patch(url, data,{ headers: defaultHeaders });
-
-    return response.data;
+    let responseData = await decryptWithAESKey(response.data)
+    return JSON.parse(responseData)
   } catch (error) {
     console.error('API Error:', error.response?.data || error.message);
     throw new Error(error.response?.data?.message || 'Something went wrong');
