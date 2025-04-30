@@ -208,7 +208,7 @@ const AddUser = ({ open, onClose, fetchData, employeeData = {}, editMode = false
                   )}
                 />
               </Grid>
-
+              {(values?.role === 'superAdmin') && (
               <Grid item xs={6}>
                 <Controller
                   name="role"
@@ -232,6 +232,7 @@ const AddUser = ({ open, onClose, fetchData, employeeData = {}, editMode = false
                   )}
                 />
               </Grid>
+              )}
               {!editMode && (
                 <Grid item xs={6}>
                   <Controller
