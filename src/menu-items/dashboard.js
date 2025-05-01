@@ -106,7 +106,7 @@ export const Portal = filterMenuItems({
 
     {
       id: '13',
-      title: 'Order',
+      title: 'Orders',
       type: 'item',
       url: '/dashboard/order',
       icon: icons.ReorderSharpIcon,
@@ -114,7 +114,7 @@ export const Portal = filterMenuItems({
     },
     {
       id: '16',
-      title: 'Table',
+      title: 'Tables',
       type: 'item',
       url: '/dashboard/table',
       icon: icons.FastfoodIcon,
