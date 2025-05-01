@@ -63,7 +63,7 @@ const ImageUploadComponent = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" p={2} width="100%" sx={{ maxWidth: 400, margin: 'auto' }}>
       <Typography variant="h6" gutterBottom>
-        {t('Upload Logo')}
+        {t('Upload Logo')} (1000×239)
       </Typography>
 
       <Box

@@ -37,20 +37,24 @@ const LogoSection = () => {
     fetchuserData();
   }, []);
   return (
-    <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      <img
-        src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : '/fallback.png'}
-        alt="Logo Loading"
-        style={{
-          marginLeft: '15px',
-          height: '50px',
-          width: 'auto', 
-          minWidth:'60px',
-          maxWidth: '155px',
-          objectFit: 'contain',
-          display: 'block'
-        }}
-      ></img>
+    <ButtonBase
+      disableRipple
+      onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })}
+      component={Link}
+      to={config.defaultPath}
+      sx={{ ml: 1 }}
+    >
+      <div style={{ width: 170, height: 45, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src={rowData?.image ? `${urls?.item?.image}${rowData?.image}` : '/fallback.png'}
+          alt="Logo Loading"
+          style={{
+            objectFit: 'contain',
+            maxWidth: '100%',
+            maxHeight: '100%'
+          }}
+        ></img>
+      </div>
     </ButtonBase>
   );
 };
