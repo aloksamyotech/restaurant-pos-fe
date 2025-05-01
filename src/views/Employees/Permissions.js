@@ -9,7 +9,7 @@ import { t } from 'i18next';
 const userPermissions = [
   t('Dashboard'),
   t('POS'),
-  t('Order'),
+  t('Orders'),
   t('Categories'),
   t('Items'),
   t('Modifiers'),
@@ -21,7 +21,7 @@ const userPermissions = [
   t('Customers'),
   t('Expense Report'),
   t('Kitchen'),
-  t('Table'),
+  t('Tables'),
   t('Profile')
 ];
 

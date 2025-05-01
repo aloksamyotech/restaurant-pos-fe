@@ -96,7 +96,7 @@ const MainRoutes = {
         {
           path: 'order',
 
-          element: <ProtectedRoute element={<Order />} requiredPermission="Order" />
+          element: <ProtectedRoute element={<Order />} requiredPermission="Orders" />
         }
       ]
     },
@@ -258,7 +258,7 @@ const MainRoutes = {
         {
           path: 'table',
 
-          element: <ProtectedRoute element={<Table />} requiredPermission="Table" />
+          element: <ProtectedRoute element={<Table />} requiredPermission="Tables" />
         }
       ]
     },
