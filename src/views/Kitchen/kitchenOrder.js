@@ -243,7 +243,7 @@ const handleCheckboxChange = async (serial, orderId) => {
               <Card sx={{ border: '2px solid', borderColor: 'divider' }}>
                 <CardContent>
                   <Typography variant="body1">
-                    <strong>{t('Order ID')}:</strong> {kitchenOrderData?.order?._id?.substring(19, 24)}
+                    <strong>{t('Order ID')}:</strong> {kitchenOrderData?.order?._id?.substring(18, 24)}
                   </Typography>
                   <Typography variant="body1" sx={{ mt: 1 }}>
                     <strong>{t('Order Type')}:</strong>

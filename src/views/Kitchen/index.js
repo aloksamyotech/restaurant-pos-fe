@@ -97,7 +97,6 @@ const Kitchen = () => {
   const values = getUserInfoFromToken();
   const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  // const [tabValue, setTabValue] = useState(0);
   const [tabValue, setTabValue] = useState(values?.role === 'superAdmin' ? 0 : 1);
 
   const handleChange = (event, newValue) => {
@@ -108,7 +107,7 @@ const Kitchen = () => {
     const formattedData = response?.data?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      orderId: item?.order?._id?.substring(19, 24),
+      orderId: item?.order?._id?.substring(18, 24),
       table: item?.table || '--',
       status: item?.completedPercentage || '0',
       orderType: item?.order?.type || '--',
