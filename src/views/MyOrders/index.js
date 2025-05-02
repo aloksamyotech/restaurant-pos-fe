@@ -106,7 +106,7 @@ const Kitchen = () => {
     const formattedData = filteredData?.map((item, index) => ({
       id: item?._id,
       serial: index + 1,
-      orderId: item?.order?._id?.substring(19, 24),
+      orderId: item?.order?._id?.substring(18, 24),
       table: item?.table || '--',
       status: item?.completedPercentage || '0',
       orderType: item?.order?.type || '--'

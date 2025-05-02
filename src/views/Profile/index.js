@@ -221,7 +221,7 @@ const Profile = () => {
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Full Name')}:</Typography>
                         </Grid>
                         <Grid item xs={9}>
-                          <Typography>{rowData?.firstName}{rowData?.lastName}</Typography>
+                          <Typography>{rowData?.firstName} {rowData?.lastName}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Role')}:</Typography>
