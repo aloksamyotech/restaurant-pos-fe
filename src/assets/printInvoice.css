@@ -1,0 +1,46 @@
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #invoice-print, #invoice-print * {
+    visibility: visible;
+  }
+  #invoice-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+@media print and (max-width: 80mm) {
+  @page {
+    size: 80mm auto;
+    margin: 5mm;
+  }
+
+  #invoice-print {
+    width: 80mm;
+    font-size: 12px;
+    padding: 5px;
+    display: block;
+  }
+
+  .MuiTable-root {
+    width: 100%;
+    font-size: 10px !important;
+  }
+
+  .MuiTableCell-root {
+    font-size: 10px !important;
+    padding: 2px !important;
+  }
+
+  .MuiTableHead-root {
+    display: none; 
+  }
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,186 @@
+import React, { useState } from 'react';
+import { List, ListItem, Typography, Paper, Avatar, IconButton, Button, Box, Snackbar, Alert } from '@mui/material';
+import { Remove, Add, Delete } from '@mui/icons-material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { t } from 'i18next';
+import { urls } from 'core/constant/urls';
+import Dummy_Image from '../../../assets/images/Dummy_Image.png';
+
+
+const Cart = ({ cartItems, setCart, dialogOpen, handleDialogOpen, handleDialogClose, resetCart }) => {
+  const currency = localStorage.getItem("$2b$10$ehdPSDmr6P1");
+  const totalPrice = cartItems.reduce((acc, item) => acc + item?.price * item?.quantity, 0);
+
+  const handleRemoveDish = (id) => {
+    setCart((prevCart) => prevCart.filter((cartItem) => cartItem?.id !== id));
+  };
+
+  const handleIncrementQuantity = (id) => {
+    setCart((prevCart) => prevCart.map((cartItem) => (cartItem?.id === id ? { ...cartItem, quantity: cartItem?.quantity + 1 } : cartItem)));
+  };
+
+  const handleDecrementQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((cartItem) =>
+        cartItem?.id === id && cartItem?.quantity > 1 ? { ...cartItem, quantity: cartItem?.quantity - 1 } : cartItem
+      )
+    );
+  };
+
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  return (
+    <>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+          {t('Add Items in the Cart')}
+        </Alert>
+      </Snackbar>
+      <Paper
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: '',
+          height: '420px',
+
+          borderRadius: '8px',
+          overflow: 'hidden'
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: 2
+          }}
+        >
+          {cartItems?.length === 0 ? (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <IconButton color="primary" aria-label="add to cart">
+                <AddShoppingCartIcon sx={{ fontSize: 100 }} />
+              </IconButton>
+            </Box>
+          ) : (
+            <List>
+              {cartItems.map((cartItem) => (
+                <ListItem
+                  key={cartItem?.id}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    border: '1px solid #ccc',
+                    borderRadius: '8px',
+                    mb: 2,
+                    p: 2
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      mr: 2,
+                      height: 80
+                    }}
+                  >
+                    <Avatar
+                      src={cartItem?.image ? `${urls?.item?.image}${cartItem?.image}` : Dummy_Image}
+                      alt={cartItem?.name}
+                      sx={{
+                        width: 80,
+                        height: 50,
+                        borderRadius: 0,
+                        border: '1px solid #ccc'
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        mt: 1
+                      }}
+                    >
+                      <IconButton onClick={() => handleDecrementQuantity(cartItem?.id)}>
+                        <Remove />
+                      </IconButton>
+                      <Typography sx={{ mt:1 }}>{cartItem?.quantity}</Typography>
+                      <IconButton onClick={() => handleIncrementQuantity(cartItem?.id)}>
+                        <Add />
+                      </IconButton>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="h5">{cartItem?.name}</Typography>
+                    <Typography variant="h6" color="textSecondary" sx={{fontWeight:'bold'}}>
+                      {t('Price')}: {currency} {cartItem?.price}
+                    </Typography>
+                    <Typography variant="h6" color="textSecondary" sx={{fontWeight:'bold'}}>
+                      {t('Subtotal')}: {currency} {cartItem?.price * cartItem?.quantity}
+                    </Typography>
+                  </Box>
+
+                  <IconButton color="error" onClick={() => handleRemoveDish(cartItem?.id)}>
+                    <Delete />
+                  </IconButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
+
+        <Box
+          sx={{
+            borderTop: '1px solid #ccc',
+            padding: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: '#f9f9f9'
+          }}
+        >
+          <Typography variant="h6" color="primary">
+            {t('Total')}: {currency} {totalPrice.toFixed(2)}
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+              if (cartItems.length === 0) {
+                setSnackbarOpen(true);
+                return;
+              }
+              handleDialogOpen();
+            }}
+          >
+            {t('Submit')}
+          </Button>
+
+          <Button variant="contained" color="secondary" onClick={handleClearCart}>
+            {t('Clear Cart')}
+          </Button>
+        </Box>
+      </Paper>
+    </>
+  );
+};
+
+export default Cart;
