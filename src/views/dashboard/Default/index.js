@@ -31,6 +31,8 @@ const Dashboard = () => {
   
   const fetchExpenseData = ExpenseData();
   const totalSaleamount = fetchData.reduce((acc, row) => acc + row.price, 0)
+  console.log( 'totalSaleamount', totalSaleamount);
+  
   const totalCostamount = fetchData.reduce((acc, row) => acc + row.cost, 0)
   const totalDiscountamount = fetchData.reduce((acc, row) => acc + row.discount, 0)
   const totalProfitamount = fetchData.reduce((acc, row) => acc + row.profit, 0)

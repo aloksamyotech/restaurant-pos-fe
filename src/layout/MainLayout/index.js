@@ -16,6 +16,7 @@ import { SET_MENU } from 'store/actions';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import Chatbot from 'ui-component/chatbot';
 
 // styles
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
@@ -47,7 +48,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(({
     marginLeft: '10px',
     width: `calc(100% - ${drawerWidth}px)`,
     padding: '16px',
-    marginRight: '10px'
+    marginRight: '10px',
+    
   }
 }));
 
@@ -74,7 +76,8 @@ const MainLayout = () => {
         elevation={0}
         sx={{
           bgcolor: theme.palette.background.default,
-          transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+          transition: leftDrawerOpened ? theme.transitions.create('width') : 'none',
+          zIndex: 999,
         }}
       >
         <Toolbar>
@@ -91,6 +94,7 @@ const MainLayout = () => {
         <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
         <Outlet />
       </Main>
+      <Chatbot/>
       <Customization />
     </Box>
   );
